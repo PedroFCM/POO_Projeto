@@ -6,16 +6,13 @@ import java.util.List;
  * @author (seu nome) 
  * @version (número de versão ou data)
  */
-public class Proprietario extends Atores_de_Sistema
+public class Proprietario extends AtorSistema
 {
     // variáveis de instância - substitua o exemplo abaixo pelo seu próprio
-    
+    /*
     private List<Veiculo> listaVeiculos;
     private int classificacao;    
     
-    /**
-     * COnstrutor para objetos da classe Proprietario
-     */
     public Proprietario(String email, String nome, String password, String morada, Date data, int classificacao)
     {
      
@@ -62,5 +59,5 @@ public class Proprietario extends Atores_de_Sistema
     public float custoViagem(){
     
     }
-    */
+   */
 }
