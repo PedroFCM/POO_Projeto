@@ -5,6 +5,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+	    //-------------------------------------------------------//  
+
 		Cliente c1 = new Cliente("maildo1@mail.pt",
 								 "Jose",
 								 "miaKhalifa922",
@@ -89,6 +91,8 @@ public class Main {
 											  100000,
 											  50000);
 
+	    //-------------------------------------------------------//  
+
 		EstadoSistema e1 = new EstadoSistema();
 		
 		e1.adicionaProprietario(p1);
@@ -104,12 +108,24 @@ public class Main {
 		e1.adicionaVeiculo(p2, ce2);
 
 		//Mostrar o carro mais próximo do cliente 1
-		System.out.println("\nCarro mais próximo do cliente 1: \n");
+		System.out.println("\n-> Carro mais próximo do cliente 1: \n");
 		System.out.println(e1.carroMaisProximo(c1).toString());
 
 		//Mostrar o carro mais próximo do cliente 2
-		System.out.println("\nCarro mais próximo do cliente 2: \n");
+		System.out.println("\n-> Carro mais próximo do cliente 2: \n");
 		System.out.println(e1.carroMaisProximo(c2).toString());
+
+	    //-------------------------------------------------------//  
+
+		EstadoSistema e2 = new EstadoSistema(e1);
+
+		//Criar e2 vazio para testar o equals
+		//EstadoSistema e2 = new EstadoSistema();
+
+		System.out.println("=> Sistema e1 == e2? [O e2 foi cloned]");
+		System.out.println("::Resposta.s " + ((e1.equals(e2))?"Sim, são iguais.":"Não, são diferentes."));
+
+	    //-------------------------------------------------------//  
 	}
 
 }

@@ -5,7 +5,7 @@ public class CarroEletrico extends Veiculo {
 
     //-------------------------------------------------------//  
 
-	private double consumoPorKm;
+	private double consumoBateriaPorKm;
     private double autonomiaMaxima;
     private double autonomiaAtual;
 
@@ -22,7 +22,7 @@ public class CarroEletrico extends Veiculo {
 
     	super(nova_matricula, velMedia, priceKM, classiF, nova_local);
 
-    	this.consumoPorKm    = consumo;
+    	this.consumoBateriaPorKm    = consumo;
     	this.autonomiaMaxima = maxAuto;
     	this.autonomiaAtual  = currentAuto;
     }
@@ -31,7 +31,7 @@ public class CarroEletrico extends Veiculo {
 
     	super(carroEletrico);
 
-    	this.consumoPorKm    = carroEletrico.getConsumoPorKM();
+    	this.consumoBateriaPorKm    = carroEletrico.getConsumoBateriaPorKm();
     	this.autonomiaMaxima = carroEletrico.getAutonomiaMax();
     	this.autonomiaAtual  = carroEletrico.getAutonomiaAtual(); 
     }
@@ -40,7 +40,7 @@ public class CarroEletrico extends Veiculo {
 
     	super();
 
-    	this.consumoPorKm    = 0;
+    	this.consumoBateriaPorKm    = 0;
     	this.autonomiaMaxima = 0;
     	this.autonomiaAtual  = 0;
     }
@@ -57,7 +57,7 @@ public class CarroEletrico extends Veiculo {
         CarroEletrico g = (CarroEletrico) o;
      
         return(super.equals(g) 							   && 
-        	   this.consumoPorKm == g.getConsumoPorKM()    &&
+        	   this.consumoBateriaPorKm == g.getConsumoBateriaPorKm()    &&
         	   this.autonomiaMaxima == g.getAutonomiaMax() &&
         	   this.autonomiaAtual == g.getAutonomiaAtual());
     }
@@ -73,7 +73,7 @@ public class CarroEletrico extends Veiculo {
 
   	    s.append("\n=> Tipo de Veiculo: Carro Elétrico.\n");
 		s.append(super.toString());
-		s.append("Cons./KM: " + this.consumoPorKm + "\n");
+		s.append("Cons./KM: " + this.consumoBateriaPorKm + "\n");
 		s.append("Autonomia (Maxima): " + this.autonomiaMaxima + "\n");
 		s.append("Autonomia (Atual) : " + this.autonomiaAtual + "\n");
 
@@ -83,9 +83,9 @@ public class CarroEletrico extends Veiculo {
 
     //-------------------------------------------------------//  
 
-	public double getConsumoPorKM () {
+	public double getConsumoBateriaPorKm () {
 
-        return this.consumoPorKm;
+        return this.consumoBateriaPorKm;
     }
    
     public double getAutonomiaMax () {

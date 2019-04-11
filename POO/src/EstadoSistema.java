@@ -129,6 +129,21 @@ public class EstadoSistema  {
         return s.toString();
     }
 
+    public boolean equals(Object o) {
+        
+        if (this == o) return true;
+        
+        if ((o == null) || (this.getClass() != o.getClass()))
+            return false;
+        
+        EstadoSistema e = (EstadoSistema) o;
+     
+        return(e.getClientesSistema().equals(this.clientes_Sistema) &&
+               e.getProprietariosSistema().equals(this.proprietarios_Sistema) &&
+               e.getData().equals(this.data_atual));
+    }
+
+
     //-------------------------------------------------------//  
 
     public List<Cliente> getClientesSistema () {
