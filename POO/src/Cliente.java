@@ -1,5 +1,7 @@
 import java.time.LocalDate;
 import java.lang.StringBuilder;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cliente extends AtorSistema {
 
@@ -7,7 +9,7 @@ public class Cliente extends AtorSistema {
 
     //Cada cliente tem a sua localização
     private Localizacao coordenadas;
-    
+
     //-------------------------------------------------------//  
 
     public Cliente (String email_cliente, 
@@ -15,11 +17,13 @@ public class Cliente extends AtorSistema {
                     String pass_cliente, 
                     String morada_cliente, 
                     LocalDate dataNasc_cliente, 
-                    Localizacao local_cliente) {
+                    Localizacao local_cliente,
+                    List<Aluguer> historico,
+                    int classif) {
         
         super(email_cliente, nome_cliente, 
               pass_cliente, morada_cliente, 
-              dataNasc_cliente);
+              dataNasc_cliente, classif, historico);
 
         this.coordenadas = new Localizacao(local_cliente);
     }
@@ -71,7 +75,7 @@ public class Cliente extends AtorSistema {
 
     public Localizacao getLocalizacao() {
         
-        return this.coordenadas;
+        return this.coordenadas.clone();
     }
     
     public void setLocalizacao (Localizacao local){

@@ -6,26 +6,26 @@ public class Veiculo {
     //-------------------------------------------------------//  
 
     private String matricula;
-    private float velMediaPorKM;
-    private float precoPorKm;
-    private float classificacao;
+    private double velMediaPorKM;
+    private double precoPorKm;
+    private double classificacao;
     private Localizacao local;
     
     //-------------------------------------------------------//  
 
     public Veiculo (String nova_matric,
-                    float mediumVel, 
-                    float precKM,
-                    float classif,
+                    double mediumVel, 
+                    double precKM,
+                    double classif,
                     Localizacao local_carro) {
 
         this.matricula       = nova_matric; 
         this.velMediaPorKM   = mediumVel;
         this.precoPorKm      = precKM;
         this.classificacao   = classif;
-        this.local           = new Localizacao(local);
+        this.local           = new Localizacao(local_carro);
     }
-    
+   
     public Veiculo (Veiculo novo) {
 
         this.matricula       = novo.getMatricula();
@@ -87,17 +87,17 @@ public class Veiculo {
         return this.matricula;
     }
 
-    public float getVelMediaPorKM () {
+    public double getVelMediaPorKM () {
 
         return this.velMediaPorKM; 
     }
 
-    public float getPrecoPorKM () {
+    public double getPrecoPorKM () {
 
         return this.precoPorKm;
     }
 
-    public float getClassificacao () {
+    public double getClassificacao () {
 
         return this.classificacao;
     }

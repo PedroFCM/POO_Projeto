@@ -1,7 +1,7 @@
 
 
 
-public class CarroGasolina extends Veiculo {
+public class CarroEletrico extends Veiculo {
 
     //-------------------------------------------------------//  
 
@@ -11,7 +11,7 @@ public class CarroGasolina extends Veiculo {
 
     //-------------------------------------------------------//  
 
-    public CarroGasolina (String nova_matricula,
+    public CarroEletrico (String nova_matricula,
     					  int velMedia,
     					  double priceKM,
     					  double classiF,
@@ -27,16 +27,16 @@ public class CarroGasolina extends Veiculo {
     	this.autonomiaAtual  = currentAuto;
     }
 
-    public CarroGasolina (CarroGasolina carroGas) {
+    public CarroEletrico (CarroEletrico carroEletrico) {
 
-    	super(carroGas);
+    	super(carroEletrico);
 
-    	this.consumoPorKm    = carroGas.getConsumoPorKM();
-    	this.autonomiaMaxima = carroGas.getAutonomiaMax();
-    	this.autonomiaAtual  = carroGas.getAutonomiaAtual(); 
+    	this.consumoPorKm    = carroEletrico.getConsumoPorKM();
+    	this.autonomiaMaxima = carroEletrico.getAutonomiaMax();
+    	this.autonomiaAtual  = carroEletrico.getAutonomiaAtual(); 
     }
 
-    public CarroGasolina () {
+    public CarroEletrico () {
 
     	super();
 
@@ -54,7 +54,7 @@ public class CarroGasolina extends Veiculo {
         if ((o == null) || (this.getClass() != o.getClass()))
             return false;
         
-        CarroGasolina g = (CarroGasolina) o;
+        CarroEletrico g = (CarroEletrico) o;
      
         return(super.equals(g) 							   && 
         	   this.consumoPorKm == g.getConsumoPorKM()    &&
@@ -62,16 +62,16 @@ public class CarroGasolina extends Veiculo {
         	   this.autonomiaAtual == g.getAutonomiaAtual());
     }
 
-    public CarroGasolina clone () {
+    public CarroEletrico clone () {
 
-        return new CarroGasolina(this);
+        return new CarroEletrico(this);
     }
 
     public String toString (){
         
         StringBuilder s = new StringBuilder();
 
-  	    s.append("\n=> Tipo de Veiculo: Carro a gasolina.\n");
+  	    s.append("\n=> Tipo de Veiculo: Carro Elétrico.\n");
 		s.append(super.toString());
 		s.append("Cons./KM: " + this.consumoPorKm + "\n");
 		s.append("Autonomia (Maxima): " + this.autonomiaMaxima + "\n");
@@ -104,4 +104,5 @@ public class CarroGasolina extends Veiculo {
     }
 
     //-------------------------------------------------------//  
+
 }

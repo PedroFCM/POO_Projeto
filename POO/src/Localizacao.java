@@ -82,9 +82,10 @@ public class Localizacao {
     
     //-------------------------------------------------------//  
     
-    public double distancia(Localizacao local){
+    public double distancia (Localizacao local){
     
-        return (Math.hypot(local.getX(),local.getY()));
+        return (Math.sqrt(Math.pow(local.getY()-this.y, 2) + 
+                          Math.pow(local.getX()-this.x, 2)));
     }
     
     //-------------------------------------------------------//  

@@ -1,6 +1,9 @@
 import java.time.LocalDate;
 import java.time.Month;
 import java.lang.StringBuilder;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 public class AtorSistema {
 
@@ -11,20 +14,28 @@ public class AtorSistema {
     private String password;
     private String morada;
     private LocalDate dataDeNascimento;
+    private int classificacao;
+    private List<Aluguer> historico_alugueres;
 
    //-------------------------------------------------------//  
 
     public AtorSistema (String novo_email, 
-    						 String novo_nome, 
-    						 String nova_pass, 
-    						 String nova_morada, 
-    						 LocalDate nova_dataNasc) {
+    					String novo_nome, 
+    					String nova_pass, 
+    					String nova_morada, 
+    					LocalDate nova_dataNasc,
+                        int classif,
+                        List<Aluguer> historico) {
         
-        this.email    		  = novo_email;
-        this.nome  	  		  = novo_nome;
-        this.password 		  = nova_pass;
-        this.morada   		  = nova_morada;
-        this.dataDeNascimento = nova_dataNasc;  
+        this.email    		     = novo_email;
+        this.nome  	  		     = novo_nome;
+        this.password 		     = nova_pass;
+        this.morada   		     = nova_morada;
+        this.dataDeNascimento    = nova_dataNasc;
+        this.classificacao       = classif;
+        this.historico_alugueres = historico.stream()
+                                            .map(Aluguer::clone)
+                                            .collect(Collectors.toList());
     }
    
     public AtorSistema (AtorSistema novo) {
@@ -36,6 +47,8 @@ public class AtorSistema {
         this.password = novo.getPassword();
         this.morada   = novo.getMorada();
         this.dataDeNascimento = novo.getDataDeNascimento();
+        this.classificacao = novo.getClassificacao();
+        this.historico_alugueres = novo.getHistoricoAlugueres();
     }
     
     public AtorSistema () {
@@ -45,6 +58,8 @@ public class AtorSistema {
         this.password         = "n/a";
         this.morada           = "n/a";
         this.dataDeNascimento = LocalDate.now();
+        this.classificacao    = 0;
+        this.historico_alugueres = new ArrayList<Aluguer>();
     }
 
    //-------------------------------------------------------//  
@@ -57,8 +72,9 @@ public class AtorSistema {
             return false;
         
         AtorSistema c = (AtorSistema) o;
-     
-        return(c.getEmail().equals(this.email)                        && 
+
+        return(c.getClassificacao() == this.classificacao             && 
+               c.getEmail().equals(this.email)                        && 
                c.getNome().equals(this.nome)                          &&
                c.getPassword().equals(this.password)                  &&
                c.getMorada().equals(this.morada)                      &&
@@ -79,11 +95,25 @@ public class AtorSistema {
         s.append("Nome: " + this.password + "\n");
         s.append("Morada: " + this.morada + "\n");
         s.append("Data de Nascimento: " + this.dataDeNascimento.toString() + "\n");
+        s.append("Class.: " + this.classificacao);
+        s.append("\nHistorico: " + this.historico_alugueres.toString() + "\n");
 
         return s.toString();
     }
 
    //-------------------------------------------------------//  
+
+    public List<Aluguer> getHistoricoAlugueres () {
+
+        return this.historico_alugueres.stream()
+                                       .map(Aluguer::clone)
+                                       .collect(Collectors.toList());
+    }
+
+    public int getClassificacao () {
+
+        return this.classificacao;
+    }
 
     public String getEmail(){
     
