@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
@@ -10,22 +11,23 @@ public class EstadoSistema  {
     //-------------------------------------------------------//  
     
     private List<Cliente> clientes_Sistema;
-    private List<Proprietario> proprietarios_Sistema;
+    private Map<Proprietario, List<Veiculo>> proprietarios_Sistema;
     private LocalDate data_atual;
     
     //-------------------------------------------------------//  
 
     public EstadoSistema (List<Cliente> clientes,
-                          List<Proprietario> proprietarios,
+                          Map<Proprietario, List<Veiculo>> proprietarios,
                           LocalDate data) {
 
         this.clientes_Sistema = clientes.stream()
                                         .map(Cliente::clone)
                                         .collect(Collectors.toList());
     
-        this.proprietarios_Sistema = proprietarios.stream()
-                                                  .map(Proprietario::clone)
-                                                  .collect(Collectors.toList());
+        this.proprietarios_Sistema = proprietarios.entrySet()
+                                                  .stream()
+                                                  .collect(Collectors.toMap(e -> e.getKey(),
+                                                                            e -> new ArrayList<Veiculo>(e.getValue())));
 
         this.data_atual = data;
     }
@@ -40,7 +42,7 @@ public class EstadoSistema  {
     public EstadoSistema () {
 
         this.clientes_Sistema = new ArrayList<Cliente>();
-        this.proprietarios_Sistema = new ArrayList<Proprietario>();
+        this.proprietarios_Sistema = new HashMap<Proprietario, List<Veiculo>>();
         this.data_atual = LocalDate.now();
     }
 
@@ -48,29 +50,32 @@ public class EstadoSistema  {
 
     public void adicionaProprietario (Proprietario p) {
 
-        this.proprietarios_Sistema.add(p);
+        this.proprietarios_Sistema.put(p, p.getListaVeiculos());
     }
 
-    public HashMap<Proprietario,List<Veiculo>> allVeiculos() {
+    public List<Veiculo> allVeiculos() {
 
-        HashMap<Proprietario,List<Veiculo>> h = new HashMap<>();
+        List<Veiculo> lista = new ArrayList<>();
         
-        for(Proprietario p: proprietarios_Sistema)
-        {
-            h.put(p, p.getListaVeiculos());  // ADICIONAR UM A UM
-        }
-        
-        return h;
+        lista = this.proprietarios_Sistema.values()
+                                          .stream()
+                                          .flatMap(l -> l.stream())
+                                                         .map(Veiculo::clone)
+                                                         .collect(Collectors.toList());
+
+        return lista;
     }
 
     public void adicionaVeiculo (Proprietario p, Veiculo v) {
 
-        for (Proprietario p1: this.proprietarios_Sistema) {
-
-            if (p1.equals(p)) {
-                p1.adicionaVeiculo(v);
-                break;
-            }
+        if (this.proprietarios_Sistema.containsKey(p)) {
+        
+           this.proprietarios_Sistema.get(p).add(v); 
+        
+        } else {
+        
+            p.adicionaVeiculo(v);
+            this.proprietarios_Sistema.put(p, p.getListaVeiculos());
         }
     }
 
@@ -78,12 +83,7 @@ public class EstadoSistema  {
 
         List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();
         
-        todosVeiculos =  this.allVeiculos()
-                             .values()
-                             .stream()
-                             .flatMap(l -> l.stream())
-                             .map(Veiculo::clone)
-                             .collect(Collectors.toList());
+        todosVeiculos =  this.allVeiculos();
 
         if (todosVeiculos.isEmpty())
             return null;
@@ -153,12 +153,13 @@ public class EstadoSistema  {
                                    .collect(Collectors.toList());   
     }
 
-    public List<Proprietario> getProprietariosSistema () {
+    public Map<Proprietario, List<Veiculo>> getProprietariosSistema () {
 
-       return this.proprietarios_Sistema.stream()
-                                        .map(Proprietario::clone)
-                                        .collect(Collectors.toList()); 
-    }
+         return this.proprietarios_Sistema.entrySet()
+                                          .stream()
+                                          .collect(Collectors.toMap(e -> e.getKey(),
+                                                                    e -> new ArrayList<Veiculo>(e.getValue())));
+   }
 
     public LocalDate getData () {
 

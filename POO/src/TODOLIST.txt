@@ -1,0 +1,97 @@
+
+
+------------> Trabalho POO #TODO list: <------------
+
+-> Um proprietario pode REGISTAR o seu veiculo na APP;
+
+-> Um cliente pode ALUGAR um carro REGISTADO;           
+
+-> Um proprietario pode ACEITAR/NEGAR o aluguer pedido;
+
+-> Deve ser mantido um HISTORICO de feedback de aluguer de CLIENTES; 
+
+-> Deve ser mantido um HISTORICO de feedback de aluguer dos VEICULOS;
+
+-> Devem ser criados mecanismos de CRIAÇÃO DE CLIENTES, PROPRIETARIOS, AUTOMOVEIS e aplicação de PRECOS quando o mesmo é devolvido;
+
+-> O sistema deve GUARDAR: Registo de todas as operações efetuadas e mecanismos de as disponibilizar (exemplos: alugueres de um cliente, extrato de aluguer de um carro num determinado periodo, valor faturacdo por um proprietario num periodo, etc...);
+
+-> Cada USER deve apenas conseguir aceder às INFORMAÇOES e FUNCIONALIDADES respetivas.
+
+-----------FUNCIONALIDADES QUE OS CLIENTES TEM ACESSO:-----------
+
+=> Solicitar o aluguer do carro mais próximo da sua Localizacao;
+=> Solicitar o aluguer do carro mais barato;
+=> Solicitar o aluguer do carro mais barato dentro de uma distância que estão dispostos a percorrer a pé;
+=> Solicitar o aluguer de um carro específico;
+=> Solicitar o aluguer de um carro com uma certa autonomia;
+
+
+NOTAS:
+
+-> O proprietario é o UNICO que pode ABASTECER! (Deposito/Bateria);
+-> No ato de aluguer o cliente indica onde quer ir (destino) e devera ser VERIFICADO se o automovel tem autonomia para o alcançar (caso negativo não se poderá alugar o automovel);
+
+-----------FUNCIONALIDADES QUE OS PROPRIETARIOS TEM ACESSO:-----------
+
+-> Sinalizar que um carro seu está disponivel para aluguer;
+-> Abastecer um veiculo (O PROPRIETARIO APENAS!!!);
+-> Alterar o preço por km;
+-> Aceitar/Regeitar o aluguer de um determinado cliente;
+-> Registar quando custou a viagem!;
+
+=====================CRIACAO DE CLASSES==============================
+
+CLIENTES DEVEM TER:--------------------------------------------------
+
+	-Localizacao;
+	-Historico de alugueres; 
+
+PROPRIETARIOS DEVEM TER:---------------------------------------------
+
+	-CLASSIFICACAO 0-100; (Dada pelos clientes que alugaram os seus carros);
+	-Historico dos seus alugueres;
+
+VEICULOS DEVEM TER:--------------------------------------------------
+
+	> TIPOS:
+	
+		-GASOLINA;
+		-ELETRICOS;
+		-HIBRIDOS;
+
+	> Expandir para: (Bicicletas, trotinetes e pranchas de surf eletricas!);
+
+	> Variaveis COMUNS:
+
+		-velocidade media;
+		-preco/km
+		-consumo/km
+		-acesso a um historico de alugueres;
+		-classificacao 0-100 (dada pelos clientes no final do aluguer)
+		-Sabe a sua localizacao!;
+
+	> Quando realiza um aluguer desoloca-se para as coordenadas indicadas pelo cliente e fica PARADO até que tenha um novo aluguer;
+
+	> Conhece a sua autonomia!
+	> ABAIXO 10% então o Proprietario deve abastecer sendo este NOTIFICADO!!!
+
+
+ALUGUER DEVE TER:----------------------------------------------------
+
+	PROCESSO DE ALUGUER:
+
+		-> O cliente indica onde está e para onde quer ir;
+		-> O cliente escolhe o carro que quer;
+		-> Após escolha, é indicado se o carro tem autonomia para fazer a viagem (TENDO EM CONTA O DESLOCAMENTO);
+		-> Caso tenha autonomia, o proprietário é notificado do aluguer e do tempo que o cliente demora a chegar ao veículo A PÉ (AÍ ACEITA OU NÃO O ALUGUER);
+		-> Calcula-se o tempo real da viagem mediante: destreza do condutor, condições meteorologicas, etc...;
+		-> O carro desloca-se para o destino do cliente;
+		-> Após viagem, cliente + proprietario classificam o carro e o cliente e ficam com registo da viagem NAS SUAS ÁREAS PESSOAIS;
+
+ABASTECIMENTO DE VEICULOS:-------------------------------------------------
+
+	-> O sistema deve conseguir fornecer a lista de carros de cada um dos tipos;
+
+	-> Determinar quanto combustivel o carro tem num determinado momento;
+	-> Determinar a autonomia do carro dependente do tipo de combustivel que possui (Para tal é necessário determinar o consumo em termos do motor de combustão e eletrico (e a sua combinação));

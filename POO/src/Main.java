@@ -115,15 +115,11 @@ public class Main {
 		System.out.println("\n-> Carro mais próximo do cliente 2: \n");
 		System.out.println(e1.carroMaisProximo(c2).toString());
 
+		System.out.println(e1.allVeiculos().toString());
+
 	    //-------------------------------------------------------//  
 
-		EstadoSistema e2 = new EstadoSistema(e1);
 
-		//Criar e2 vazio para testar o equals
-		//EstadoSistema e2 = new EstadoSistema();
-
-		System.out.println("=> Sistema e1 == e2? [O e2 foi cloned]");
-		System.out.println("::Resposta.s " + ((e1.equals(e2))?"Sim, são iguais.":"Não, são diferentes."));
 
 	    //-------------------------------------------------------//  
 	}
