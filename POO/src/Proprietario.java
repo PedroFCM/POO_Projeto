@@ -45,7 +45,7 @@ public class Proprietario extends AtorSistema
     
         StringBuilder s =  new StringBuilder();
 
-        s.append("=> Tipo de ator de Sistema: Proprietario.");
+        s.append("\n=> Tipo de ator de Sistema: Proprietario.");
         s.append(super.toString());
 
         return s.toString();

@@ -64,7 +64,7 @@ public class Cliente extends AtorSistema {
    
         StringBuilder s = new StringBuilder();
 
-        s.append("=> Tipo de ator de Sistema: Cliente.");
+        s.append("\n=> Tipo de ator de Sistema: Cliente.");
         s.append(super.toString());
         s.append(this.coordenadas.toString());
 
