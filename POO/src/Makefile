@@ -4,6 +4,7 @@
 main:
 	javac Main.java
 	
+#Main - IO version	
 io:
 	javac Main_IO.java
 
@@ -11,7 +12,8 @@ io:
 run:
 	java Main
 
-runIO:
+#Run the IO version
+runio:
 	java Main_IO
 
 #Clean .class files

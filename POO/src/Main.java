@@ -120,7 +120,7 @@ public class Main {
         c1.adicionaAluguer(alug1);
 
         //Adicionar clientes ao sistema
-            e1.adicionaCliente(c1);
+        e1.adicionaCliente(c1);
         e1.adicionaCliente(c2);
 
        

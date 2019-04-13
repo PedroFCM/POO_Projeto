@@ -97,7 +97,7 @@ public class AtorSistema {
 
         s.append("\n" + "Nome: " + this.nome + "\n");
         s.append("E-mail: " + this.email + "\n");
-        s.append("Nome: " + this.password + "\n");
+        s.append("Password: " + this.password + "\n");
         s.append("Morada: " + this.morada + "\n");
         s.append("Data de Nascimento: " + this.dataDeNascimento.toString() + "\n");
         s.append("Class.: " + this.classificacao);

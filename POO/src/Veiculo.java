@@ -82,12 +82,14 @@ public class Veiculo {
     
     //-------------------------------------------------------//  
     
-    /************************
     public double getAutonomiaAtual(){
         
+        //Esta versao so esta presente para o compilador detetar o metodo
+        //A versao correta esta presente nas classes de tipos de carros
+        //Gasolina, Eletricos,...
+
         return 0;
     }
-    */
    
     public String getMatricula () {
 

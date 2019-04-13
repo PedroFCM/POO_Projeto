@@ -58,13 +58,14 @@ public class EstadoSistema {
 
     //-------------------------------------------------------//  
     
-    public boolean existeProprietario (String nome) {
+    public boolean existeProprietario (String email) {
 
-      return this.proprietarios_Sistema.containsValue(nome);
+      return this.proprietarios_Sistema.containsKey(email);
     }
 
-    public void getProprietario (String nome) {
+    public Proprietario getProprietario (String email) {
 
+      return this.proprietarios_Sistema.get(email);
     }
     
     public void adicionaProprietario (Proprietario p) {
@@ -209,12 +210,10 @@ public class EstadoSistema {
       return carroEspecifico;
     }
     
-    /**************************
     public boolean temAutonomiaParaViagem (Veiculo v,double distancia){
     
         return(v.getAutonomiaAtual() >= distancia);
     }
-    *****************/
     
     //-------------------------------------------------------//  
 
