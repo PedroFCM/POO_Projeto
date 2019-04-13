@@ -13,16 +13,16 @@ public class EstadoSistema {
     //-------------------------------------------------------//  
     
     //Key: Cliente; Value: Nome
-    private Map<Cliente, String> clientes_Sistema;
+    private Map<String, Cliente> clientes_Sistema;
 
-    private Map<Proprietario, String> proprietarios_Sistema;
+    private Map<String, Proprietario> proprietarios_Sistema;
     
     private LocalDate data_atual;
     
     //-------------------------------------------------------//  
 
-    public EstadoSistema (Map<Cliente, String> clientes,
-                          Map<Proprietario, String> proprietarios,
+    public EstadoSistema (Map<String, Cliente> clientes,
+                          Map<String, Proprietario> proprietarios,
                           LocalDate data) {
 
         this.clientes_Sistema = clientes.entrySet()
@@ -51,29 +51,35 @@ public class EstadoSistema {
 
     public EstadoSistema () {
 
-        this.clientes_Sistema = new HashMap<Cliente, String>();
-        this.proprietarios_Sistema = new HashMap<Proprietario, String>();
+        this.clientes_Sistema = new HashMap<String, Cliente>();
+        this.proprietarios_Sistema = new HashMap<String, Proprietario>();
         this.data_atual = LocalDate.now();
     }
 
     //-------------------------------------------------------//  
     
-    
-    
+    public boolean existeProprietario (String nome) {
+
+      return this.proprietarios_Sistema.containsValue(nome);
+    }
+
+    public void getProprietario (String nome) {
+
+    }
     
     public void adicionaProprietario (Proprietario p) {
 
-        if (!this.proprietarios_Sistema.containsKey(p)) {
+        if (!this.proprietarios_Sistema.containsKey(p.getEmail())) {
 
-              this.proprietarios_Sistema.put(p.clone(), p.getEmail());
+              this.proprietarios_Sistema.put(p.getEmail(), p.clone());
         }
     }
 
     public void adicionaCliente (Cliente c) {
 
-        if (!this.clientes_Sistema.containsKey(c)) {
+        if (!this.clientes_Sistema.containsKey(c.getEmail())) {
 
-               this.clientes_Sistema.put(c.clone(), c.getEmail());
+               this.clientes_Sistema.put(c.getEmail(), c.clone());
         }
     }
 
@@ -82,9 +88,9 @@ public class EstadoSistema {
         List<Proprietario> listaP = new ArrayList<>();
         List<Veiculo> listaV = new ArrayList<>();
         
-        listaP = this.proprietarios_Sistema.keySet()
-                                          .stream()
-                                          .collect(Collectors.toList());
+        listaP = this.proprietarios_Sistema.values()
+                                           .stream()
+                                           .collect(Collectors.toList());
         for(Proprietario p: listaP){
         
             listaV.addAll(p.getListaVeiculos());
@@ -247,7 +253,7 @@ public class EstadoSistema {
 
     //-------------------------------------------------------//  
 
-    public Map<Cliente, String> getClientesSistema () {
+    public Map<String, Cliente> getClientesSistema () {
 
        return this.clientes_Sistema.entrySet()
                                    .stream()
@@ -257,7 +263,7 @@ public class EstadoSistema {
                                                              HashMap::new));
     }
 
-    public Map<Proprietario, String> getProprietariosSistema () {
+    public Map<String, Proprietario> getProprietariosSistema () {
 
          return this.proprietarios_Sistema.entrySet()
                                            .stream()

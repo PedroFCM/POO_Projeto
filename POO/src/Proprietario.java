@@ -117,6 +117,12 @@ public class Proprietario extends AtorSistema
                                    .map(Veiculo::clone)
                                    .collect(Collectors.toList());
     }
+ 
+    public boolean existeVeiculo (Veiculo v) {
+
+        return this.mapVeiculos.containsKey(v.getMatricula());
+    }
+
     //-------------------------------------------------------//  
     
    /*
@@ -136,11 +142,7 @@ public class Proprietario extends AtorSistema
     public void abastecerVeiculo(){
     
     }
-    
-    public void alterarPrecoKm(){
-    
-    }
-    
+       
     public boolean aceitarRejeitarAluguer(){
     
     }

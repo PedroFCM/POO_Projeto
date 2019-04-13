@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Main {
+public class Main_IO {
 
 	public static List<String> leFicheiroParaLista (String fileName) throws IOException {
 
@@ -26,10 +26,8 @@ public class Main {
 
 	}
 
-	public static void main(String[] args) {
+	public static void loadLogs (EstadoSistema e) {
 
-		EstadoSistema e1 = new EstadoSistema();
-		
 		try {
         
             List<String> logs = leFicheiroParaLista("logs.txt");
@@ -67,8 +65,23 @@ public class Main {
 													  new ArrayList<Aluguer>(),
 													  0);
 
-						e1.adicionaCliente(cliente_lido);
+						e.adicionaCliente(cliente_lido);
 
+						break;
+
+					case "NovoProp":
+
+//						LocalDate dataLida = LocalDate.parse(tokens[5], formatter);
+/*
+						Proprietario prop_lido = new Proprietario (tokens[1],
+																   tokens[2],
+																   tokens[3],
+																   tokens[4],
+																   dataLida,
+																   0);
+
+						e.adicionaProprietario(prop_lido);
+*/
 						break;
 
 					case "NovoCarro": //**********************************************
@@ -93,7 +106,11 @@ public class Main {
 														   consumo,
 														   100,
 														   0);
-							
+								
+								if (e.existeProprietario(tokens[4])) {
+
+
+								}		
 								
 
 						break;
@@ -114,12 +131,20 @@ public class Main {
 
             }
 
-        	System.out.println(e1.toString());
+        	System.out.println(e.toString());
 
         } catch (IOException ex) {
         
             ex.printStackTrace();
         }
+
+	}
+
+	public static void main(String[] args) {
+
+		EstadoSistema e1 = new EstadoSistema();
+		
+		loadLogs(e1);
 
 	    //-------------------------------------------------------//  
 /*
@@ -238,35 +263,6 @@ public class Main {
 		e1.adicionaCliente(c1);
 		e1.adicionaCliente(c2);
 
-	    //-------------------------------------------------------//  
-
-		// System.out.println("Carro mais próximo de c1: \n");
-		// System.out.println(e1.carroMaisProximo(c1));
-
-		// System.out.println("Carro mais próximo de c2: \n");
-		// System.out.println(e1.carroMaisProximo(c2));
-
-		// System.out.println("Carro mais barato: ");
-		// System.out.println((e1.carroMaisBarato())==null?
-		// 					"Não há carros.":(e1.carroMaisBarato()));
-
-		// System.out.println("Carro mais barato, dentro de uma distancia (2km) para c1: ");
-		// System.out.println((e1.carroMaisBarato(c1, 2.0))==null?
-		// 					"Não há carros.":(e1.carroMaisBarato(c1, 2.0)));
-
-		//Para carros específicos (Gasolina, Eletricos, Hibridos, etc...):
-		// System.out.println("Solicitacao de carros a gasolina: \n");
-		// System.out.println(e1.carroEspecifico("CarroGasolina"));
-
-		// System.out.println("Solicitacao de carros eletricos: \n");
-		// System.out.println(e1.carroEspecifico("CarroEletrico"));
-
-	    //-------------------------------------------------------//  
-
-		//Para dar print ao sistema -> DEBUG
-		System.out.println(e1.toString());
-
-	    //-------------------------------------------------------//  
 */	
 	}
 
