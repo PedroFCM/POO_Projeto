@@ -137,6 +137,64 @@ public class EstadoSistema  {
         return veiculosOrdenadosPorPreco.get(veiculosOrdenadosPorPreco.firstKey());  
     }
 
+    public Veiculo carroMaisBarato (Cliente c, Double distanciaMax) {
+
+        List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();
+        
+        todosVeiculos =  this.allVeiculos();
+
+        if (todosVeiculos.isEmpty()) {
+            return null;
+        }
+
+        SortedMap<Double, Veiculo> veiculosOrdenadosPorPreco = 
+                            new TreeMap<Double, Veiculo>();
+        
+        for (Veiculo v: todosVeiculos) {
+
+          if (c.getLocalizacao().distancia(v.getLocalizacao()) <= distanciaMax) {
+            
+            veiculosOrdenadosPorPreco.put(v.getPrecoPorKM(), v.clone());
+          }
+        
+        }
+
+        if (veiculosOrdenadosPorPreco.size()==0) return null;
+
+        return veiculosOrdenadosPorPreco.get(veiculosOrdenadosPorPreco.firstKey());  
+    }
+
+    public List<Veiculo> carroEspecifico (String tipoDeCarroDesejado) {
+
+      List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();    
+      todosVeiculos =  this.allVeiculos();
+
+      if (todosVeiculos.isEmpty()) {
+          return null;
+      }
+
+      List <Veiculo> carroEspecifico = new ArrayList<Veiculo>();
+
+      String currentClass;
+
+      for (Veiculo v: todosVeiculos) {
+
+        currentClass = v.getClass().getSimpleName();
+
+        if (currentClass.equals(tipoDeCarroDesejado)) {
+
+          carroEspecifico.add(v);
+
+        } else if (currentClass.equals(tipoDeCarroDesejado)) {
+
+          carroEspecifico.add(v);
+        }
+
+      }
+
+      return carroEspecifico;
+    }
+
     //-------------------------------------------------------//  
 
     public EstadoSistema clone () {

@@ -74,8 +74,8 @@ public class CarroGasolina extends Veiculo {
   	    s.append("\n=> Tipo de Veiculo: Carro a gasolina.\n");
 		s.append(super.toString());
 		s.append("Cons./KM: " + this.consumoPorKm + "\n");
-		s.append("Autonomia (Maxima): " + this.autonomiaMaxima + "\n");
-		s.append("Autonomia (Atual) : " + this.autonomiaAtual + "\n");
+		s.append("Deposito (Max): " + this.autonomiaMaxima + "\n");
+		s.append("Deposito (Atual) : " + this.autonomiaAtual + "\n");
 
         return s.toString();
     }

@@ -113,17 +113,33 @@ public class Main {
 		e1.adicionaCliente(c1);
 		e1.adicionaCliente(c2);
 
-		//Para dar print ao sistema -> DEBUG
-		//System.out.println(e1.toString());
+	    //-------------------------------------------------------//  
 
 		System.out.println("Carro mais próximo de c1: \n");
 		System.out.println(e1.carroMaisProximo(c1));
 
-		System.out.println("Carro mais próximo de c2: \n");
-		System.out.println(e1.carroMaisProximo(c2));
+		// System.out.println("Carro mais próximo de c2: \n");
+		// System.out.println(e1.carroMaisProximo(c2));
 
 		System.out.println("Carro mais barato: ");
-		System.out.println(e1.carroMaisBarato());
+		System.out.println((e1.carroMaisBarato())==null?
+							"Não há carros.":(e1.carroMaisBarato()));
+
+		System.out.println("Carro mais barato, dentro de uma distancia (2km) para c1: ");
+		System.out.println((e1.carroMaisBarato(c1, 2.0))==null?
+							"Não há carros.":(e1.carroMaisBarato(c1, 2.0)));
+
+		//Para carros específicos (Gasolina, Eletricos, Hibridos, etc...):
+		System.out.println("Solicitacao de carros a gasolina: \n");
+		System.out.println(e1.carroEspecifico("CarroGasolina"));
+
+		// System.out.println("Solicitacao de carros eletricos: \n");
+		// System.out.println(e1.carroEspecifico("CarroEletrico"));
+
+	    //-------------------------------------------------------//  
+
+		//Para dar print ao sistema -> DEBUG
+		//System.out.println(e1.toString());
 
 	    //-------------------------------------------------------//  
 	}
