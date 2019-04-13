@@ -40,8 +40,6 @@ public class AtorSistema {
    
     public AtorSistema (AtorSistema novo) {
 
-        //Aqui todas as variveis são imutaveis;
-
         this.email    = novo.getEmail();
         this.nome     = novo.getNome();
         this.password = novo.getPassword();
@@ -101,6 +99,11 @@ public class AtorSistema {
         return s.toString();
     }
 
+    public int hashCode() {
+        
+        return this.getEmail().hashCode();
+    }
+    
    //-------------------------------------------------------//  
 
     public List<Aluguer> getHistoricoAlugueres () {

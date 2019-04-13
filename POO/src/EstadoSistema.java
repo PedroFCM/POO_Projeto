@@ -10,15 +10,15 @@ public class EstadoSistema  {
     
     //-------------------------------------------------------//  
     
-    private HashMap<Cliente, List<Aluguer>> clientes_Sistema;
-    private HashMap<Proprietario, List<Veiculo>> proprietarios_Sistema;
+    private Map<Cliente, List<Aluguer>> clientes_Sistema;
+    private Map<Proprietario, List<Veiculo>> proprietarios_Sistema;
     
     private LocalDate data_atual;
     
     //-------------------------------------------------------//  
 
-    public EstadoSistema (HashMap<Cliente, List<Aluguer>> clientes,
-                          HashMap<Proprietario, List<Veiculo>> proprietarios,
+    public EstadoSistema (Map<Cliente, List<Aluguer>> clientes,
+                          Map<Proprietario, List<Veiculo>> proprietarios,
                           LocalDate data) {
 
         this.clientes_Sistema = clientes.entrySet()
@@ -58,7 +58,7 @@ public class EstadoSistema  {
 
     	if (!this.proprietarios_Sistema.containsKey(p)) {
 
-			this.proprietarios_Sistema.put(p.clone(), p.getListaVeiculos());
+		      this.proprietarios_Sistema.put(p.clone(), p.getListaVeiculos());
     	}
     }
 
@@ -66,7 +66,7 @@ public class EstadoSistema  {
 
     	if (!this.clientes_Sistema.containsKey(c)) {
 
-			this.clientes_Sistema.put(c.clone(), c.getHistoricoAlugueres());
+			   this.clientes_Sistema.put(c.clone(), c.getHistoricoAlugueres());
     	}
     }
 
@@ -151,7 +151,7 @@ public class EstadoSistema  {
 
     //-------------------------------------------------------//  
 
-    public HashMap<Cliente, List<Aluguer>> getClientesSistema () {
+    public Map<Cliente, List<Aluguer>> getClientesSistema () {
 
        return this.clientes_Sistema.entrySet()
                                    .stream()
@@ -161,7 +161,7 @@ public class EstadoSistema  {
                                           					 HashMap::new));
     }
 
-    public HashMap<Proprietario, List<Veiculo>> getProprietariosSistema () {
+    public Map<Proprietario, List<Veiculo>> getProprietariosSistema () {
 
          return this.proprietarios_Sistema.entrySet()
                                            .stream()

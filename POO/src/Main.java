@@ -114,10 +114,8 @@ public class Main {
 		e1.adicionaCliente(c2);
 
 		//Para dar print ao sistema -> DEBUG
-		//System.out.println(e1.toString());
+		System.out.println(e1.toString());
 
-
-		
 
 
 	    //-------------------------------------------------------//  
