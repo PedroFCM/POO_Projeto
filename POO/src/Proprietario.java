@@ -41,16 +41,43 @@ public class Proprietario extends AtorSistema
 
     //-------------------------------------------------------//  
 
-    public void adicionaVeiculo (Veiculo v) {
+    public String toString (){
+    
+        StringBuilder s =  new StringBuilder();
 
-        this.listaVeiculos.add(v);
+        s.append(super.toString());
+
+        return s.toString();
+    }
+
+    public boolean equals(Object o) {
+        
+        if (this == o) return true;
+        
+        if ((o == null) || (this.getClass() != o.getClass()))
+            return false;
+        
+        Proprietario p = (Proprietario) o;
+
+        boolean veiculosIgual = true;
+     
+        return (super.equals(p) &&
+                p.getListaVeiculos().equals(this.listaVeiculos));
+    }
+    
+    public Proprietario clone() {
+
+        return new Proprietario(this);
     }
 
     //-------------------------------------------------------//  
 
-    public Proprietario clone() {
+    public void adicionaVeiculo (Veiculo v) {
 
-        return new Proprietario(this);
+        if (!this.listaVeiculos.contains(v)) {
+
+            this.listaVeiculos.add(v);
+        }
     }
 
     //-------------------------------------------------------//  
@@ -69,17 +96,6 @@ public class Proprietario extends AtorSistema
 
     //-------------------------------------------------------//  
     
-
-    /*
-    public ArrayList<Veiculo> getListaVeiculos(){
-        
-        return this.listaVeiculos.stream()
-                          .collect(Collectors.toCollection(ArrayList::new));
-                          
-        //Penso que nao esteja certo
-    }
-    
-    */
    /*
     public ArrayList<Veiculo> carrosDisponiveis(){
             

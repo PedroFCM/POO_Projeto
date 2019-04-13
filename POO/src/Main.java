@@ -91,34 +91,33 @@ public class Main {
 											  100000,
 											  50000);
 
+
 	    //-------------------------------------------------------//  
 
 		EstadoSistema e1 = new EstadoSistema();
 		
+		//Adicionar veiculos ao proprietario 1
+		p1.adicionaVeiculo(cg1);
+		p1.adicionaVeiculo(cg2);
+		p1.adicionaVeiculo(cg3);
+
+		//Adicionar veiculos ao proprietario 2
+		p2.adicionaVeiculo(ce1);
+		p2.adicionaVeiculo(ce2);
+		
+		//Adicionar proprietarios ao sistema
 		e1.adicionaProprietario(p1);
 		e1.adicionaProprietario(p2);
 
-		//Adicionar veiculos ao proprietario 1
-		e1.adicionaVeiculo(p1, cg1);
-		e1.adicionaVeiculo(p1, cg2);
-		e1.adicionaVeiculo(p1, cg3);
+		//Adicionar clientes ao sistema
+		e1.adicionaCliente(c1);
+		e1.adicionaCliente(c2);
 
-		//Adicionar veiculos ao proprietario 2
-		e1.adicionaVeiculo(p2, ce1);
-		e1.adicionaVeiculo(p2, ce2);
+		//Para dar print ao sistema -> DEBUG
+		//System.out.println(e1.toString());
 
-		//Mostrar o carro mais próximo do cliente 1
-		System.out.println("\n-> Carro mais próximo do cliente 1: \n");
-		System.out.println(e1.carroMaisProximo(c1).toString());
 
-		//Mostrar o carro mais próximo do cliente 2
-		System.out.println("\n-> Carro mais próximo do cliente 2: \n");
-		System.out.println(e1.carroMaisProximo(c2).toString());
-
-		System.out.println(e1.allVeiculos().toString());
-
-	    //-------------------------------------------------------//  
-
+		
 
 
 	    //-------------------------------------------------------//  

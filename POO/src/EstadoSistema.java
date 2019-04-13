@@ -10,24 +10,30 @@ public class EstadoSistema  {
     
     //-------------------------------------------------------//  
     
-    private List<Cliente> clientes_Sistema;
-    private Map<Proprietario, List<Veiculo>> proprietarios_Sistema;
+    private HashMap<Cliente, List<Aluguer>> clientes_Sistema;
+    private HashMap<Proprietario, List<Veiculo>> proprietarios_Sistema;
+    
     private LocalDate data_atual;
     
     //-------------------------------------------------------//  
 
-    public EstadoSistema (List<Cliente> clientes,
-                          Map<Proprietario, List<Veiculo>> proprietarios,
+    public EstadoSistema (HashMap<Cliente, List<Aluguer>> clientes,
+                          HashMap<Proprietario, List<Veiculo>> proprietarios,
                           LocalDate data) {
 
-        this.clientes_Sistema = clientes.stream()
-                                        .map(Cliente::clone)
-                                        .collect(Collectors.toList());
+        this.clientes_Sistema = clientes.entrySet()
+                                        .stream()
+                                        .collect(Collectors.toMap(e -> e.getKey(),
+                                                                  e -> new ArrayList<Aluguer>(e.getValue()),
+                                        					        (e1, e2) -> e2,
+                                        					        HashMap::new));
     
         this.proprietarios_Sistema = proprietarios.entrySet()
                                                   .stream()
                                                   .collect(Collectors.toMap(e -> e.getKey(),
-                                                                            e -> new ArrayList<Veiculo>(e.getValue())));
+                                                                            e -> new ArrayList<Veiculo>(e.getValue()),
+                                                  					        (e1, e2) -> e2,
+                                                  					        HashMap::new));
 
         this.data_atual = data;
     }
@@ -41,7 +47,7 @@ public class EstadoSistema  {
 
     public EstadoSistema () {
 
-        this.clientes_Sistema = new ArrayList<Cliente>();
+        this.clientes_Sistema = new HashMap<Cliente, List<Aluguer>>();
         this.proprietarios_Sistema = new HashMap<Proprietario, List<Veiculo>>();
         this.data_atual = LocalDate.now();
     }
@@ -50,7 +56,18 @@ public class EstadoSistema  {
 
     public void adicionaProprietario (Proprietario p) {
 
-        this.proprietarios_Sistema.put(p, p.getListaVeiculos());
+    	if (!this.proprietarios_Sistema.containsKey(p)) {
+
+			this.proprietarios_Sistema.put(p.clone(), p.getListaVeiculos());
+    	}
+    }
+
+    public void adicionaCliente (Cliente c) {
+
+    	if (!this.clientes_Sistema.containsKey(c)) {
+
+			this.clientes_Sistema.put(c.clone(), c.getHistoricoAlugueres());
+    	}
     }
 
     public List<Veiculo> allVeiculos() {
@@ -60,23 +77,10 @@ public class EstadoSistema  {
         lista = this.proprietarios_Sistema.values()
                                           .stream()
                                           .flatMap(l -> l.stream())
-                                                         .map(Veiculo::clone)
-                                                         .collect(Collectors.toList());
+                                                   .map(Veiculo::clone)
+                                                   .collect(Collectors.toList());
 
         return lista;
-    }
-
-    public void adicionaVeiculo (Proprietario p, Veiculo v) {
-
-        if (this.proprietarios_Sistema.containsKey(p)) {
-        
-           this.proprietarios_Sistema.get(p).add(v); 
-        
-        } else {
-        
-            p.adicionaVeiculo(v);
-            this.proprietarios_Sistema.put(p, p.getListaVeiculos());
-        }
     }
 
     public Veiculo carroMaisProximo (Cliente c) {
@@ -85,8 +89,9 @@ public class EstadoSistema  {
         
         todosVeiculos =  this.allVeiculos();
 
-        if (todosVeiculos.isEmpty())
+        if (todosVeiculos.isEmpty()) {
             return null;
+        }
 
         Localizacao local_c = c.getLocalizacao();
 
@@ -124,7 +129,7 @@ public class EstadoSistema  {
         s.append(this.clientes_Sistema.toString());
         s.append("\n------------Proprietarios no Sistema------------\n");
         s.append(this.proprietarios_Sistema.toString());
-        s.append("\n------------Data Sistema------------\n" + this.data_atual.toString() + "\n");
+        s.append("\n------------Data Sistema------------\n\t" + this.data_atual.toString() + "\n");
 
         return s.toString();
     }
@@ -146,19 +151,24 @@ public class EstadoSistema  {
 
     //-------------------------------------------------------//  
 
-    public List<Cliente> getClientesSistema () {
+    public HashMap<Cliente, List<Aluguer>> getClientesSistema () {
 
-       return this.clientes_Sistema.stream()
-                                   .map(Cliente::clone)
-                                   .collect(Collectors.toList());   
+       return this.clientes_Sistema.entrySet()
+                                   .stream()
+                                   .collect(Collectors.toMap(e -> e.getKey(),
+                                                             e -> new ArrayList<Aluguer>(e.getValue()),
+                                   					        (e1, e2) -> e2,
+                                          					 HashMap::new));
     }
 
-    public Map<Proprietario, List<Veiculo>> getProprietariosSistema () {
+    public HashMap<Proprietario, List<Veiculo>> getProprietariosSistema () {
 
          return this.proprietarios_Sistema.entrySet()
-                                          .stream()
-                                          .collect(Collectors.toMap(e -> e.getKey(),
-                                                                    e -> new ArrayList<Veiculo>(e.getValue())));
+                                           .stream()
+                                           .collect(Collectors.toMap(e -> e.getKey(),
+                                                                     e -> new ArrayList<Veiculo>(e.getValue()),
+                                           					        (e1, e2) -> e2,
+                                                  					 HashMap::new));
    }
 
     public LocalDate getData () {
