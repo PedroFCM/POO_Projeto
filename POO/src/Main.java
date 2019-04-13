@@ -56,7 +56,7 @@ public class Main {
 
 		CarroGasolina cg2 = new CarroGasolina("20-00-22",
 											  200,
-											  14,
+											  16,
 											  45,
 											  new Localizacao (20.0, 30.1),
 											  20,
@@ -66,7 +66,7 @@ public class Main {
 
 		CarroGasolina cg3 = new CarroGasolina("57-47-AX",
 											  200,
-											  14,
+											  900,
 											  45,
 											  new Localizacao (900.0, 300.1),
 											  20,
@@ -75,7 +75,7 @@ public class Main {
 
 		CarroEletrico ce1 = new CarroEletrico("29-20-PW",
 											  200,
-											  14,
+											  1,
 											  45,
 											  new Localizacao (1.1, 1.1),
 											  20,
@@ -84,7 +84,7 @@ public class Main {
 
 		CarroEletrico ce2 = new CarroEletrico("12-02-LS",
 											  200,
-											  14,
+											  2,
 											  45,
 											  new Localizacao (90.0, 3.1),
 											  20,
@@ -114,9 +114,16 @@ public class Main {
 		e1.adicionaCliente(c2);
 
 		//Para dar print ao sistema -> DEBUG
-		System.out.println(e1.toString());
+		//System.out.println(e1.toString());
 
+		System.out.println("Carro mais próximo de c1: \n");
+		System.out.println(e1.carroMaisProximo(c1));
 
+		System.out.println("Carro mais próximo de c2: \n");
+		System.out.println(e1.carroMaisProximo(c2));
+
+		System.out.println("Carro mais barato: ");
+		System.out.println(e1.carroMaisBarato());
 
 	    //-------------------------------------------------------//  
 	}

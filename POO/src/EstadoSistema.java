@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.lang.Integer;
+import java.util.TreeMap;
+import java.util.SortedMap;
 
 public class EstadoSistema  {
     
@@ -112,6 +114,27 @@ public class EstadoSistema  {
         }
 
         return maisPerto;  
+    }
+
+    public Veiculo carroMaisBarato () {
+
+        List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();
+        
+        todosVeiculos =  this.allVeiculos();
+
+        if (todosVeiculos.isEmpty()) {
+            return null;
+        }
+        
+       SortedMap<Double, Veiculo> veiculosOrdenadosPorPreco = 
+                            new TreeMap<Double, Veiculo>();
+
+        for (Veiculo v: todosVeiculos) {
+
+          veiculosOrdenadosPorPreco.put(v.getPrecoPorKM(), v.clone());
+        }
+
+        return veiculosOrdenadosPorPreco.get(veiculosOrdenadosPorPreco.firstKey());  
     }
 
     //-------------------------------------------------------//  
