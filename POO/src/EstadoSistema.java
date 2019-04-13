@@ -12,21 +12,23 @@ public class EstadoSistema  {
     
     //-------------------------------------------------------//  
     
-    private Map<Cliente, List<Aluguer>> clientes_Sistema;
+    //Key: Cliente; Value: Nome
+    private Map<Cliente, String> clientes_Sistema;
+
     private Map<Proprietario, List<Veiculo>> proprietarios_Sistema;
     
     private LocalDate data_atual;
     
     //-------------------------------------------------------//  
 
-    public EstadoSistema (Map<Cliente, List<Aluguer>> clientes,
+    public EstadoSistema (Map<Cliente, String> clientes,
                           Map<Proprietario, List<Veiculo>> proprietarios,
                           LocalDate data) {
 
         this.clientes_Sistema = clientes.entrySet()
                                         .stream()
                                         .collect(Collectors.toMap(e -> e.getKey(),
-                                                                  e -> new ArrayList<Aluguer>(e.getValue()),
+                                                                  e -> e.getValue(),
                                         					        (e1, e2) -> e2,
                                         					        HashMap::new));
     
@@ -49,7 +51,7 @@ public class EstadoSistema  {
 
     public EstadoSistema () {
 
-        this.clientes_Sistema = new HashMap<Cliente, List<Aluguer>>();
+        this.clientes_Sistema = new HashMap<Cliente, String>();
         this.proprietarios_Sistema = new HashMap<Proprietario, List<Veiculo>>();
         this.data_atual = LocalDate.now();
     }
@@ -68,7 +70,7 @@ public class EstadoSistema  {
 
     	if (!this.clientes_Sistema.containsKey(c)) {
 
-			   this.clientes_Sistema.put(c.clone(), c.getHistoricoAlugueres());
+			   this.clientes_Sistema.put(c.clone(), c.getNome());
     	}
     }
 
@@ -232,12 +234,12 @@ public class EstadoSistema  {
 
     //-------------------------------------------------------//  
 
-    public Map<Cliente, List<Aluguer>> getClientesSistema () {
+    public Map<Cliente, String> getClientesSistema () {
 
        return this.clientes_Sistema.entrySet()
                                    .stream()
                                    .collect(Collectors.toMap(e -> e.getKey(),
-                                                             e -> new ArrayList<Aluguer>(e.getValue()),
+                                                             e -> e.getValue(),
                                    					        (e1, e2) -> e2,
                                           					 HashMap::new));
     }
