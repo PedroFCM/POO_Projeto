@@ -2,9 +2,9 @@
 
 ------------> Trabalho POO #TODO list: <------------
 
--> Um proprietario pode REGISTAR o seu veiculo na APP;
+-> Um proprietario pode REGISTAR o seu veiculo na APP; (CHECK)
 
--> Um cliente pode ALUGAR um carro REGISTADO;           
+-> Um cliente pode ALUGAR um carro REGISTADO;            
 
 -> Um proprietario pode ACEITAR/NEGAR o aluguer pedido;
 
@@ -20,23 +20,23 @@
 
 -----------FUNCIONALIDADES QUE OS CLIENTES TEM ACESSO:-----------
 
-=> Solicitar o aluguer do carro mais próximo da sua Localizacao;
-=> Solicitar o aluguer do carro mais barato;
-=> Solicitar o aluguer do carro mais barato dentro de uma distância que estão dispostos a percorrer a pé;
-=> Solicitar o aluguer de um carro específico;
-=> Solicitar o aluguer de um carro com uma certa autonomia;
+=> Solicitar o aluguer do carro mais próximo da sua Localizacao; (CHECK)
+=> Solicitar o aluguer do carro mais barato; (CHECK)
+=> Solicitar o aluguer do carro mais barato dentro de uma distância que estão dispostos a percorrer a pé; (CHECK)
+=> Solicitar o aluguer de um carro específico; (CHECK)
+=> Solicitar o aluguer de um carro com uma certa autonomia; 
 
 
 NOTAS:
 
 -> O proprietario é o UNICO que pode ABASTECER! (Deposito/Bateria);
--> No ato de aluguer o cliente indica onde quer ir (destino) e devera ser VERIFICADO se o automovel tem autonomia para o alcançar (caso negativo não se poderá alugar o automovel);
+-> No ato de aluguer o cliente indica onde quer ir (destino) e devera ser VERIFICADO se o automovel tem autonomia para o alcançar (caso negativo não se poderá alugar o automovel); (CHECK)
 
 -----------FUNCIONALIDADES QUE OS PROPRIETARIOS TEM ACESSO:-----------
 
 -> Sinalizar que um carro seu está disponivel para aluguer;
 -> Abastecer um veiculo (O PROPRIETARIO APENAS!!!);
--> Alterar o preço por km;
+-> Alterar o preço por km; (check)
 -> Aceitar/Regeitar o aluguer de um determinado cliente;
 -> Registar quando custou a viagem!;
 

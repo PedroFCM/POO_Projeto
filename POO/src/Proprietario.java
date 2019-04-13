@@ -2,13 +2,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Proprietario extends AtorSistema
 {
 
     //-------------------------------------------------------//  
 
-    private List<Veiculo> listaVeiculos;
+    private Map<String,Veiculo> mapVeiculos;
     
     //-------------------------------------------------------//  
 
@@ -19,24 +21,27 @@ public class Proprietario extends AtorSistema
                         LocalDate data, 
                         int classificacao,
                         List<Aluguer> historico,
-                        List<Veiculo> veiculos) {
+                        Map<String,Veiculo> veiculos) {
      
         super(email, nome, password, morada, data, classificacao, historico);
-        this.listaVeiculos = veiculos.stream()
-                                     .map(Veiculo::clone)
-                                     .collect(Collectors.toList());
+        this.mapVeiculos = veiculos.entrySet()
+                                        .stream()
+                                        .collect(Collectors.toMap(e -> e.getKey(),
+                                                                  e -> e.getValue(),
+                                                                    (e1, e2) -> e2,
+                                                                    HashMap::new));
     }
     
     public Proprietario (Proprietario umProprietario) {
     
         super(umProprietario);
-        this.listaVeiculos = umProprietario.getListaVeiculos();
+        this.mapVeiculos = umProprietario.getMapVeiculos();
     }
     
     public Proprietario () {
         
         super();
-        this.listaVeiculos = new ArrayList<Veiculo>();
+        this.mapVeiculos = new HashMap<String, Veiculo>();
     }
 
     //-------------------------------------------------------//  
@@ -47,6 +52,7 @@ public class Proprietario extends AtorSistema
 
         s.append("\n=> Tipo de ator de Sistema: Proprietario.");
         s.append(super.toString());
+        s.append(this.getListaVeiculos().toString());
 
         return s.toString();
     }
@@ -63,7 +69,7 @@ public class Proprietario extends AtorSistema
         boolean veiculosIgual = true;
      
         return (super.equals(p) &&
-                p.getListaVeiculos().equals(this.listaVeiculos));
+                p.getListaVeiculos().equals(this.mapVeiculos));
     }
     
     public Proprietario clone() {
@@ -72,29 +78,45 @@ public class Proprietario extends AtorSistema
     }
 
     //-------------------------------------------------------//  
-
+    
     public void adicionaVeiculo (Veiculo v) {
 
-        if (!this.listaVeiculos.contains(v)) {
+        
+        if (!this.mapVeiculos.containsKey(v.getMatricula())) {
 
-            this.listaVeiculos.add(v);
+            this.mapVeiculos.put(v.getMatricula(),v.clone());
         }
     }
 
+   
+    public void alteraPrecoPorKm(Veiculo v, double preco){
+        
+        if(this.mapVeiculos.containsValue(v)){
+            
+            this.mapVeiculos.get(v.getMatricula()).setPrecoPorKm(preco);
+        }
+    }
+    
+   
     //-------------------------------------------------------//  
+
+    public Map<String, Veiculo> getMapVeiculos() {
+
+       return this.mapVeiculos.entrySet()
+                                   .stream()
+                                   .collect(Collectors.toMap(e -> e.getKey(),
+                                                             e -> e.getValue(),
+                                                            (e1, e2) -> e2,
+                                                             HashMap::new));
+    }
 
     public List<Veiculo> getListaVeiculos() {
 
-        List<Veiculo> lista = new ArrayList<>(); 
-        
-        for(Veiculo v: this.listaVeiculos) {
-
-            lista.add(v.clone());
-        }
-        
-        return lista;
+       return this.mapVeiculos.values()
+                                   .stream()
+                                   .map(Veiculo::clone)
+                                   .collect(Collectors.toList());
     }
-
     //-------------------------------------------------------//  
     
    /*

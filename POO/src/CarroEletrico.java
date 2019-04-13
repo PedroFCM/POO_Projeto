@@ -12,7 +12,7 @@ public class CarroEletrico extends Veiculo {
     //-------------------------------------------------------//  
 
     public CarroEletrico (String nova_matricula,
-    					  int velMedia,
+    					  double velMedia,
     					  double priceKM,
     					  double classiF,
     					  Localizacao nova_local,

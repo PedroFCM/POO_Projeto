@@ -15,29 +15,29 @@ public class EstadoSistema {
     //Key: Cliente; Value: Nome
     private Map<Cliente, String> clientes_Sistema;
 
-    private Map<Proprietario, List<Veiculo>> proprietarios_Sistema;
+    private Map<Proprietario, String> proprietarios_Sistema;
     
     private LocalDate data_atual;
     
     //-------------------------------------------------------//  
 
     public EstadoSistema (Map<Cliente, String> clientes,
-                          Map<Proprietario, List<Veiculo>> proprietarios,
+                          Map<Proprietario, String> proprietarios,
                           LocalDate data) {
 
         this.clientes_Sistema = clientes.entrySet()
                                         .stream()
                                         .collect(Collectors.toMap(e -> e.getKey(),
                                                                   e -> e.getValue(),
-                                        					        (e1, e2) -> e2,
-                                        					        HashMap::new));
+                                                                    (e1, e2) -> e2,
+                                                                    HashMap::new));
     
         this.proprietarios_Sistema = proprietarios.entrySet()
                                                   .stream()
                                                   .collect(Collectors.toMap(e -> e.getKey(),
-                                                                            e -> new ArrayList<Veiculo>(e.getValue()),
-                                                  					        (e1, e2) -> e2,
-                                                  					        HashMap::new));
+                                                                            e -> e.getValue(),
+                                                                            (e1, e2) -> e2,
+                                                                            HashMap::new));
 
         this.data_atual = data;
     }
@@ -52,39 +52,45 @@ public class EstadoSistema {
     public EstadoSistema () {
 
         this.clientes_Sistema = new HashMap<Cliente, String>();
-        this.proprietarios_Sistema = new HashMap<Proprietario, List<Veiculo>>();
+        this.proprietarios_Sistema = new HashMap<Proprietario, String>();
         this.data_atual = LocalDate.now();
     }
 
     //-------------------------------------------------------//  
-
+    
+    
+    
+    
     public void adicionaProprietario (Proprietario p) {
 
-    	if (!this.proprietarios_Sistema.containsKey(p)) {
+        if (!this.proprietarios_Sistema.containsKey(p)) {
 
-		      this.proprietarios_Sistema.put(p.clone(), p.getListaVeiculos());
-    	}
+              this.proprietarios_Sistema.put(p.clone(), p.getEmail());
+        }
     }
 
     public void adicionaCliente (Cliente c) {
 
-    	if (!this.clientes_Sistema.containsKey(c)) {
+        if (!this.clientes_Sistema.containsKey(c)) {
 
-			   this.clientes_Sistema.put(c.clone(), c.getNome());
-    	}
+               this.clientes_Sistema.put(c.clone(), c.getEmail());
+        }
     }
 
     public List<Veiculo> allVeiculos() {
 
-        List<Veiculo> lista = new ArrayList<>();
+        List<Proprietario> listaP = new ArrayList<>();
+        List<Veiculo> listaV = new ArrayList<>();
         
-        lista = this.proprietarios_Sistema.values()
+        listaP = this.proprietarios_Sistema.keySet()
                                           .stream()
-                                          .flatMap(l -> l.stream())
-                                                   .map(Veiculo::clone)
-                                                   .collect(Collectors.toList());
-
-        return lista;
+                                          .collect(Collectors.toList());
+        for(Proprietario p: listaP){
+        
+            listaV.addAll(p.getListaVeiculos());
+        }
+   
+        return listaV;
     }
 
     public Veiculo carroMaisProximo (Cliente c) {
@@ -196,7 +202,14 @@ public class EstadoSistema {
 
       return carroEspecifico;
     }
-
+    
+    /**************************
+    public boolean temAutonomiaParaViagem (Veiculo v,double distancia){
+    
+        return(v.getAutonomiaAtual() >= distancia);
+    }
+    *****************/
+    
     //-------------------------------------------------------//  
 
     public EstadoSistema clone () {
@@ -240,18 +253,18 @@ public class EstadoSistema {
                                    .stream()
                                    .collect(Collectors.toMap(e -> e.getKey(),
                                                              e -> e.getValue(),
-                                   					        (e1, e2) -> e2,
-                                          					 HashMap::new));
+                                                            (e1, e2) -> e2,
+                                                             HashMap::new));
     }
 
-    public Map<Proprietario, List<Veiculo>> getProprietariosSistema () {
+    public Map<Proprietario, String> getProprietariosSistema () {
 
          return this.proprietarios_Sistema.entrySet()
                                            .stream()
                                            .collect(Collectors.toMap(e -> e.getKey(),
-                                                                     e -> new ArrayList<Veiculo>(e.getValue()),
-                                           					        (e1, e2) -> e2,
-                                                  					 HashMap::new));
+                                                                     e -> e.getValue(),
+                                                                    (e1, e2) -> e2,
+                                                                     HashMap::new));
    }
 
     public LocalDate getData () {

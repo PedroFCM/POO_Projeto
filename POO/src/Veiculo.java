@@ -62,8 +62,8 @@ public class Veiculo {
                this.local.equals(v.getLocalizacao()));
     }
 
-    public Veiculo clone () {
-
+    public Veiculo clone (){
+        
         return new Veiculo(this);
     }
 
@@ -81,7 +81,14 @@ public class Veiculo {
     }
     
     //-------------------------------------------------------//  
-
+    
+    /************************
+    public double getAutonomiaAtual(){
+        
+        return 0;
+    }
+    */
+   
     public String getMatricula () {
 
         return this.matricula;
@@ -107,6 +114,11 @@ public class Veiculo {
         return this.local;
     }
 
+    public void setPrecoPorKm(double preco){
+        
+        this.precoPorKm = preco;
+    }
+    
     //-------------------------------------------------------//  
     
     public void moverParaPosicao (int x, int y){
