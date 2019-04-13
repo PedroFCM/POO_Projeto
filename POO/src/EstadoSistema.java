@@ -8,7 +8,7 @@ import java.lang.Integer;
 import java.util.TreeMap;
 import java.util.SortedMap;
 
-public class EstadoSistema  {
+public class EstadoSistema {
     
     //-------------------------------------------------------//  
     

@@ -39,6 +39,48 @@ public class Aluguer
         this.data = LocalDate.now();
     }
 
+   //-------------------------------------------------------//  
+
+
+
+   //-------------------------------------------------------//  
+
+    public String toString() 
+    {    
+        StringBuffer sb = new StringBuffer();
+        
+        sb.append('\n' + "Cliente = "+ this.getCliente() + '\n');
+        sb.append("Proprietario = "+ this.getProprietario() + '\n');
+        sb.append("Veiculo = "+ this.getVeiculo() + '\n');
+        sb.append("Preco = "+ this.getPreco() + '\n');
+        sb.append("Distancia = "+ this.getDistancia() + '\n');
+        sb.append("Data = "+ this.getData().toString() + '\n'); 
+        
+        return sb.toString();
+        
+    }
+    
+    public Aluguer clone()
+    {
+        return new Aluguer(this);
+    }
+    
+    public boolean equals(Object o)
+    {
+        if(this == o)
+            return true;
+        
+        if((o == null) || (this.getClass() != o.getClass()))
+          return false;
+          
+        Aluguer umAluguer = (Aluguer) o;
+        return (this.cliente.equals(umAluguer.getCliente()) && this.proprietario.equals(umAluguer.getProprietario()) 
+            && this.veiculo.equals(umAluguer.getVeiculo()) && this.preco == umAluguer.getPreco() && this.distancia == umAluguer.getDistancia() 
+            && this.data.equals(umAluguer.getData()) ); 
+    }
+
+   //-------------------------------------------------------//  
+
     public String getCliente()
     {
         return this.cliente;
@@ -97,40 +139,6 @@ public class Aluguer
     public void setData(LocalDate data)
     {
         this.data = data;
-    }
-    
-    public String toString() 
-    {    
-        StringBuffer sb = new StringBuffer();
-        
-        sb.append("Cliente = "+ this.getCliente());
-        sb.append("Proprietario = "+ this.getProprietario());
-        sb.append("Veiculo = "+ this.getVeiculo());
-        sb.append("Preco = "+ this.getPreco());
-        sb.append("Distancia = "+ this.getDistancia());
-        sb.append("Data = "+ this.getData().toString()); 
-        
-        return sb.toString();
-        
-    }
-    
-    public Aluguer clone()
-    {
-        return new Aluguer(this);
-    }
-    
-    public boolean equals(Object o)
-    {
-        if(this == o)
-            return true;
-        
-        if((o == null) || (this.getClass() != o.getClass()))
-          return false;
-          
-        Aluguer umAluguer = (Aluguer) o;
-        return (this.cliente.equals(umAluguer.getCliente()) && this.proprietario.equals(umAluguer.getProprietario()) 
-            && this.veiculo.equals(umAluguer.getVeiculo()) && this.preco == umAluguer.getPreco() && this.distancia == umAluguer.getDistancia() 
-            && this.data.equals(umAluguer.getData()) ); 
     }
     
 }

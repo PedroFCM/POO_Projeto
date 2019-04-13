@@ -62,6 +62,13 @@ public class AtorSistema {
 
    //-------------------------------------------------------//  
 
+    public void adicionaAluguer (Aluguer novo) {
+
+        this.historico_alugueres.add(novo.clone());
+    }
+
+   //-------------------------------------------------------//  
+
     public boolean equals(Object o) {
         
         if (this == o) return true;
