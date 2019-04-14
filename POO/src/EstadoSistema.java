@@ -62,11 +62,6 @@ public class EstadoSistema {
 
       return this.proprietarios_Sistema.containsKey(email);
     }
-
-    public Proprietario getProprietario (String email) {
-
-      return this.proprietarios_Sistema.get(email);
-    }
     
     public void adicionaProprietario (Proprietario p) {
 
@@ -251,6 +246,16 @@ public class EstadoSistema {
 
 
     //-------------------------------------------------------//  
+
+    public Cliente getCliente (String email) {
+
+      return this.clientes_Sistema.get(email);
+    }
+
+    public Proprietario getProprietario (String email) {
+
+      return this.proprietarios_Sistema.get(email);
+    }
 
     public Map<String, Cliente> getClientesSistema () {
 

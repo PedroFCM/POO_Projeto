@@ -33,37 +33,35 @@ public class Main_IO {
         
             List<String> logs = leFicheiroParaLista("logs.txt");
        		
-            System.out.println ("\nFicheiro de logs: \n");
-
            	//logs.forEach(System.out::println);
 
             //A partir daqui conseguiu ler o ficheiro
             //Vai percorrer o ficheiro lido na lista de strings (linhas)
 
-            for (String s: logs) {
+        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 
-            	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+        	double xLido = 0, yLido = 0;
+			double velMedia, consumo, precoKM, maxAuto, currAuto;
+			
+			LocalDate dataLida;
 
-            	int xLido = 0, yLido = 0;
-				double velMedia, consumo, precoKM, maxAuto, currAuto;
-				
-				LocalDate dataLida;
+           for (String s: logs) {
 
-				String[] tokens = s.split(",");            	
+ 				String[] tokens = s.split(",");            	
 
 				switch(tokens[0]) {
 
-					case "NovoCliente": //**********************************************
+					case "NovoCliente":
 
 						dataLida = LocalDate.parse(tokens[4], formatter);
 
-						xLido = Character.getNumericValue(tokens[5].charAt(1));
-						yLido = Character.getNumericValue(tokens[5].charAt(3));
+						xLido = Double.parseDouble(tokens[5]);
+						yLido = Double.parseDouble(tokens[6]);
 
 						Cliente cliente_lido = new Cliente(tokens[1],
 													  tokens[3],
 													  tokens[2],
-													  tokens[6],
+													  tokens[7],
 													  dataLida,
 													  new Localizacao(xLido, yLido),
 													  new ArrayList<Aluguer>(),
@@ -90,18 +88,18 @@ public class Main_IO {
 
 						break;
 
-					case "NovoCarro": //**********************************************
+					case "NovoCarro":
 						
 						velMedia = Double.parseDouble(tokens[5]);
 						precoKM  = Double.parseDouble(tokens[6]);
 						consumo  = Double.parseDouble(tokens[7]);
 
-						xLido = Character.getNumericValue(tokens[8].charAt(1));
-						yLido = Character.getNumericValue(tokens[8].charAt(3));
+						xLido = Double.parseDouble(tokens[8]);
+						yLido = Double.parseDouble(tokens[9]);
 
 						switch (tokens[1]) {
 
-							case "gasolina": //---------------------------------------
+							case "gasolina":
 
 								CarroGasolina carro_gas = 
 										new CarroGasolina (tokens[2],
@@ -111,11 +109,12 @@ public class Main_IO {
 														   new Localizacao(xLido, yLido),
 														   consumo,
 														   100,
-														   0);
+														   0,
+														   tokens[10]);
 
-								if (e.existeProprietario(tokens[9])) {
+								if (e.existeProprietario(tokens[10])) {
 
-									e.getProprietario(tokens[9]).adicionaVeiculo(carro_gas);
+									e.getProprietario(tokens[10]).adicionaVeiculo(carro_gas);
 								
 								}
 								
@@ -131,23 +130,52 @@ public class Main_IO {
 															   new Localizacao(xLido, yLido),
 															   consumo,
 															   100,
-															   0);
+															   0,
+															   tokens[10]);
 											
-									if (e.existeProprietario(tokens[9])) {
+									if (e.existeProprietario(tokens[10])) {
 
-										e.getProprietario(tokens[9]).adicionaVeiculo(carro_ele);
+										e.getProprietario(tokens[10]).adicionaVeiculo(carro_ele);
 									
 									}
 
 									break;
 
-							}
+							default: break;
+						}
+					
+					case "Aluguer":
+
+						switch(tokens[2]) {
+
+							case "MaisPerto":
+
+								Veiculo alugado 
+									= new Veiculo (e.carroMaisProximo(
+														e.getCliente(tokens[1])));
+
+								String nomeVeiculo = alugado.getClass().getSimpleName();
+
+								Aluguer alug = new Aluguer(nomeVeiculo, //Nome do veiculo
+								    					    tokens[1], //Nome do cliente
+								    						alugado.getProprietario(), //Nome do prodprietario
+														    20.0, //Distancia
+														    alugado.getPrecoPorKM(), //Preco
+														    e.getData()); //Data de aluguer
+
+								e.getCliente(tokens[1]).adicionaAluguer(alug);
+								e.getProprietario(alugado.getProprietario()).adicionaAluguer(alug);
+
+						       	// System.out.println("\nCarro mais próximo de " + tokens[1] + "\n");
+						        // System.out.println(e.getCliente(tokens[1]).getLocalizacao().toString());
+						        // System.out.println(e.carroMaisProximo(e.getCliente(tokens[1])));
+
+						    default: break;
+						}
+
 							break;
 
-					default:
-					
-						//System.out.println("None of those options were detected!"); 
-						break;
+					default: break;
 				}
 
             }
@@ -163,24 +191,28 @@ public class Main_IO {
 
 		EstadoSistema e1 = new EstadoSistema();
 		
+		//Carregar o ficheiro de logs no sistema
 		loadLogs(e1);
 
+		//Para dar print ao sistema todo [Debug]
        	System.out.println(e1.toString());
 	    
-	    //-------------------------------------------------------//  
-/*		Aluguer alug1 = new Aluguer("CarroGasolina",
-								    c1.getNome(),
-								    "Firmino",
-								    20.0,
-								    15,
-								    e1.getData());
+        // System.out.println("Carro mais próximo de maria.silva@gmail.com: "+ e1.getCliente("jose.silva@gmail.com").getLocalizacao().toString());
+        // System.out.println(e1.carroMaisProximo(e1.getCliente("maria.silva@gmail.com")));
 
-		c1.adicionaAluguer(alug1);
+        // System.out.println("Carro mais barato: ");
+        // System.out.println((e1.carroMaisBarato())==null?
+        //                  "Não há carros.":(e1.carroMaisBarato()));
 
-		//Adicionar clientes ao sistema
-		e1.adicionaCliente(c1);
-		e1.adicionaCliente(c2);
-*/
+        // System.out.println("Carro mais barato, dentro de uma distancia (2km) para jose.silva@gmail.com: " + e1.getCliente("jose.silva@gmail.com").getLocalizacao().toString());
+        // System.out.println((e1.carroMaisBarato(e1.getCliente("jose.silva@gmail.com"), 2.0))==null?
+        //                  "Não há carros.":(e1.carroMaisBarato(e1.getCliente("jose.silva@gmail.com"), 2.0)));
+
+        // System.out.println("\nSolicitacao de carros a gasolina: \n");
+        // System.out.println(e1.carroEspecifico("CarroGasolina"));
+
+        // System.out.println("\nSolicitacao de carros eletricos: \n");
+        // System.out.println(e1.carroEspecifico("CarroEletrico"));
 	
 	}
 

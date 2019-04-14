@@ -18,9 +18,10 @@ public class CarroEletrico extends Veiculo {
     					  Localizacao nova_local,
     					  double consumo,
     					  double maxAuto,
-    					  double currentAuto) {
+    					  double currentAuto,
+                          String prop) {
 
-    	super(nova_matricula, velMedia, priceKM, classiF, nova_local);
+    	super(nova_matricula, velMedia, priceKM, classiF, nova_local, prop);
 
     	this.consumoBateriaPorKm    = consumo;
     	this.autonomiaMaxima = maxAuto;

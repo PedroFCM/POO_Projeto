@@ -53,7 +53,8 @@ public class Main {
                                               new Localizacao (20.0, 3.1),
                                               20,
                                               100000,
-                                              50000);
+                                              50000,
+                                              "propriatario1@mail.pt");
 
         CarroGasolina cg2 = new CarroGasolina("20-00-22",
                                               200,
@@ -62,7 +63,8 @@ public class Main {
                                               new Localizacao (20.0, 30.1),
                                               20,
                                               100000,
-                                              50000);
+                                              50000,
+                                              "propriatario1@mail.pt");
 
 
         CarroGasolina cg3 = new CarroGasolina("57-47-AX",
@@ -72,7 +74,8 @@ public class Main {
                                               new Localizacao (900.0, 300.1),
                                               20,
                                               100000,
-                                              50000);
+                                              50000,
+                                              "propriatario1@mail.pt");
 
         CarroEletrico ce1 = new CarroEletrico("29-20-PW",
                                               200,
@@ -81,7 +84,8 @@ public class Main {
                                               new Localizacao (1.1, 1.1),
                                               20,
                                               100000,
-                                              50000);
+                                              50000,
+                                              "propriatario2@mail.pt");
 
         CarroEletrico ce2 = new CarroEletrico("12-02-LS",
                                               200,
@@ -90,7 +94,8 @@ public class Main {
                                               new Localizacao (90.0, 3.1),
                                               20,
                                               100000,
-                                              50000);
+                                              50000,
+                                              "propriatario2@mail.pt");
 
 
         //-------------------------------------------------------//  

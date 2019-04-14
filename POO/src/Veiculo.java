@@ -10,6 +10,7 @@ public class Veiculo {
     private double precoPorKm;
     private double classificacao;
     private Localizacao local;
+    private String proprietario;
     
     //-------------------------------------------------------//  
 
@@ -17,13 +18,15 @@ public class Veiculo {
                     double mediumVel, 
                     double precKM,
                     double classif,
-                    Localizacao local_carro) {
+                    Localizacao local_carro,
+                    String proprietario) {
 
         this.matricula       = nova_matric; 
         this.velMediaPorKM   = mediumVel;
         this.precoPorKm      = precKM;
         this.classificacao   = classif;
         this.local           = new Localizacao(local_carro);
+        this.proprietario    = proprietario;
     }
    
     public Veiculo (Veiculo novo) {
@@ -33,6 +36,7 @@ public class Veiculo {
         this.precoPorKm      = novo.getPrecoPorKM();
         this.classificacao   = novo.getClassificacao();
         this.local           = novo.getLocalizacao();
+        this.proprietario    = novo.getProprietario();
     }
 
     public Veiculo () {
@@ -42,6 +46,7 @@ public class Veiculo {
         this.precoPorKm      = 0;
         this.classificacao   = 0;
         this.local           = new Localizacao();
+        this.proprietario    = "Não tem";
     }
   
     //-------------------------------------------------------//  
@@ -59,7 +64,8 @@ public class Veiculo {
                this.velMediaPorKM == v.getVelMediaPorKM() &&
                this.precoPorKm == v.getPrecoPorKM()       &&
                this.classificacao == v.getClassificacao() &&
-               this.local.equals(v.getLocalizacao()));
+               this.local.equals(v.getLocalizacao())      &&
+               this.proprietario.equals(v.getProprietario()));
     }
 
     public Veiculo clone (){
@@ -75,6 +81,7 @@ public class Veiculo {
         s.append("Vel_Med/KM: " + this.velMediaPorKM + "\n");
         s.append("Preco/KM: " + this.precoPorKm + "\n");
         s.append("Class.: " + this.classificacao + "\n");
+        s.append("Proprietario: " + this.proprietario + "\n");
         s.append(this.local.toString());
 
         return s.toString();
@@ -91,6 +98,11 @@ public class Veiculo {
         return 0;
     }
    
+    public String getProprietario() {
+
+        return this.proprietario;
+    }
+
     public String getMatricula () {
 
         return this.matricula;

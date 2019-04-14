@@ -85,15 +85,7 @@ public class Cliente extends AtorSistema {
  
     //-------------------------------------------------------//  
 
-    /*
-    public aluguerCarroMaisProximo(){
-    
-    }
-    
-    public aluguerCarroMaisBarato(){
-    
-    }
-    
+/*
     public carroMaisBaratoDistanciaPe(int kmPe){
     
     }
