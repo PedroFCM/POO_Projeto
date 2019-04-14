@@ -20,17 +20,17 @@ public class AtorSistema {
    //-------------------------------------------------------//  
 
     public AtorSistema (String novo_email, 
-    					String novo_nome, 
-    					String nova_pass, 
-    					String nova_morada, 
-    					LocalDate nova_dataNasc,
+                        String novo_nome, 
+                        String nova_pass, 
+                        String nova_morada, 
+                        LocalDate nova_dataNasc,
                         int classif,
                         List<Aluguer> historico) {
         
-        this.email    		     = novo_email;
-        this.nome  	  		     = novo_nome;
-        this.password 		     = nova_pass;
-        this.morada   		     = nova_morada;
+        this.email               = novo_email;
+        this.nome                = novo_nome;
+        this.password            = nova_pass;
+        this.morada              = nova_morada;
         this.dataDeNascimento    = nova_dataNasc;
         this.classificacao       = classif;
         this.historico_alugueres = historico.stream()
@@ -111,6 +111,13 @@ public class AtorSistema {
         return this.getEmail().hashCode();
     }
     
+    public void atribuiClassificacao(int classi){
+    
+        int n = this.historico_alugueres.size();
+        
+        this.setClassificacao((this.classificacao + classi)/(n+1));
+    }
+    
    //-------------------------------------------------------//  
 
     public List<Aluguer> getHistoricoAlugueres () {
@@ -177,6 +184,10 @@ public class AtorSistema {
         this.dataDeNascimento = dataDeNascimento;
     }
 
+    public void setClassificacao(int classi){
+    
+        this.classificacao = classi;
+    }
    //-------------------------------------------------------//  
 
 }

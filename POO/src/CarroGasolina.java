@@ -5,45 +5,46 @@ public class CarroGasolina extends Veiculo {
 
     //-------------------------------------------------------//  
 
-	private double consumoPorKm;
+    private double consumoPorKm;
     private double autonomiaMaxima;
     private double autonomiaAtual;
 
     //-------------------------------------------------------//  
 
     public CarroGasolina (String nova_matricula,
-    					  double velMedia,
-    					  double priceKM,
-    					  double classiF,
-    					  Localizacao nova_local,
-    					  double consumo,
-    					  double maxAuto,
-    					  double currentAuto,
-                          String prop) {
+                          double velMedia,
+                          double priceKM,
+                          double classiF,
+                          Localizacao nova_local,
+                          double consumo,
+                          double maxAuto,
+                          double currentAuto,
+                          String prop,
+                          boolean estado) {
 
-    	super(nova_matricula, velMedia, priceKM, classiF, nova_local, prop);
+        super(nova_matricula, velMedia, priceKM, classiF, nova_local, prop, estado);
 
-    	this.consumoPorKm    = consumo;
-    	this.autonomiaMaxima = maxAuto;
-    	this.autonomiaAtual  = currentAuto;
+        this.consumoPorKm    = consumo;
+        this.autonomiaMaxima = maxAuto;
+        this.autonomiaAtual  = currentAuto;
     }
 
     public CarroGasolina (CarroGasolina carroGas) {
 
-    	super(carroGas);
+        super(carroGas);
 
-    	this.consumoPorKm    = carroGas.getConsumoPorKM();
-    	this.autonomiaMaxima = carroGas.getAutonomiaMax();
-    	this.autonomiaAtual  = carroGas.getAutonomiaAtual(); 
+        this.consumoPorKm    = carroGas.getConsumoPorKM();
+        this.autonomiaMaxima = carroGas.getAutonomiaMaxima();
+        this.autonomiaAtual  = carroGas.getAutonomiaAtual(); 
     }
 
     public CarroGasolina () {
 
-    	super();
+        super();
 
-    	this.consumoPorKm    = 0;
-    	this.autonomiaMaxima = 0;
-    	this.autonomiaAtual  = 0;
+        this.consumoPorKm    = 0;
+        this.autonomiaMaxima = 0;
+        this.autonomiaAtual  = 0;
     }
 
     //-------------------------------------------------------//  
@@ -57,10 +58,10 @@ public class CarroGasolina extends Veiculo {
         
         CarroGasolina g = (CarroGasolina) o;
      
-        return(super.equals(g) 							   && 
-        	   this.consumoPorKm == g.getConsumoPorKM()    &&
-        	   this.autonomiaMaxima == g.getAutonomiaMax() &&
-        	   this.autonomiaAtual == g.getAutonomiaAtual());
+        return(super.equals(g)                             && 
+               this.consumoPorKm == g.getConsumoPorKM()    &&
+               this.autonomiaMaxima == g.getAutonomiaMaxima() &&
+               this.autonomiaAtual == g.getAutonomiaAtual());
     }
 
     public CarroGasolina clone () {
@@ -72,11 +73,11 @@ public class CarroGasolina extends Veiculo {
         
         StringBuilder s = new StringBuilder();
 
-  	    s.append("\n=> Tipo de Veiculo: Carro a gasolina.\n");
-		s.append(super.toString());
-		s.append("Cons./KM: " + this.consumoPorKm + "\n");
-		s.append("Deposito (Max): " + this.autonomiaMaxima + "\n");
-		s.append("Deposito (Atual) : " + this.autonomiaAtual + "\n");
+        s.append("\n=> Tipo de Veiculo: Carro a gasolina.\n");
+        s.append(super.toString());
+        s.append("Cons./KM: " + this.consumoPorKm + "\n");
+        s.append("Deposito (Max): " + this.autonomiaMaxima + "\n");
+        s.append("Deposito (Atual) : " + this.autonomiaAtual + "\n");
 
         return s.toString();
     }
@@ -84,12 +85,12 @@ public class CarroGasolina extends Veiculo {
 
     //-------------------------------------------------------//  
 
-	public double getConsumoPorKM () {
+    public double getConsumoPorKM () {
 
         return this.consumoPorKm;
     }
    
-    public double getAutonomiaMax () {
+    public double getAutonomiaMaxima () {
 
         return this.autonomiaMaxima;
     }
@@ -98,11 +99,20 @@ public class CarroGasolina extends Veiculo {
 
         return this.autonomiaAtual;
     }
+    
+    public void setAutonomiaAtual(double atual){
+        
+        this.autonomiaMaxima = atual;
+    }
 
     public double percentagemAutonomia () {
      
         return ((this.autonomiaAtual/this.autonomiaMaxima) * 100);
     }
 
+    public boolean veiculoDisponivelAluguer(){
+    
+        return(this.percentagemAutonomia() >= 10);
+    }
     //-------------------------------------------------------//  
 }

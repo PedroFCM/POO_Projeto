@@ -1,49 +1,48 @@
 
-
-
 public class CarroEletrico extends Veiculo {
 
     //-------------------------------------------------------//  
 
-	private double consumoBateriaPorKm;
+    private double consumoBateriaPorKm;
     private double autonomiaMaxima;
     private double autonomiaAtual;
 
     //-------------------------------------------------------//  
 
     public CarroEletrico (String nova_matricula,
-    					  double velMedia,
-    					  double priceKM,
-    					  double classiF,
-    					  Localizacao nova_local,
-    					  double consumo,
-    					  double maxAuto,
-    					  double currentAuto,
-                          String prop) {
+                          double velMedia,
+                          double priceKM,
+                          double classiF,
+                          Localizacao nova_local,
+                          double consumo,
+                          double maxAuto,
+                          double currentAuto,
+                          String prop,
+                          boolean estado) {
 
-    	super(nova_matricula, velMedia, priceKM, classiF, nova_local, prop);
+        super(nova_matricula, velMedia, priceKM, classiF, nova_local, prop, estado);
 
-    	this.consumoBateriaPorKm    = consumo;
-    	this.autonomiaMaxima = maxAuto;
-    	this.autonomiaAtual  = currentAuto;
+        this.consumoBateriaPorKm    = consumo;
+        this.autonomiaMaxima = maxAuto;
+        this.autonomiaAtual  = currentAuto;
     }
 
     public CarroEletrico (CarroEletrico carroEletrico) {
 
-    	super(carroEletrico);
+        super(carroEletrico);
 
-    	this.consumoBateriaPorKm    = carroEletrico.getConsumoBateriaPorKm();
-    	this.autonomiaMaxima = carroEletrico.getAutonomiaMax();
-    	this.autonomiaAtual  = carroEletrico.getAutonomiaAtual(); 
+        this.consumoBateriaPorKm    = carroEletrico.getConsumoBateriaPorKm();
+        this.autonomiaMaxima = carroEletrico.getAutonomiaMaxima();
+        this.autonomiaAtual  = carroEletrico.getAutonomiaAtual(); 
     }
 
     public CarroEletrico () {
 
-    	super();
+        super();
 
-    	this.consumoBateriaPorKm    = 0;
-    	this.autonomiaMaxima = 0;
-    	this.autonomiaAtual  = 0;
+        this.consumoBateriaPorKm    = 0;
+        this.autonomiaMaxima = 0;
+        this.autonomiaAtual  = 0;
     }
 
     //-------------------------------------------------------//  
@@ -57,10 +56,10 @@ public class CarroEletrico extends Veiculo {
         
         CarroEletrico g = (CarroEletrico) o;
      
-        return(super.equals(g) 							   && 
-        	   this.consumoBateriaPorKm == g.getConsumoBateriaPorKm()    &&
-        	   this.autonomiaMaxima == g.getAutonomiaMax() &&
-        	   this.autonomiaAtual == g.getAutonomiaAtual());
+        return(super.equals(g)                             && 
+               this.consumoBateriaPorKm == g.getConsumoBateriaPorKm()    &&
+               this.autonomiaMaxima == g.getAutonomiaMaxima() &&
+               this.autonomiaAtual == g.getAutonomiaAtual());
     }
 
     public CarroEletrico clone () {
@@ -72,11 +71,11 @@ public class CarroEletrico extends Veiculo {
         
         StringBuilder s = new StringBuilder();
 
-  	    s.append("\n=> Tipo de Veiculo: Carro Elétrico.\n");
-		s.append(super.toString());
-		s.append("Cons./KM: " + this.consumoBateriaPorKm + "\n");
-		s.append("Autonomia (Maxima): " + this.autonomiaMaxima + "\n");
-		s.append("Autonomia (Atual) : " + this.autonomiaAtual + "\n");
+        s.append("\n=> Tipo de Veiculo: Carro Elétrico.\n");
+        s.append(super.toString());
+        s.append("Cons./KM: " + this.consumoBateriaPorKm + "\n");
+        s.append("Autonomia (Maxima): " + this.autonomiaMaxima + "\n");
+        s.append("Autonomia (Atual) : " + this.autonomiaAtual + "\n");
 
         return s.toString();
     }
@@ -84,12 +83,12 @@ public class CarroEletrico extends Veiculo {
 
     //-------------------------------------------------------//  
 
-	public double getConsumoBateriaPorKm () {
+    public double getConsumoBateriaPorKm () {
 
         return this.consumoBateriaPorKm;
     }
    
-    public double getAutonomiaMax () {
+    public double getAutonomiaMaxima () {
 
         return this.autonomiaMaxima;
     }
@@ -99,11 +98,21 @@ public class CarroEletrico extends Veiculo {
         return this.autonomiaAtual;
     }
 
+    public void setAutonomiaAtual(double atual){
+        
+        this.autonomiaAtual = atual;
+    }
+    
     public double percentagemAutonomia () {
      
         return ((this.autonomiaAtual/this.autonomiaMaxima) * 100);
     }
 
+    public boolean veiculoDisponivelAluguer(){
+    
+        return(this.percentagemAutonomia() >= 10);
+    }
+    
     //-------------------------------------------------------//  
 
 }

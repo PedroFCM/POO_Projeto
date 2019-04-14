@@ -11,6 +11,7 @@ public class Veiculo {
     private double classificacao;
     private Localizacao local;
     private String proprietario;
+    private boolean disponivel;
     
     //-------------------------------------------------------//  
 
@@ -19,7 +20,8 @@ public class Veiculo {
                     double precKM,
                     double classif,
                     Localizacao local_carro,
-                    String proprietario) {
+                    String proprietario,
+                    boolean estado) {
 
         this.matricula       = nova_matric; 
         this.velMediaPorKM   = mediumVel;
@@ -27,6 +29,7 @@ public class Veiculo {
         this.classificacao   = classif;
         this.local           = new Localizacao(local_carro);
         this.proprietario    = proprietario;
+        this.disponivel      = estado; 
     }
    
     public Veiculo (Veiculo novo) {
@@ -37,6 +40,7 @@ public class Veiculo {
         this.classificacao   = novo.getClassificacao();
         this.local           = novo.getLocalizacao();
         this.proprietario    = novo.getProprietario();
+        this.disponivel      = novo.getDisponivel();
     }
 
     public Veiculo () {
@@ -47,6 +51,7 @@ public class Veiculo {
         this.classificacao   = 0;
         this.local           = new Localizacao();
         this.proprietario    = "Não tem";
+        this.disponivel      = true;
     }
   
     //-------------------------------------------------------//  
@@ -60,12 +65,13 @@ public class Veiculo {
         
         Veiculo v = (Veiculo) o;
      
-        return(this.matricula.equals(v.getMatricula())    &&
-               this.velMediaPorKM == v.getVelMediaPorKM() &&
-               this.precoPorKm == v.getPrecoPorKM()       &&
-               this.classificacao == v.getClassificacao() &&
-               this.local.equals(v.getLocalizacao())      &&
-               this.proprietario.equals(v.getProprietario()));
+        return(this.matricula.equals(v.getMatricula())       &&
+               this.velMediaPorKM == v.getVelMediaPorKM()    &&
+               this.precoPorKm == v.getPrecoPorKM()          &&
+               this.classificacao == v.getClassificacao()    &&
+               this.local.equals(v.getLocalizacao())         &&
+               this.proprietario.equals(v.getProprietario()) &&
+               this.disponivel == v.getDisponivel());
     }
 
     public Veiculo clone (){
@@ -83,6 +89,7 @@ public class Veiculo {
         s.append("Class.: " + this.classificacao + "\n");
         s.append("Proprietario: " + this.proprietario + "\n");
         s.append(this.local.toString());
+        s.append("Disponivel: " + this.disponivel + "\n");
 
         return s.toString();
     }
@@ -98,6 +105,20 @@ public class Veiculo {
         return 0;
     }
    
+    public boolean veiculoDisponivelAluguer(){
+    
+        return true;
+    }
+    
+    public double getAutonomiaMaxima(){
+        
+        return 0;
+    }
+    
+    public void setAutonomiaAtual(double autonomia){
+
+    }
+    
     public String getProprietario() {
 
         return this.proprietario;
@@ -128,16 +149,36 @@ public class Veiculo {
         return this.local;
     }
 
+    public boolean getDisponivel(){
+        
+        return this.disponivel;
+    }
+    
     public void setPrecoPorKm(double preco){
         
         this.precoPorKm = preco;
     }
     
+    public void setDisponivel(boolean estado){
+        
+        this.disponivel = estado;
+    }
+    
+    public void setLocalizacao(Localizacao l){
+    
+        this.local = l.clone();
+    }
+    
     //-------------------------------------------------------//  
     
-    public void moverParaPosicao (int x, int y){
+    public void moverParaPosicao (double x, double y){
         
-
-
+        Localizacao l = new Localizacao(x,y);
+        
+        double p = this.getAutonomiaAtual() - this.getLocalizacao().distancia(l);
+        
+        this.setAutonomiaAtual((p<0)?0:p);
+        
+        this.setLocalizacao(l);
     }
 }

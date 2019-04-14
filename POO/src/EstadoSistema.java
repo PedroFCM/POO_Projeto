@@ -246,7 +246,19 @@ public class EstadoSistema {
 
 
     //-------------------------------------------------------//  
-
+    public String getMailProprietarioVeiculo(Veiculo v){
+    
+        List <Proprietario> lista = this.proprietarios_Sistema.values().stream().collect(Collectors.toList());
+        
+        for(Proprietario p: lista){
+            
+            if (p.getMapVeiculos().containsKey(v.getMatricula())) 
+                return p.getEmail();
+        }     
+        
+        return null;
+    }
+    
     public Cliente getCliente (String email) {
 
       return this.clientes_Sistema.get(email);

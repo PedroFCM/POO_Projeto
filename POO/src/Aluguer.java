@@ -81,6 +81,11 @@ public class Aluguer
 
    //-------------------------------------------------------//  
 
+    public double precoViagem(){
+        
+        return (this.preco * this.distancia);
+    }
+   
     public String getCliente()
     {
         return this.cliente;
@@ -140,5 +145,5 @@ public class Aluguer
     {
         this.data = data;
     }
-    
+        
 }

@@ -54,7 +54,8 @@ public class Main {
                                               20,
                                               100000,
                                               50000,
-                                              "propriatario1@mail.pt");
+                                              "propriatario1@mail.pt",
+                                              true);
 
         CarroGasolina cg2 = new CarroGasolina("20-00-22",
                                               200,
@@ -64,7 +65,8 @@ public class Main {
                                               20,
                                               100000,
                                               50000,
-                                              "propriatario1@mail.pt");
+                                              "propriatario1@mail.pt",
+                                              true);
 
 
         CarroGasolina cg3 = new CarroGasolina("57-47-AX",
@@ -75,7 +77,8 @@ public class Main {
                                               20,
                                               100000,
                                               50000,
-                                              "propriatario1@mail.pt");
+                                              "propriatario1@mail.pt",
+                                              true);
 
         CarroEletrico ce1 = new CarroEletrico("29-20-PW",
                                               200,
@@ -85,7 +88,8 @@ public class Main {
                                               20,
                                               100000,
                                               50000,
-                                              "propriatario2@mail.pt");
+                                              "propriatario2@mail.pt",
+                                              true);
 
         CarroEletrico ce2 = new CarroEletrico("12-02-LS",
                                               200,
@@ -95,7 +99,8 @@ public class Main {
                                               20,
                                               100000,
                                               50000,
-                                              "propriatario2@mail.pt");
+                                              "propriatario2@mail.pt",
+                                              true);
 
 
         //-------------------------------------------------------//  

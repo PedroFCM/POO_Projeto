@@ -84,20 +84,4 @@ public class Cliente extends AtorSistema {
     }
  
     //-------------------------------------------------------//  
-
-/*
-    public carroMaisBaratoDistanciaPe(int kmPe){
-    
-    }
-
-    public aluguerCarroEspecifico(Veiculo v){
-    
-    }
-
-    public carroComAutonomiaDesejada(int autonomia){
-    
-    }
-    */
-
-    //-------------------------------------------------------//  
 }

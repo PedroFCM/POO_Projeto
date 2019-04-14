@@ -85,6 +85,7 @@ public class Proprietario extends AtorSistema
         if (!this.mapVeiculos.containsKey(v.getMatricula())) {
 
             this.mapVeiculos.put(v.getMatricula(),v.clone());
+            this.sinalizarVeiculo(mapVeiculos.get(v.getMatricula()));
         }
     }
 
@@ -123,32 +124,33 @@ public class Proprietario extends AtorSistema
         return this.mapVeiculos.containsKey(v.getMatricula());
     }
 
-    //-------------------------------------------------------//  
+    public void sinalizarVeiculo (Veiculo v){
     
-   /*
-    public ArrayList<Veiculo> carrosDisponiveis(){
+        if(this.mapVeiculos.containsValue(v)){
             
-        ArrayList<Veiculo> carrosDisponiveis = new ArrayList<>();
-        
-        for(Veiculo v: getListaVeiculos()){
-            
-            if(v.percentagemAutonomia() > 10) carrosDisponiveis.add(v);
+            if(v.veiculoDisponivelAluguer()) this.mapVeiculos.get(v.getMatricula()).setDisponivel(true);
+            else this.mapVeiculos.get(v.getMatricula()).setDisponivel(false);
+
         }
+    }
+    
+    public void abastecer(Veiculo v){
+    
+        if(this.mapVeiculos.containsValue(v)){
+
+            this.mapVeiculos.get(v.getMatricula()).setAutonomiaAtual(v.getAutonomiaMaxima());
+
+        }
+    }
+    
+    public Veiculo getVeiculoPelaMatricula (String matricula){
         
-        return carrosDisponiveis;
-    }
-    */
-    /*
-    public void abastecerVeiculo(){
-    
-    }
-       
-    public boolean aceitarRejeitarAluguer(){
-    
+        return this.mapVeiculos.containsKey(matricula)?this.mapVeiculos.get(matricula):null;
     }
     
-    public float custoViagem(){
+    public boolean aceitarRejeitarAluguer(Cliente c){
     
+        return(c.getClassificacao() > 50);
     }
-   */
+    
 }
