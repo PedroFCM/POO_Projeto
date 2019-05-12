@@ -152,9 +152,7 @@ public class Main_IO {
 
                             case "MaisPerto":
 
-                                Veiculo alugado 
-                                            = new Veiculo (e.carroMaisProximo(
-                                                        e.getCliente(tokens[1])));
+                                Veiculo alugado = e.carroMaisProximo(e.getCliente(tokens[1])).clone();
                                                         
                                                   
                                 String nomeVeiculo = alugado.getMatricula();

@@ -1,5 +1,5 @@
 
-public class CarroEletrico extends Veiculo {
+public class CarroEletrico extends Veiculo implements Autonomia {
 
     //-------------------------------------------------------//  
 
@@ -115,4 +115,20 @@ public class CarroEletrico extends Veiculo {
     
     //-------------------------------------------------------//  
 
+    public void moverParaPosicao (double x, double y){
+        
+        Localizacao l = new Localizacao(x,y);
+        
+        double p = this.getAutonomiaAtual() - this.getLocalizacao().distancia(l);
+        
+        this.setAutonomiaAtual((p<0)?0:p);
+        
+        this.setLocalizacao(l);
+    }
+ 
+    public boolean temAutonomiaParaViagem (double distancia){
+    
+        return(this.getAutonomiaAtual() >= distancia);
+    }
+    
 }

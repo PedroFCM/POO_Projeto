@@ -109,7 +109,7 @@ public class EstadoSistema {
 
         double distancia_menor = Integer.MAX_VALUE, atual = Integer.MAX_VALUE;
 
-        Veiculo maisPerto = new Veiculo();
+        Veiculo maisPerto = new CarroGasolina();
 
         for (Veiculo v: todosVeiculos) {
 
@@ -117,7 +117,7 @@ public class EstadoSistema {
             
             if (atual < distancia_menor) {
 
-                maisPerto = new Veiculo(v);
+                maisPerto = v.clone();
                 distancia_menor = atual;             
             }
 
@@ -204,12 +204,7 @@ public class EstadoSistema {
 
       return carroEspecifico;
     }
-    
-    public boolean temAutonomiaParaViagem (Veiculo v,double distancia){
-    
-        return(v.getAutonomiaAtual() >= distancia);
-    }
-    
+        
     //-------------------------------------------------------//  
 
     public EstadoSistema clone () {

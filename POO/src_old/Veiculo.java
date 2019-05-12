@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class Veiculo {
+public abstract class Veiculo {
 
     //-------------------------------------------------------//  
 
@@ -74,10 +74,7 @@ public class Veiculo {
                this.disponivel == v.getDisponivel());
     }
 
-    public Veiculo clone (){
-        
-        return new Veiculo(this);
-    }
+    public abstract Veiculo clone ();
 
     public String toString (){
         
@@ -95,30 +92,7 @@ public class Veiculo {
     }
     
     //-------------------------------------------------------//  
-    
-    public double getAutonomiaAtual(){
-        
-        //Esta versao so esta presente para o compilador detetar o metodo
-        //A versao correta esta presente nas classes de tipos de carros
-        //Gasolina, Eletricos,...
 
-        return 0;
-    }
-   
-    public boolean veiculoDisponivelAluguer(){
-    
-        return true;
-    }
-    
-    public double getAutonomiaMaxima(){
-        
-        return 0;
-    }
-    
-    public void setAutonomiaAtual(double autonomia){
-
-    }
-    
     public String getProprietario() {
 
         return this.proprietario;
@@ -171,14 +145,7 @@ public class Veiculo {
     
     //-------------------------------------------------------//  
     
-    public void moverParaPosicao (double x, double y){
-        
-        Localizacao l = new Localizacao(x,y);
-        
-        double p = this.getAutonomiaAtual() - this.getLocalizacao().distancia(l);
-        
-        this.setAutonomiaAtual((p<0)?0:p);
-        
-        this.setLocalizacao(l);
-    }
+    public abstract void moverParaPosicao (double x, double y);
+    public abstract boolean veiculoDisponivelAluguer();
+
 }
