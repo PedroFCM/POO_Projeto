@@ -134,6 +134,11 @@ public class Proprietario extends AtorSistema {
         return this.mapVeiculos.containsKey(v.getMatricula());
     }
 
+    public boolean existeVeiculo (String matricula) {
+
+        return this.mapVeiculos.containsKey(matricula);
+    }
+
     public void sinalizarVeiculo (Veiculo v) {
     
         if(this.mapVeiculos.containsValue(v)) {

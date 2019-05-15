@@ -8,6 +8,8 @@ import ComponentesSistema.AtorSistema.*;
 import EstadoSistema.*;
 import EstadoSistema.ExceptionsProgramFlow.*;
 import BaseClasses.Localizacao;
+import GestaoFicheiros.GestorFicheirosDados;
+import GUInterfaces.*;
 
 //--------------------------------------------------
 
@@ -23,61 +25,10 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-
 //--------------------------------------------------
 
-public class Main {
+public class UMCarroJA {
 
-	//--------------------------------------------------
-
-	private static final String estadoObjetoPath = "ObjectSaves/estadoObj.obj";
-
-	//--------------------------------------------------
-
-	public static void stats_iniciais(EstadoSistema e) {
-
-		System.out.println ("=> STATS pós carregamento: \n");
-
-		System.out.println ("Existem " + e.getNumProprietarios() + " Proprietarios.");
-		System.out.println ("Existem " + e.getNumClientes() + " Clientes.");
-		System.out.println ("Existem " + e.getNumVeiculos() + " Veiculos.");
-
-	}
-
-	public static void estadoParaObjectFile(EstadoSistema estado) 
-					throws FileNotFoundException, IOException {
-
-		FileOutputStream fileOut = new FileOutputStream(estadoObjetoPath);
-	    
-	    ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-	    
-	    objectOut.writeObject(estado);
-
-	    objectOut.close();
-	    fileOut.close();
-	    
- 	}
-
- 	public static EstadoSistema objectFileParaEstado () 
- 								throws  FileNotFoundException, 
- 										IOException, 
- 										ClassNotFoundException {
-
- 		FileInputStream fileInput = new FileInputStream(estadoObjetoPath);
-		ObjectInputStream objectIn = new ObjectInputStream(fileInput);
- 		
- 		EstadoSistema novo = new EstadoSistema((EstadoSistema) objectIn.readObject());
-
- 		objectIn.close();
- 		fileInput.close();
-
- 		return novo;
- 	}
 
     public static void main(String[] args) {
 		
@@ -86,22 +37,27 @@ public class Main {
     	//Guarda o estado da App
 
     	EstadoSistema estado = new EstadoSistema();
+        GestorFicheirosDados initStatesGestor = new GestorFicheirosDados();
 		
-		//----------------------------------------------------------------------------------    	
+	    GUI_UMcarroJA novo = new GUI_UMcarroJA();
+
+        novo.main_menu_view();
+
+    	//----------------------------------------------------------------------------------    	
 
     	//Carregar o log inicial
-
+/*
     	try {
 
     		System.out.println("\n> A fazer o carregamento inicial de logs...\nLoading...");
 
-    		estado.carregarEstadoFromLogs(estado, "Logs/log_simples.bak");
+    		initStatesGestor.carregarEstadoFromLogs(estado, "Logs/log_simples.bak");
 
-            System.out.println(estado.getClientesSistema().toString());
+           // System.out.println(estado.getClientesSistema().toString());
 
     		System.out.println("> Sistema inicial carregado.\n");
 
-    		stats_iniciais(estado);
+    		initStatesGestor.stats_iniciais(estado);
     	}
     	
     	catch (IOException io_exc) {
@@ -115,7 +71,7 @@ public class Main {
 
     	try {
 
-    		estadoParaObjectFile(estado);
+    		initStatesGestor.estadoParaObjectFile(estado);
   			
   		}
 
@@ -136,9 +92,9 @@ public class Main {
     	try {
 
         		EstadoSistema carregadoEstado 
-    				= new EstadoSistema(objectFileParaEstado());
+    				= new EstadoSistema(initStatesGestor.objectFileParaEstado());
     	
-    		stats_iniciais(estado);
+    		initStatesGestor.stats_iniciais(estado);
     	}
 
     	catch (FileNotFoundException e) {
@@ -155,7 +111,7 @@ public class Main {
 
     		System.out.println("Oops! Got an IOException");
     	}
-
+*/
     }
 
 }

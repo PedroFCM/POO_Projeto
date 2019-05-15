@@ -10,7 +10,7 @@ public class CarroGasolina extends VeiculoComAutonomia {
     public CarroGasolina (String nova_matricula,
                           double velMedia,
                           double priceKM,
-                          double classiF,
+                          int classiF,
                           Localizacao nova_local,
                           double consumo,
                           double maxAuto,

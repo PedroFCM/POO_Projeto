@@ -10,7 +10,7 @@ public class CarroEletrico extends VeiculoComAutonomia {
     public CarroEletrico (String nova_matricula,
                           double velMedia,
                           double priceKM,
-                          double classiF,
+                          int classiF,
                           Localizacao nova_local,
                           double consumo,
                           double maxAuto,

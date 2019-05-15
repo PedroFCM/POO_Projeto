@@ -16,17 +16,8 @@ import java.util.ArrayList;
 import java.lang.Integer;
 import java.util.TreeMap;
 import java.util.SortedMap;
-
-import java.io.IOException;
-import EstadoSistema.ExceptionsProgramFlow.*;
-
-import java.io.BufferedWriter;
-import java.io.BufferedReader;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-
-import java.util.StringTokenizer;
+import java.util.Set;
+import java.util.HashSet;
 
 import java.io.Serializable;
 
@@ -41,12 +32,15 @@ public class EstadoSistema implements Serializable {
 
     private Map<String, Proprietario> proprietarios_Sistema;
     
+    private Map<String, Veiculo> veiculos_Sistema;
+
     private LocalDate data_atual;
     
     //-------------------------------------------------------//  
 
     public EstadoSistema (Map<String, Cliente> clientes,
                           Map<String, Proprietario> proprietarios,
+                          Map<String, Veiculo> veiculos,
                           LocalDate data) {
 
         this.clientes_Sistema = clientes.entrySet()
@@ -63,6 +57,12 @@ public class EstadoSistema implements Serializable {
                                                                             (e1, e2) -> e2,
                                                                             HashMap::new));
 
+        this.veiculos_Sistema = veiculos.entrySet()
+                                        .stream()
+                                        .collect(Collectors.toMap(e -> e.getKey(),
+                                                                            e -> e.getValue(),
+                                                                            (e1, e2) -> e2,
+                                                                            HashMap::new));
         this.data_atual = data;
     }
 
@@ -71,12 +71,14 @@ public class EstadoSistema implements Serializable {
         this.clientes_Sistema = novo.getClientesSistema();
         this.proprietarios_Sistema = novo.getProprietariosSistema();
         this.data_atual = novo.getData();
+        this.veiculos_Sistema = novo.getVeiculosSistema();
     }
 
     public EstadoSistema () {
 
         this.clientes_Sistema = new HashMap<String, Cliente>();
         this.proprietarios_Sistema = new HashMap<String, Proprietario>();
+        this.veiculos_Sistema = new HashMap<String, Veiculo>();
         this.data_atual = LocalDate.now();
     }
 
@@ -86,7 +88,17 @@ public class EstadoSistema implements Serializable {
 
       return this.proprietarios_Sistema.containsKey(nif);
     }
+
+    public boolean existeMatricula (String matricula) {
+
+      return this.veiculos_Sistema.containsKey(matricula);
+    }
     
+    public boolean existeCliente (String nif) {
+
+      return this.clientes_Sistema.containsKey(nif);
+    }
+
     public void adicionaProprietario (Proprietario p) {
 
         if (!this.proprietarios_Sistema.containsKey(p.getNif())) {
@@ -101,6 +113,11 @@ public class EstadoSistema implements Serializable {
 
                this.clientes_Sistema.put(c.getNif(), c.clone());
         }
+    }
+
+    public void adicionaVeiculoSistema (Veiculo novo) {
+
+      this.veiculos_Sistema.put(novo.getMatricula(), novo.clone());
     }
 
     public List<Veiculo> allVeiculos() {
@@ -125,10 +142,12 @@ public class EstadoSistema implements Serializable {
         
         if (!preferencia.equals("SemPreferencia")) {
 
-          todosVeiculos = this.allVeiculos().stream().filter(v -> v.getClass()
-                                                                   .getSimpleName()
-                                                                   .equals(preferencia))
-                                                                   .collect(Collectors.toList());
+          todosVeiculos = this.veiculos_Sistema.values()
+                                               .stream()
+                                               .filter(v -> v.getClass()
+                                                             .getSimpleName()
+                                                             .equals(preferencia))
+                                                             .collect(Collectors.toList());
         }
 
         if (todosVeiculos.isEmpty()) {
@@ -156,18 +175,26 @@ public class EstadoSistema implements Serializable {
         return maisPerto;  
     }
 
-    public Veiculo carroMaisBarato () {
+    public Veiculo carroMaisBarato (String preferencia) {
 
         List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();
         
-        todosVeiculos =  this.allVeiculos();
+        if (!preferencia.equals("SemPreferencia")) {
+
+          todosVeiculos = this.veiculos_Sistema.values()
+                                               .stream()
+                                               .filter(v -> v.getClass()
+                                                             .getSimpleName()
+                                                             .equals(preferencia))
+                                                             .collect(Collectors.toList());
+        }        
 
         if (todosVeiculos.isEmpty()) {
             return null;
         }
         
-       SortedMap<Double, Veiculo> veiculosOrdenadosPorPreco = 
-                            new TreeMap<Double, Veiculo>();
+       SortedMap<Double, Veiculo> 
+       	veiculosOrdenadosPorPreco = new TreeMap<Double, Veiculo>();
 
         for (Veiculo v: todosVeiculos) {
 
@@ -295,6 +322,21 @@ public class EstadoSistema implements Serializable {
       return this.proprietarios_Sistema.get(nif);
     }
 
+    public Veiculo getVeiculo (String matricula) {
+
+      return this.veiculos_Sistema.get(matricula);
+    }
+
+    public Map<String, Veiculo> getVeiculosSistema () {
+
+       return this.veiculos_Sistema.entrySet()
+                                   .stream()
+                                   .collect(Collectors.toMap(e -> e.getKey(),
+                                                             e -> e.getValue(),
+                                                            (e1, e2) -> e2,
+                                                             HashMap::new));
+    }
+
     public Map<String, Cliente> getClientesSistema () {
 
        return this.clientes_Sistema.entrySet()
@@ -315,263 +357,24 @@ public class EstadoSistema implements Serializable {
                                                                      HashMap::new));
    }
 
-    public LocalDate getData () {
+   public LocalDate getData () {
 
-        return this.data_atual;
-    }
+       return this.data_atual;
+   }
 
-    public int getNumProprietarios() {
+   public int getNumProprietarios() {
 
-        return this.proprietarios_Sistema.size();
-    }
+       return this.proprietarios_Sistema.size();
+   }
 
-    public int getNumClientes() {
+   public int getNumClientes() {
 
-        return this.clientes_Sistema.size();
-    }
+       return this.clientes_Sistema.size();
+   }
 
-    public int getNumVeiculos() {
+   public int getNumVeiculos() {
 
-      return this.allVeiculos().size();
-    }
-
-    //--------------------------------------------------
-
-    public static void carregarEstadoFromLogs (EstadoSistema estado, String path_logs) 
-                          throws IOException {
-
-      //--------------------------------------------------
-
-      String linha = null, novoComponente = null;
-      
-      StringTokenizer tokens = null;
-
-      String[] camposProp = new String[5];
-      String[] camposClie = new String[6];
-      String[] camposCarr = new String[11];
-      String[] camposAlug = new String[5];
-
-      //--------------------------------------------------
-      
-      BufferedReader inStream = new BufferedReader(new FileReader(path_logs));
-
-      while ((linha = inStream.readLine()) != null) {
-          
-        tokens = new StringTokenizer(linha);
-
-        novoComponente = tokens.nextToken(":");
-
-        switch(novoComponente) {
-
-      
-        //-----------------------------------------------------------------------------------
-          
-          case "NovoProp": 
-
-            for (int i = 0; tokens.hasMoreTokens(); i++)
-              camposProp[i] = tokens.nextToken(","); 
-
-            AtorSistema novoProp = new Proprietario(camposProp[2],
-                                  camposProp[0].replaceAll(":", ""),
-                                  camposProp[2],
-                                  camposProp[3],
-                                  LocalDate.now(),
-                                  0,
-                                  new ArrayList<>(),
-                                  new HashMap<>(),
-                                  camposProp[1]);
-
-            estado.adicionaProprietario((Proprietario) novoProp);
-
-            break;
-
-        //-----------------------------------------------------------------------------------
-
-          case "NovoCliente":
-
-            for (int i = 0; tokens.hasMoreTokens(); i++)
-              camposClie[i] = tokens.nextToken(","); 
-
-            AtorSistema novoClie = new Cliente (camposClie[2],
-                                camposClie[0].replaceAll(":", ""),
-                                camposClie[2],
-                                camposClie[3],
-                                LocalDate.now(),
-                                new Localizacao(Double.parseDouble(camposClie[4]), 
-                                      Double.parseDouble(camposClie[5])),
-                              new ArrayList<>(),
-                              0,
-                              camposClie[1]);
-
-            estado.adicionaCliente ((Cliente) novoClie);
-
-
-            break;
-
-        //-----------------------------------------------------------------------------------
-
-          case "NovoCarro":
-
-            for (int i = 0; tokens.hasMoreTokens(); i++)
-              camposCarr[i] = tokens.nextToken(","); 
-
-            String tipoDeCarro = camposCarr[0].replaceAll(":", "");
-      
-            switch (tipoDeCarro) {
-
-              case "Electrico":
-                              
-                VeiculoComAutonomia eletrico 
-                  = new CarroEletrico(camposCarr[2],
-                              Double.parseDouble(camposCarr[4]),
-                              Double.parseDouble(camposCarr[5]),
-                              0.0,
-                              new Localizacao(Double.parseDouble(camposCarr[8]),
-                                        Double.parseDouble(camposCarr[9])),
-                              Double.parseDouble(camposCarr[6]),
-                              100,
-                              Double.parseDouble(camposCarr[7]),
-                              "?",
-                              true,
-                              camposCarr[1]);
-
-                if (estado.existeProprietario(camposCarr[3])) {
-
-                  estado.getProprietario(camposCarr[3])
-                        .adicionaVeiculo(eletrico);
-                }
-
-                break;
-
-              case "Gasolina": 
-
-                VeiculoComAutonomia gasolina 
-                  = new CarroGasolina(camposCarr[2],
-                              Double.parseDouble(camposCarr[4]),
-                              Double.parseDouble(camposCarr[5]),
-                              0.0,
-                              new Localizacao(Double.parseDouble(camposCarr[8]),
-                                        Double.parseDouble(camposCarr[9])),
-                              Double.parseDouble(camposCarr[6]),
-                              100,
-                              Double.parseDouble(camposCarr[7]),
-                              "?",
-                              true,
-                              camposCarr[1]);
-
-                if (estado.existeProprietario(camposCarr[3])) {
-
-                  estado.getProprietario(camposCarr[3])
-                        .adicionaVeiculo(gasolina);
-                }
-
-                break;
-
-              case "Hibrido":
-
-                VeiculoComAutonomia hibrido 
-                  = new CarroHibrido(camposCarr[2],
-                              Double.parseDouble(camposCarr[4]),
-                              Double.parseDouble(camposCarr[5]),
-                              0.0,
-                              new Localizacao(Double.parseDouble(camposCarr[8]),
-                                        Double.parseDouble(camposCarr[9])),
-                              Double.parseDouble(camposCarr[6]),
-                              100,
-                              Double.parseDouble(camposCarr[7]),
-                              "?",
-                              true,
-                              camposCarr[1]);
-
-                if (estado.existeProprietario(camposCarr[3])) {
-
-                  estado.getProprietario(camposCarr[3])
-                        .adicionaVeiculo(hibrido);
-                }
-
-                break;
-    
-              default: break;
-
-            }
-
-            break;
-
-        //-----------------------------------------------------------------------------------
-
-        case "Aluguer": 
-
-            //-----------------------------------------------------------------------------------
-
-            for (int i = 0; tokens.hasMoreTokens(); i++)
-              camposAlug[i] = tokens.nextToken(","); 
-
-            //-----------------------------------------------------------------------------------
-
-            String tipoCarroAlugado = camposAlug[3];
-            String cli_nif = camposAlug[0].replaceAll(":", "");
-            Cliente cli_aluguer = estado.getCliente(cli_nif);
-            String tipoCombustivel = "Carro" + camposAlug[3];
-
-            if (tipoCombustivel.equals("CarroElectrico")) {
-
-              tipoCombustivel = tipoCombustivel.replaceAll("Electrico", 
-                                                           "Eletrico");
-            }
-
-            //-----------------------------------------------------------------------------------
-
-            if (cli_aluguer == null) 
-              continue;
-
-            Localizacao destino = new Localizacao(Double.parseDouble(camposAlug[1]),
-                                                  Double.parseDouble(camposAlug[2]));
-
-            double distancia = cli_aluguer.getLocalizacao().distancia(destino);
-
-            //-----------------------------------------------------------------------------------
-
-            switch (camposAlug[4]) {
-
-              case "MaisPerto": 
-                
-                Veiculo novo = estado.carroMaisProximo(cli_aluguer, tipoCombustivel)
-                                     .clone();
-
-                if (novo == null) continue;
-
-                Aluguer novoAluguer = new Aluguer (novo.getMatricula(),
-                                                   cli_nif,
-                                                   novo.getProprietario(),
-                                                   distancia,
-                                                   novo.getPrecoPorKM() * distancia,
-                                                   LocalDate.now());
-
-                cli_aluguer.adicionaAluguer(novoAluguer);
-
-                
-
-                break;
-
-              case "MaisBarato": 
-
-
-                break;
-
-              default: break;
-            }
-
-          break;
-
-        //-----------------------------------------------------------------------------------
-
-          default: break;
-
-        //-----------------------------------------------------------------------------------
-
-        }
-      }
-    }
-
+     return this.allVeiculos().size();
+   }
 
 }

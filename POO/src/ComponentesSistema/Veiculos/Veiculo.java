@@ -13,7 +13,7 @@ public abstract class Veiculo implements Serializable {
     private String matricula;
     private double velMediaPorKM;
     private double precoPorKm;
-    private double classificacao;
+    private int classificacao;
     private Localizacao local;
     private String proprietario;
     private boolean disponivel;
@@ -24,7 +24,7 @@ public abstract class Veiculo implements Serializable {
                     String new_mat,
                     double new_mediumVel, 
                     double new_precKM,
-                    double new_classif,
+                    int new_classif,
                     Localizacao new_local,
                     String new_prop,
                     boolean new_estado) {
@@ -134,7 +134,7 @@ public abstract class Veiculo implements Serializable {
         return this.precoPorKm;
     }
 
-    public double getClassificacao () {
+    public int getClassificacao () {
 
         return this.classificacao;
     }
@@ -168,6 +168,11 @@ public abstract class Veiculo implements Serializable {
 
         this.marca = new_marca;
     }
+
+    public void setClassificacao(int clas) {
+
+        this.classificacao = clas;
+    }
     
     //-------------------------------------------------------//  
     
@@ -175,6 +180,11 @@ public abstract class Veiculo implements Serializable {
  
     public abstract boolean veiculoDisponivelAluguer();
 
-    //-------------------------------------------------------//  
+    //-------------------------------------------------------//
+
+    public int hashCode () {
+
+        return this.matricula.hashCode();
+    }
 
 }

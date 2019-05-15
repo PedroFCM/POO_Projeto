@@ -1,9 +1,11 @@
 
 main:
-	javac Main.java
+	javac UMCarroJA.java
 
 run:
-	java Main
+	java UMCarroJA
 
 clean:
 	find . -type f -name "*.class" -delete
+	find . -type f -name "*.ctxt" -delete
+	find . -type f -name "package.bluej" -delete
