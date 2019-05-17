@@ -7,6 +7,8 @@ import ComponentesSistema.AtorSistema.*;
 import BaseClasses.Localizacao;
 import BaseClasses.Aluguer;
 
+import EstadoSistema.ExceptionsProgramFlow.*;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +109,28 @@ public class EstadoSistema implements Serializable {
         }
     }
 
+    public void criaAdicionaProprietario(String email,
+                                         String nomeAtor,
+                                         String passw,
+                                         String morada,
+                                         String nif) 
+      throws AtorAlreadyExistsException {
+
+      AtorSistema novoProp 
+      = new Proprietario(email, nomeAtor,
+                           passw, morada,
+                           LocalDate.now(), 0,
+                           new ArrayList<>(),
+                           new HashMap<>(), nif);
+
+      if (this.existeProprietario(nif))
+        throw new AtorAlreadyExistsException("Nif " + nif + " já existente!");
+      else {
+
+        this.adicionaProprietario((Proprietario) novoProp);
+      }
+    }
+
     public void adicionaCliente (Cliente c) {
 
         if (!this.clientes_Sistema.containsKey(c.getNif())) {
@@ -136,10 +160,12 @@ public class EstadoSistema implements Serializable {
         return listaV;
     }
 
-    public Veiculo carroMaisProximo (Cliente c, String preferencia) {
+    public List<Veiculo> carroMaisProximo (Cliente c, String preferencia) 
+          throws CarNotAvailableException {
 
         List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();
-        
+        List<Veiculo> matched       = new ArrayList<>();
+
         if (!preferencia.equals("SemPreferencia")) {
 
           todosVeiculos = this.veiculos_Sistema.values()
@@ -148,17 +174,23 @@ public class EstadoSistema implements Serializable {
                                                              .getSimpleName()
                                                              .equals(preferencia))
                                                              .collect(Collectors.toList());
+        } else {
+
+           todosVeiculos = this.veiculos_Sistema.values()
+                                               .stream()
+                                               .collect(Collectors.toList());
         }
 
         if (todosVeiculos.isEmpty()) {
-            return null;
+            
+            throw new CarNotAvailableException("Não existem carros disponivéis...");
+            
+            //return null;
         }
 
         Localizacao local_c = c.getLocalizacao();
 
         double distancia_menor = Integer.MAX_VALUE, atual = Integer.MAX_VALUE;
-
-        Veiculo maisPerto = null;
 
         for (Veiculo v: todosVeiculos) {
 
@@ -166,13 +198,19 @@ public class EstadoSistema implements Serializable {
             
             if (atual < distancia_menor) {
 
-                maisPerto = v.clone();
+                matched.add(v.clone());
                 distancia_menor = atual;             
             }
-
         }
 
-        return maisPerto;  
+        final Double x = distancia_menor;
+
+        Veiculo last = matched.get(matched.size() - 1);
+
+        return matched.stream()
+                      .filter(v -> (x == v.getLocalizacao()
+                                          .distancia(local_c)))
+                      .collect(Collectors.toList());  
     }
 
     public Veiculo carroMaisBarato (String preferencia) {

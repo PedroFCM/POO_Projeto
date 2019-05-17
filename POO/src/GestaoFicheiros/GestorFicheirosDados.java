@@ -22,6 +22,7 @@ import java.util.StringTokenizer;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.List;
 
 
 import java.io.File;
@@ -51,7 +52,7 @@ public class GestorFicheirosDados {
 	//--------------------------------------------------
 
     public static void carregarEstadoFromLogs (EstadoSistema estado, String path_logs) 
-                          throws IOException {
+                          throws IOException, FileNotFoundException {
 
 	    //--------------------------------------------------
 
@@ -143,7 +144,7 @@ public class GestorFicheirosDados {
 	                            new Localizacao(Double.parseDouble(camposCarr[8]),
 	                                      Double.parseDouble(camposCarr[9])),
 	                            Double.parseDouble(camposCarr[6]),
-	                            100,
+	                            Double.parseDouble(camposCarr[7]),
 	                            Double.parseDouble(camposCarr[7]),
 	                            "?",
 	                            true,
@@ -169,7 +170,7 @@ public class GestorFicheirosDados {
 	                            new Localizacao(Double.parseDouble(camposCarr[8]),
 	                                      Double.parseDouble(camposCarr[9])),
 	                            Double.parseDouble(camposCarr[6]),
-	                            100,
+	                            Double.parseDouble(camposCarr[7]),
 	                            Double.parseDouble(camposCarr[7]),
 	                            "?",
 	                            true,
@@ -195,7 +196,7 @@ public class GestorFicheirosDados {
 	                            new Localizacao(Double.parseDouble(camposCarr[8]),
 	                                      Double.parseDouble(camposCarr[9])),
 	                            Double.parseDouble(camposCarr[6]),
-	                            100,
+	                            Double.parseDouble(camposCarr[7]),
 	                            Double.parseDouble(camposCarr[7]),
 	                            "?",
 	                            true,
@@ -254,9 +255,17 @@ public class GestorFicheirosDados {
 	          switch (camposAlug[4]) {
 
 	            case "MaisPerto": 
-	              
-	              Veiculo novoMP = estado.carroMaisProximo(cli_aluguer, tipoCombustivel)
-	                                     .clone();
+	              	
+	              	Veiculo novoMP = null;
+	              	List<Veiculo> listMP = new ArrayList<>();
+
+		            try {
+
+		              listMP = estado.carroMaisProximo(cli_aluguer, tipoCombustivel);
+		              novoMP = listMP.get(listMP.size() - 1);
+
+		            } 
+		            catch (CarNotAvailableException e) {}
 
 	              if (novoMP == null) continue;
 
@@ -404,13 +413,20 @@ public class GestorFicheirosDados {
       return result;
     }
 
+    public static boolean isStringEmail (String possEmail) {
+
+    	return (possEmail.chars()
+    					.filter(ch -> ch == '@')
+    					.count() == 1);
+    }
+
     public static void stats_iniciais(EstadoSistema e) {
 
-		System.out.println ("=> STATS pós carregamento: \n");
+		System.out.println ("\n=> STATS pós carregamento: \n");
 
 		System.out.println ("Existem " + e.getNumProprietarios() + " Proprietarios.");
 		System.out.println ("Existem " + e.getNumClientes() + " Clientes.");
-		System.out.println ("Existem " + e.getNumVeiculos() + " Veiculos.");
+		System.out.println ("Existem " + e.getNumVeiculos() + " Veiculos.\n");
 
 	}
 

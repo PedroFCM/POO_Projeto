@@ -85,7 +85,7 @@ public class VeiculoComAutonomia extends Veiculo {
         
         StringBuilder s = new StringBuilder();
 
-        s.append("\n=> Veiculo com autonomia.\n");
+        s.append(":: Veiculo com autonomia.\n\n");
         s.append(super.toString());
         s.append("Cons./KM: " + this.consumoPorKm + "\n");
         s.append("Deposito (Max): " + this.autonomiaMaxima + "\n");

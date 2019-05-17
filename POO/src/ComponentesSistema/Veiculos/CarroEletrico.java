@@ -65,7 +65,7 @@ public class CarroEletrico extends VeiculoComAutonomia {
         
         StringBuilder s = new StringBuilder();
 
-        s.append("\n=> Tipo de Veiculo: Carro Eletrico.\n");
+        s.append("\n:: Tipo de Veiculo: Carro Eletrico.\n");
         s.append(super.toString());
 
         return s.toString();

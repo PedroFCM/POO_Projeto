@@ -65,7 +65,7 @@ public class CarroHibrido extends VeiculoComAutonomia {
         
         StringBuilder s = new StringBuilder();
 
-        s.append("\n=> Tipo de Veiculo: Carro Hibrido.\n");
+        s.append("\n:: Tipo de Veiculo: Carro Hibrido,");
         s.append(super.toString());
 
         return s.toString();

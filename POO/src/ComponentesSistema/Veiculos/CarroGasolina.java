@@ -65,7 +65,7 @@ public class CarroGasolina extends VeiculoComAutonomia {
         
         StringBuilder s = new StringBuilder();
 
-        s.append("\n=> Tipo de Veiculo: Carro a gasolina.\n");
+        s.append("\n:: Tipo de Veiculo: Carro a gasolina.\n");
         s.append(super.toString());
 
         return s.toString();

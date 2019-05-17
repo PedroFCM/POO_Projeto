@@ -1,9 +1,9 @@
 
-main:
-	javac UMCarroJA.java
+main: clean
+	javac Main.java
 
 run:
-	java UMCarroJA
+	java Main
 
 clean:
 	find . -type f -name "*.class" -delete
