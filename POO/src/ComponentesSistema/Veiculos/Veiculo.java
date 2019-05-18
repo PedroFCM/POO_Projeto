@@ -17,6 +17,7 @@ public abstract class Veiculo implements Serializable {
     private Localizacao local;
     private String proprietario;
     private boolean disponivel;
+    private int vezesAlugado;
     
     //-------------------------------------------------------//  
 
@@ -27,7 +28,8 @@ public abstract class Veiculo implements Serializable {
                     int new_classif,
                     Localizacao new_local,
                     String new_prop,
-                    boolean new_estado) {
+                    boolean new_estado,
+                    int vezes) {
 
         this.marca           = new_marca;
         this.matricula       = new_mat; 
@@ -37,6 +39,7 @@ public abstract class Veiculo implements Serializable {
         this.local           = new Localizacao(new_local);
         this.proprietario    = new_prop;
         this.disponivel      = new_estado;
+        this.vezesAlugado    = vezes;
     }
    
     public Veiculo (Veiculo novo) {
@@ -49,6 +52,7 @@ public abstract class Veiculo implements Serializable {
         this.local           = novo.getLocalizacao();
         this.proprietario    = novo.getProprietario();
         this.disponivel      = novo.getDisponivel();
+        this.vezesAlugado    = novo.getVezesAlugado();
     }
 
     public Veiculo () {
@@ -61,7 +65,7 @@ public abstract class Veiculo implements Serializable {
         this.proprietario    = "N/A";
         this.disponivel      = false;
         this.marca           = "N/A";
-
+        this.vezesAlugado    = 0;
     }
   
     //-------------------------------------------------------//  
@@ -103,6 +107,7 @@ public abstract class Veiculo implements Serializable {
         s.append("Proprietario: " + this.proprietario + "\n");
         s.append(this.local.toString());
         s.append("Disponivel: " + this.disponivel + "\n");
+        s.append("Alugado " + this.vezesAlugado + " vezes\n");
 
         return s.toString();
     }
@@ -172,6 +177,28 @@ public abstract class Veiculo implements Serializable {
     public void setClassificacao(int clas) {
 
         this.classificacao = clas;
+    }
+
+    public int getVezesAlugado() {
+
+        return this.vezesAlugado;
+    }
+
+    public void setVezesAlugado(int v) {
+
+        this.vezesAlugado = v;
+    }
+
+    public void incrementVezesAlugadoBy1() {
+
+        this.vezesAlugado = this.vezesAlugado + 1;
+    }   
+
+    public void atribuiClassificacao(int classi){
+    
+        int n = this.vezesAlugado;
+        
+        this.setClassificacao((this.classificacao + classi)/(n+1));
     }
     
     //-------------------------------------------------------//  

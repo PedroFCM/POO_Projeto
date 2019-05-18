@@ -99,6 +99,18 @@ public class Proprietario extends AtorSistema {
         }
     }
 
+    public void replaceVeiculo (Veiculo novo) {
+
+        if (!this.mapVeiculos.containsKey(novo.getMatricula())) {
+
+              this.mapVeiculos.put(novo.getMatricula(), novo.clone());
+        } else {
+
+          this.mapVeiculos.replace(novo.getMatricula(), novo.clone());
+        }
+
+    }
+
    
     public void alteraPrecoPorKm(Veiculo v, double preco){
         
@@ -149,12 +161,17 @@ public class Proprietario extends AtorSistema {
         }
     }
     
-    public void abastecer (VeiculoComAutonomia v) {
+    public void abastecer (VeiculoComAutonomia v, Double quant) {
     
-        if(this.mapVeiculos.containsValue(v)){
+        Double atual = ((VeiculoComAutonomia) v).getAutonomiaAtual(), 
+               max   = ((VeiculoComAutonomia) v).getAutonomiaMaxima();
 
-           ((VeiculoComAutonomia) this.mapVeiculos.get(v.getMatricula())).setAutonomiaAtual(v.getAutonomiaMaxima());
-        }
+        if (atual + quant > max) {
+
+            atual = max;
+        } else atual += quant;
+
+        ((VeiculoComAutonomia) v).setAutonomiaAtual(atual);
     }
     
     public Veiculo getVeiculoPelaMatricula (String matricula){

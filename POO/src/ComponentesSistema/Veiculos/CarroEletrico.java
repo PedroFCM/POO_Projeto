@@ -17,7 +17,8 @@ public class CarroEletrico extends VeiculoComAutonomia {
                           double currentAuto,
                           String prop,
                           boolean estado,
-                          String marca) {
+                          String marca,
+                          int v) {
 
         super(marca,
               nova_matricula, 
@@ -29,7 +30,8 @@ public class CarroEletrico extends VeiculoComAutonomia {
               maxAuto,
               currentAuto, 
               prop, 
-              estado);
+              estado,
+              v);
     }
 
     public CarroEletrico (CarroEletrico carroEle) {

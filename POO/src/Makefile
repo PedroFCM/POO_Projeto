@@ -9,3 +9,6 @@ clean:
 	find . -type f -name "*.class" -delete
 	find . -type f -name "*.ctxt" -delete
 	find . -type f -name "package.bluej" -delete
+
+cleanSaves:
+	rm ObjectSaves/estadoObj.obj

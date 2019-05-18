@@ -109,6 +109,17 @@ public class EstadoSistema implements Serializable {
         }
     }
 
+    public void replaceProprietario (Proprietario p) {
+
+        if (!this.proprietarios_Sistema.containsKey(p.getNif())) {
+
+              this.proprietarios_Sistema.put(p.getNif(), p.clone());
+        } else {
+
+          this.proprietarios_Sistema.replace(p.getNif(), p.clone());
+        }
+    }
+
     public void criaAdicionaProprietario(String email,
                                          String nomeAtor,
                                          String passw,
@@ -144,6 +155,17 @@ public class EstadoSistema implements Serializable {
       this.veiculos_Sistema.put(novo.getMatricula(), novo.clone());
     }
 
+    public void replaceVeiculoSistema (Veiculo novo) {
+
+      this.veiculos_Sistema.replace(novo.getMatricula(), novo.clone());
+    }
+
+    public void replaceClienteSistema (Cliente c) {
+
+
+      this.clientes_Sistema.replace(c.getNif(), c.clone());
+    }    
+
     public List<Veiculo> allVeiculos() {
 
         List<Proprietario> listaP = new ArrayList<>();
@@ -174,6 +196,7 @@ public class EstadoSistema implements Serializable {
                                                              .getSimpleName()
                                                              .equals(preferencia))
                                                              .collect(Collectors.toList());
+        
         } else {
 
            todosVeiculos = this.veiculos_Sistema.values()
@@ -182,10 +205,8 @@ public class EstadoSistema implements Serializable {
         }
 
         if (todosVeiculos.isEmpty()) {
-            
+
             throw new CarNotAvailableException("Não existem carros disponivéis...");
-            
-            //return null;
         }
 
         Localizacao local_c = c.getLocalizacao();
@@ -196,7 +217,7 @@ public class EstadoSistema implements Serializable {
 
             atual = v.getLocalizacao().distancia(local_c);
             
-            if (atual < distancia_menor) {
+            if (atual <= distancia_menor) {
 
                 matched.add(v.clone());
                 distancia_menor = atual;             
@@ -207,13 +228,16 @@ public class EstadoSistema implements Serializable {
 
         Veiculo last = matched.get(matched.size() - 1);
 
-        return matched.stream()
-                      .filter(v -> (x == v.getLocalizacao()
-                                          .distancia(local_c)))
-                      .collect(Collectors.toList());  
+        List<Veiculo> res = matched.stream()
+                                   .filter(v -> (x == v.getLocalizacao()
+                                                       .distancia(local_c)))
+                                   .collect(Collectors.toList()); 
+
+        return res;  
     }
 
-    public Veiculo carroMaisBarato (String preferencia) {
+    public List<Veiculo> carroMaisBarato (String preferencia) 
+      throws CarNotAvailableException {
 
         List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();
         
@@ -225,13 +249,18 @@ public class EstadoSistema implements Serializable {
                                                              .getSimpleName()
                                                              .equals(preferencia))
                                                              .collect(Collectors.toList());
-        }        
+        }  else {
+
+           todosVeiculos = this.veiculos_Sistema.values()
+                                               .stream()
+                                               .collect(Collectors.toList());
+        }       
 
         if (todosVeiculos.isEmpty()) {
-            return null;
+             throw new CarNotAvailableException("Não existem carros disponivéis...");
         }
         
-       SortedMap<Double, Veiculo> 
+        SortedMap<Double, Veiculo> 
        	veiculosOrdenadosPorPreco = new TreeMap<Double, Veiculo>();
 
         for (Veiculo v: todosVeiculos) {
@@ -239,34 +268,65 @@ public class EstadoSistema implements Serializable {
           veiculosOrdenadosPorPreco.put(v.getPrecoPorKM(), v.clone());
         }
 
-        return veiculosOrdenadosPorPreco.get(veiculosOrdenadosPorPreco.firstKey());  
+        List<Veiculo> l = new ArrayList<>();
+
+        Veiculo v = veiculosOrdenadosPorPreco.get(veiculosOrdenadosPorPreco.firstKey());
+
+        l = todosVeiculos.stream()
+                         .filter(v1 -> v1.getPrecoPorKM() == v.getPrecoPorKM())
+                         .collect(Collectors.toList());
+
+        
+        return l;  
     }
 
-    public Veiculo carroMaisBarato (Cliente c, Double distanciaMax) {
+    public List<Veiculo> carroMaisBarato (Cliente c, Double distanciaMax, String preferencia) 
+            throws CarNotAvailableException {
 
-        List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();
+      List<Veiculo> maisBaratos = carroMaisBarato(preferencia);
+
+      Localizacao clienteLocal = c.getLocalizacao();
+    
+      List<Veiculo> result = maisBaratos.stream()
+                                        .filter(v -> (clienteLocal.distancia(v.getLocalizacao()) <= distanciaMax))
+                                        .collect(Collectors.toList());
+
+      return result;  
+    }
+
+    public List<Veiculo> carroComCertaAutonomia(String preferencia, Double autonomia)
+          throws CarNotAvailableException {
+
+      List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();
         
-        todosVeiculos =  this.allVeiculos();
+        if (!preferencia.equals("SemPreferencia")) {
+
+          todosVeiculos = this.veiculos_Sistema.values()
+                                               .stream()
+                                               .filter(v -> v.getClass()
+                                                             .getSimpleName()
+                                                             .equals(preferencia))
+                                                             .collect(Collectors.toList());
+        }  else {
+
+           todosVeiculos = this.veiculos_Sistema.values()
+                                               .stream()
+                                               .collect(Collectors.toList());
+        }       
 
         if (todosVeiculos.isEmpty()) {
-            return null;
+             throw new CarNotAvailableException("Não existem carros disponivéis...");
         }
+      
+        List<Veiculo> result = new ArrayList<>();
 
-        SortedMap<Double, Veiculo> veiculosOrdenadosPorPreco = 
-                            new TreeMap<Double, Veiculo>();
-        
         for (Veiculo v: todosVeiculos) {
 
-          if (c.getLocalizacao().distancia(v.getLocalizacao()) <= distanciaMax) {
-            
-            veiculosOrdenadosPorPreco.put(v.getPrecoPorKM(), v.clone());
-          }
-        
+          if (((VeiculoComAutonomia) v).getAutonomiaAtual() >= autonomia)
+            result.add(v);
         }
 
-        if (veiculosOrdenadosPorPreco.size()==0) return null;
-
-        return veiculosOrdenadosPorPreco.get(veiculosOrdenadosPorPreco.firstKey());  
+        return result;
     }
 
     public List<Veiculo> carroEspecifico (String tipoDeCarroDesejado) {
@@ -298,6 +358,13 @@ public class EstadoSistema implements Serializable {
       }
 
       return carroEspecifico;
+    }
+
+    public void consumirkmAluguer (VeiculoComAutonomia v, Double dist) {
+
+      Double atual = v.getAutonomiaAtual();
+
+      v.setAutonomiaAtual((atual-dist)>=0?(atual-dist):0.0);
     }
         
     //-------------------------------------------------------//  

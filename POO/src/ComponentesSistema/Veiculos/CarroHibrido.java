@@ -17,7 +17,8 @@ public class CarroHibrido extends VeiculoComAutonomia {
                           double currentAuto,
                           String prop,
                           boolean estado,
-                          String marca) {
+                          String marca,
+                          int vezesA) {
 
         super(marca,
               nova_matricula, 
@@ -29,7 +30,8 @@ public class CarroHibrido extends VeiculoComAutonomia {
               maxAuto,
               currentAuto, 
               prop, 
-              estado);
+              estado,
+              vezesA);
     }
 
     public CarroHibrido (CarroHibrido carroGas) {

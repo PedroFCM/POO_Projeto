@@ -20,8 +20,13 @@ import BaseClasses.Aluguer;
 
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.time.format.DateTimeParseException;
+import java.io.File;
 
 import java.util.Scanner;
+import java.util.List;
+import java.lang.Character;
+import java.time.LocalDate;
 
 //--------------------------------------------------
 
@@ -39,8 +44,8 @@ public class UMCarroJA {
 	private String usernameLogged;
 	private boolean isProprietario;
 	private String currentAlugerPref;
-
 	private AtorSistema user;
+	private int currAluguerCarNum;
 
 	//--------------------------------------------------
 
@@ -54,12 +59,32 @@ public class UMCarroJA {
 
     public void initLogs () throws IOException, FileNotFoundException {
 
+
     	GestorFicheirosDados fileManager = new GestorFicheirosDados();
-    		
-    	fileManager.carregarEstadoFromLogs(this.estadoMODEL, 
-    									   pathLogs);
-           	    		    		
-    	//fileManager.stats_iniciais(this.estadoMODEL);
+    	
+    	File load = new File("ObjectSaves/estadoObj.obj");
+
+    	if (load.exists() && !load.isDirectory()) {
+
+    		try {
+
+	    		this.estadoMODEL = fileManager.objectFileParaEstado();
+
+		    	fileManager.stats_iniciais(this.estadoMODEL);
+	    
+	    		return;
+
+    		}
+    		catch (FileNotFoundException e) {}
+    		catch (IOException e) {}
+    		catch (ClassNotFoundException e) {}
+    	}
+
+    	System.out.println("\t\nPrimeira vez a utilizar a APP, a carregar LOGS!");
+
+    	fileManager.carregarEstadoFromLogs(this.estadoMODEL, pathLogs);
+        
+    	fileManager.stats_iniciais(this.estadoMODEL);
     }
 
     public void run () {
@@ -77,9 +102,9 @@ public class UMCarroJA {
 	    welcomeMenu();
    	}
 
-   	public void cheapestCarMenu() {
+   	public void clientMenuSelection() {
 
-   		Scanner scan = new Scanner(System.in);
+ 		Scanner scan = new Scanner(System.in);
 
    		this.menusVIEW.printPreferredVehicles();
 
@@ -112,36 +137,301 @@ public class UMCarroJA {
 
 					this.currentAlugerPref = "SemPreferencia";
 					optionCliente = "q";
+
+				} else if (optionCliente.charAt(0) == '5') {
+
+					welcomeMenu();					
 				} else
 					this.menusVIEW.printError("Option unavailable.");
 
 			} else 
 				this.menusVIEW.printError("Insert only 1 haracter, please.");
    		}
+
    	}
 
-   	public void clientMenuSelection(char optionSelected) {
+   	public Double getDoubleInput (String msg) {
 
-   		switch(optionSelected) {
+  		Scanner scan = new Scanner(System.in);
 
-   			//Carro mais perto
-   			case '1':
-				
-				cheapestCarMenu();
+  		Double x;
+  		int n_spaces;
 
-				break;
+  		while (true) {
 
-   			case '2':
-				
+	  		this.menusVIEW.printHighlight(msg);
 
-				break;
+  			String doub = scan.nextLine();
+  			
+  			n_spaces = doub.length() - doub.replaceAll(" ", "").length();
 
-   			case '3':
-				
+  			if (n_spaces == 0) {
 
-				break;
+  				try {
+
+  					x = Double.parseDouble(doub);
+  				
+  					break;
+  				}
+  				catch (NumberFormatException e) {
+
+  					this.menusVIEW.printError("Formato inserido inválido, insira por exemplo: 12.2");
+  				}
+
+  			} else
+  				this.menusVIEW.printError("Formato inserido inválido, insira por exemplo: 12.2");
+  		}
+
+  		return x;
+   	}
+
+   	public int getIntegerInput (String msg) {
+
+  		Scanner scan = new Scanner(System.in);
+
+  		int x;
+  		int n_spaces;
+
+  		while (true) {
+
+	  		this.menusVIEW.printHighlight(msg);
+
+  			String doub = scan.nextLine();
+  			
+  			n_spaces = doub.length() - doub.replaceAll(" ", "").length();
+
+  			if (n_spaces == 0) {
+
+  				try {
+
+  					x = Integer.parseInt(doub);
+  				
+  					break;
+  				}
+  				catch (NumberFormatException e) {
+
+  					this.menusVIEW.printError("Formato inserido inválido, insira por exemplo: 12");
+
+  					return -1;
+  				}
+
+  			} else
+  				this.menusVIEW.printError("Formato inserido inválido, insira por exemplo: 12");
+  		}
+
+  		return x;
+   	}
+
+   	public LocalDate getDataInput (String msg) {
+
+   		Scanner scan = new Scanner(System.in);
+
+   		String data;
+		LocalDate nova;
+
+   		while(true) {
+
+   			this.menusVIEW.printHighlight("Insira uma data " + msg + ": (Ex: \"2019-5-18\" no formato \"yy-mm-dd\"");
+
+   			data = scan.next();
+
+
+   			try {
+
+	   			nova = LocalDate.parse(data);
+	   			break;
+   			}
+   			catch (DateTimeParseException e) {
+
+   				this.menusVIEW.printError("Formato inválido! Respeite o seguinte formato yyyy-mm-dd");
+   			}
+   		}	
+
+   		return nova;
+   	}
+
+   	public Localizacao whereToGo () {	
+
+  		Scanner scan = new Scanner(System.in);
+
+  		int n_spaces = 0;
+  		Double x, y;
+
+  		while (true) {
+
+	  		this.menusVIEW.printHighlight("Para onde deseja ir? (Ex: insira x y => 2.0 2.0)");
+
+  			String posicao = scan.nextLine();
+  			
+  			n_spaces = posicao.length() - posicao.replaceAll(" ", "").length();
+
+  			if (n_spaces == 1) {
+
+  				try {
+
+			  		String[] parts = posicao.split(" ");
+  			
+  					x = Double.parseDouble(parts[0]);
+  					y = Double.parseDouble(parts[1]);
+  				
+  					break;
+  				}
+  				catch (NumberFormatException e) {
+
+  					this.menusVIEW.printError("Formato inserido inválido, insira por exemplo: 2.0 2.0");
+  				}
+  			} else
+  				this.menusVIEW.printError("Formato inserido inválido, insira por exemplo: 2.0 2.0");
+  		}
+
+  		return new Localizacao(x, y);
+   	}
+
+   	public void classificarCarroMenu (Veiculo v) {
+
+   		int classParaAtribuir = getIntegerInput("Qual classificação deseja atribuir ao carro? ");
+
+   		this.menusVIEW.printHighlight("Atribuiu " + classParaAtribuir + " pontos em 100!");
+
+   		//Classificar o proprietario
+
+   		this.estadoMODEL.getProprietario(v.getProprietario())
+   						.atribuiClassificacao(classParaAtribuir);
+
+   		v.atribuiClassificacao(classParaAtribuir);
+
+   		this.menusVIEW.printHighlight("O carro tem agora " + v.getClassificacao());
+   	}
+
+   	public int getCarChoice(int max, List<Veiculo> listV) {
+
+
+   		Scanner scan = new Scanner(System.in);
+
+   		String optionCliente = "s";
+
+   		int inp;
+
+   		while (true) {
+
+   			optionCliente = scan.next();
+
+   				try { 
+							
+					inp = Integer.parseInt(optionCliente);
+				}
+				catch (NumberFormatException e) {
+
+					continue;
+				}
+
+				if (inp >= 1 && inp <= max) {
+
+					Localizacao destino = whereToGo();
+
+	   				this.menusVIEW.printHighlight("Efetuar aluguer do carro " + inp + "? [y/n]");
+
+	   				char choice;
+
+	   				while (true) {
+
+	   					choice = getStringInput().charAt(0);
+
+	   					if (choice == 'y') {
+
+	   						Veiculo paraAlugar = listV.get(inp-1);
+
+					   		this.menusVIEW.clearConsole();
+							this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+							this.menusVIEW.printUserDetails(user.getNome(),
+															user.getMorada(),
+															user.getEmail(),
+															user.getClassificacao(),
+															user.getNif(),
+															user.getClass().getSimpleName());
+	   						
+	   						Double distancia = destino.distancia(paraAlugar.getLocalizacao());
+
+	   						if (!((VeiculoComAutonomia) paraAlugar).temAutonomiaParaViagem(distancia)) {
+						   		
+						   		this.menusVIEW.clearConsole();
+								this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+								this.menusVIEW.printUserDetails(user.getNome(),
+																user.getMorada(),
+																user.getEmail(),
+																user.getClassificacao(),
+																user.getNif(),
+																user.getClass().getSimpleName());
+
+								this.menusVIEW.printError("This vehicle does not have enough autonomy, sorry try again later.");
+
+	   							break;
+
+	   						}
+
+				            Aluguer novoAluguerMP = new Aluguer (paraAlugar.getMatricula(),
+	                                                   			 this.user.getNif(),
+	                                                   			 paraAlugar.getProprietario(),
+	                                                   			 distancia,
+	                                                    		 paraAlugar.getPrecoPorKM() * distancia,
+	                                                   			 LocalDate.now());
+
+				            this.user.adicionaAluguer(novoAluguerMP);
+				            this.estadoMODEL.replaceClienteSistema((Cliente) this.user);
+
+				            this.menusVIEW.printFaturaAlguer(novoAluguerMP.getCliente(),
+				            								 novoAluguerMP.getProprietario(),
+				            								 novoAluguerMP.getVeiculo(),
+				            								 novoAluguerMP.getPreco(),
+				            								 novoAluguerMP.getDistancia(),
+				            								 novoAluguerMP.getData());
+
+				            this.estadoMODEL.consumirkmAluguer((VeiculoComAutonomia) paraAlugar,
+				            							 distancia);
+				            
+				            classificarCarroMenu(paraAlugar);
+
+				            paraAlugar.setLocalizacao(destino);
+				            ((Cliente) this.user).setLocalizacao(destino);
+
+				            Proprietario p = this.estadoMODEL.getProprietario(paraAlugar.getProprietario()); 
+				            p.replaceVeiculo(paraAlugar);
+
+				            this.estadoMODEL.replaceProprietario(p);
+				            this.estadoMODEL.replaceVeiculoSistema(paraAlugar);
+
+	   						break;
+
+	   					} else if (choice == 'n') {
+
+					   		this.menusVIEW.clearConsole();
+							this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+							this.menusVIEW.printUserDetails(user.getNome(),
+															user.getMorada(),
+															user.getEmail(),
+															user.getClassificacao(),
+															user.getNif(),
+															user.getClass().getSimpleName());
+
+	   						break;
+	   					} else 
+	   						this.menusVIEW.printError("Option not available...");
+
+	   				}
+
+	   				break;
+
+				} else {
+					this.menusVIEW.printError("Option unavailable.");
+					System.out.print("Please, choose a car by its NUMBER: ");
+				}
    		}
-   	} 
+
+   		return inp;
+  	}
 
    	public void welcomeMenu() {
 
@@ -171,9 +461,12 @@ public class UMCarroJA {
 
 					if (optionCliente.charAt(0) == '1' ||
 						optionCliente.charAt(0) == '2' ||
-						optionCliente.charAt(0) == '3') {
+						optionCliente.charAt(0) == '3' ||
+						optionCliente.charAt(0) == '4' ||
+						optionCliente.charAt(0) == '5') {
 
-						clientMenuSelection(optionCliente.charAt(0));
+						if (optionCliente.charAt(0) != '5') 
+							clientMenuSelection();
 
 				   		this.menusVIEW.clearConsole();
 						this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
@@ -184,21 +477,128 @@ public class UMCarroJA {
 														user.getClassificacao(),
 														user.getNif(),
 														user.getClass().getSimpleName());
-				 
-						this.menusVIEW.printHint("There's this car available: \n");
-
-						try {
-
-							System.out.println(this.user);
-
-							System.out.println(this.estadoMODEL
-							.carroMaisProximo((Cliente) this.user, this.currentAlugerPref));
-
-						}
 						
-						catch (CarNotAvailableException e) {
+						if (optionCliente.charAt(0) == '1') {			 
+						
+							try {
 
-							this.menusVIEW.printError("There's no car available now.");
+								this.menusVIEW
+									.printClientLocationBasicInfo(((Cliente) this.user).getLocalizacao()
+																		             .getX(),
+																  ((Cliente) this.user).getLocalizacao()
+																  		             .getY());
+
+								List<Veiculo> listaV = this.estadoMODEL
+												.carroMaisProximo((Cliente) this.user, this.currentAlugerPref);
+
+								int num_cars = printAvailableCars(listaV);
+							
+								int car = getCarChoice(num_cars, listaV);
+							}
+							
+							catch (CarNotAvailableException e) {
+
+								this.menusVIEW.printError("There's no car available now.");
+							}
+
+						} else if (optionCliente.charAt(0) == '2') {
+
+							try {
+
+								this.menusVIEW
+									.printClientLocationBasicInfo(((Cliente) this.user).getLocalizacao()
+																		             .getX(),
+																  ((Cliente) this.user).getLocalizacao()
+																  		             .getY());
+
+								//System.out.println(this.currentAlugerPref);
+
+								List<Veiculo> listaV = this.estadoMODEL
+												.carroMaisBarato(this.currentAlugerPref);
+								
+
+								int num_cars = printAvailableCars(listaV);
+							
+								int car = getCarChoice(num_cars, listaV);
+							}
+							
+							catch (CarNotAvailableException e) {
+
+								this.menusVIEW.printError("There's no car available now.");
+							}
+						} else if (optionCliente.charAt(0) == '3') {
+
+							try {
+
+								this.menusVIEW
+									.printClientLocationBasicInfo(((Cliente) this.user).getLocalizacao()
+																		             .getX(),
+																  ((Cliente) this.user).getLocalizacao()
+																  		             .getY());
+
+								//System.out.println(this.currentAlugerPref);
+								Double x = getDoubleInput("Qual a distância que deseja? ");
+									
+								System.out.println("Escolheu um distância de " + x + " km.");
+
+								List<Veiculo> listaV = this.estadoMODEL
+												.carroMaisBarato(((Cliente) this.user), x, this.currentAlugerPref);								
+
+								if (listaV.size() == 0) {
+								
+									this.menusVIEW.printError("There's no car available now.");
+								} else {
+
+									int num_cars = printAvailableCars(listaV);
+									
+									int car = getCarChoice(num_cars, listaV);
+								}
+							}
+							
+							catch (CarNotAvailableException e) {
+
+								this.menusVIEW.printError("There's no car available now.");
+							}
+
+						} else if (optionCliente.charAt(0) == '4') {
+
+							try {
+
+								this.menusVIEW
+									.printClientLocationBasicInfo(((Cliente) this.user).getLocalizacao()
+																		               .getX(),
+																  ((Cliente) this.user).getLocalizacao()
+																  		               .getY());
+
+								Double auto = getDoubleInput("Qual a autonomia que deseja? ");
+									
+								System.out.println("Escolheu uma autonomia de " + auto + " km.");
+
+								List<Veiculo> listaV = this.estadoMODEL
+												.carroComCertaAutonomia(this.currentAlugerPref, auto);								
+
+								if (listaV.size() == 0) {
+								
+									this.menusVIEW.printError("There's no car available now.");
+								} else {
+
+									int num_cars = printAvailableCars(listaV);
+								
+									int car = getCarChoice(num_cars, listaV);
+								}
+							}
+							
+							catch (CarNotAvailableException e) {
+
+								this.menusVIEW.printError("There's no car available now.");
+							}
+
+						} else if (optionCliente.charAt(0) == '5') {
+
+							List<Aluguer> listaAlugueres = ((Cliente) this.user).getHistoricoAlugueres();
+
+							printListBetweenDates(listaAlugueres, LocalDate.of(2019, 5, 18), LocalDate.of(2019, 5, 19));
+
 						}
 
 					} else if (optionCliente.charAt(0) == 'y') {
@@ -224,6 +624,219 @@ public class UMCarroJA {
 			}
 
 
+		} else if (user.getClass().getSimpleName().equals("Proprietario")) {
+
+			String optionCliente = "s";
+
+			while (optionCliente.charAt(0) != 'z') {
+	
+				optionCliente = scan.next();
+
+				if (optionCliente.length() == 1) {
+
+					char inp = optionCliente.charAt(0);
+
+					if (optionCliente.charAt(0) == '1' ||
+						optionCliente.charAt(0) == '2' ||
+						optionCliente.charAt(0) == '3' ||
+						optionCliente.charAt(0) == '4' ||
+						optionCliente.charAt(0) == 'c' ||
+						optionCliente.charAt(0) == 'y') {
+
+					//----------------------------------------------------------------------------------------
+
+						if (optionCliente.charAt(0) == '1') {
+							
+							List<Veiculo> veiculosP = ((Proprietario) this.user).getListaVeiculos();
+							
+							presentCarsOwner(veiculosP);
+							
+							this.menusVIEW.clearConsole();
+				
+							this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+							this.menusVIEW.printUserDetails(user.getNome(),
+															user.getMorada(),
+															user.getEmail(),
+															user.getClassificacao(),
+															user.getNif(),
+															user.getClass().getSimpleName());
+	
+					//----------------------------------------------------------------------------------------
+					
+						} else if (optionCliente.charAt(0) == '2') {
+
+							LocalDate antes = getDataInput("inferior");
+							
+							LocalDate depois;
+
+							while (true) {
+								
+								depois = getDataInput("superior");
+								
+								if(depois.isAfter(antes) || depois.isEqual(antes)) break;
+								else {
+									this.menusVIEW.printError("Essa data não é superior!");
+								} 
+							}
+							
+							this.menusVIEW.printHighlight("List of rentals between " + antes + " and " + depois);
+							
+							printListBetweenDates(((Proprietario) this.user).getHistoricoAlugueres(), antes, depois);
+
+					//----------------------------------------------------------------------------------------
+
+						} else if (optionCliente.charAt(0) == '3') {
+
+							List<Veiculo> veiculosP = ((Proprietario) this.user).getListaVeiculos();
+
+							this.menusVIEW.printHint("Visit the first (1) menu to choose your car, example: ...Vehicle x....");
+							this.menusVIEW.printHint("(Press \"q\" to go back to menu)");
+
+							int sel_car = getIntegerInput("Car option:");
+
+							if (sel_car == -1) 
+								welcomeMenu();
+
+							if (sel_car >= 0 && sel_car < veiculosP.size()) {
+
+								Double aumentarAuto = getDoubleInput("Insira a quantidade de combustivel: ");
+
+								Veiculo paraAumentar = veiculosP.get(sel_car);
+
+								((Proprietario) this.user).abastecer((VeiculoComAutonomia) paraAumentar, 
+																	 aumentarAuto);
+								
+								((Proprietario) this.user).replaceVeiculo(paraAumentar);
+
+					            this.estadoMODEL.replaceProprietario((Proprietario) this.user);
+					            this.estadoMODEL.replaceVeiculoSistema(paraAumentar);
+
+							}
+
+					//----------------------------------------------------------------------------------------
+
+						} else if (optionCliente.charAt(0) == '4') {
+
+							Scanner s = new Scanner(System.in);
+
+							this.menusVIEW.printCreateVehicles();							
+
+							String tipo, marca, matricula;
+							Double vel_media, pkm, cons, auton, xloc, yloc;
+
+							GestorFicheirosDados gestor = new GestorFicheirosDados();
+
+							while(true) {
+								
+								this.menusVIEW.printHint("Choose the kind of car you want to add: ");
+
+								tipo = s.nextLine();
+							
+								if (tipo.length() == 1) {
+
+									if (tipo.charAt(0) == '1') {
+										tipo = "Hybrid";
+										break;
+									}
+									else if (tipo.charAt(0) == '2') {
+										tipo = "Gasoline";
+										break;
+									} 
+									else if (tipo.charAt(0) == '3') {
+										tipo = "Eletric";
+										break;
+									}
+								} else 
+									this.menusVIEW.printError("Invalid argument...");
+							}
+
+							while(true) {
+																	
+								this.menusVIEW.printHint("Marca: ");
+								
+								marca = s.nextLine();
+							
+								if (tipo.length() == 0) {
+
+									this.menusVIEW.printError("Marca vazia!");
+								} else break;
+							}
+
+							while(true) {
+																	
+								this.menusVIEW.printHint("Matricula: ");
+								
+								matricula = s.nextLine();
+							
+								if (gestor.isStringMatricula(matricula) == false) {
+
+									this.menusVIEW.printError("Não é uma matricula!");
+								} else break;
+							}
+											
+							vel_media = getDoubleInput("Vel. Med: ");
+							pkm = getDoubleInput("Price/km: ");
+							cons = getDoubleInput("Cons/km: ");
+							auton = getDoubleInput("Auto.: ");
+							xloc = getDoubleInput("Local. X: ");
+							yloc = getDoubleInput("Local. Y: ");
+
+							if (tipo.equals("Hybrid")) {
+
+								VeiculoComAutonomia v = new CarroHibrido(matricula, vel_media, pkm, 0, new Localizacao(xloc, yloc), cons, auton, auton, ((Proprietario) this.user).getNif(), true, marca, 0);
+								
+								((Proprietario) this.user).adicionaVeiculo(v);								
+
+								this.estadoMODEL.replaceProprietario((Proprietario) this.user);
+
+								this.estadoMODEL.adicionaVeiculoSistema(v);
+							} else
+							if (tipo.equals("Gasoline")) {
+
+								VeiculoComAutonomia v = new CarroGasolina(matricula, vel_media, pkm, 0, new Localizacao(xloc, yloc), cons, auton, auton, ((Proprietario) this.user).getNif(), true, marca, 0);
+								
+								((Proprietario) this.user).adicionaVeiculo(v);								
+
+								this.estadoMODEL.replaceProprietario((Proprietario) this.user);
+
+								this.estadoMODEL.adicionaVeiculoSistema(v);
+							} else 
+							if (tipo.equals("Eletric")) {
+
+								VeiculoComAutonomia v = new CarroEletrico(matricula, vel_media, pkm, 0, new Localizacao(xloc, yloc), cons, auton, auton, ((Proprietario) this.user).getNif(), true, marca, 0);
+								
+								((Proprietario) this.user).adicionaVeiculo(v);								
+
+								this.estadoMODEL.replaceProprietario((Proprietario) this.user);
+
+								this.estadoMODEL.adicionaVeiculoSistema(v);
+								
+							}	
+
+
+						} else if (optionCliente.charAt(0) == 'y') {
+
+							this.menusVIEW.clearConsole();
+
+							run();
+					
+						} else if (optionCliente.charAt(0) == 'c') {
+
+							System.out.println("ola");
+
+							welcomeMenu();
+
+						} else {
+
+							this.menusVIEW.printError("Option unavailable.");
+						}
+
+					}
+
+				}
+
+			}
 		}
    	}
 
@@ -237,14 +850,14 @@ public class UMCarroJA {
 
 		boolean clearScreen = false;
 
-		//--------------------------------------------------
+		//--------------------------------------------------	
 
 		try {
 
 			char optionLogMenu = scanner.next().charAt(0);
 
 			//Press l to login or r to register
-			while (optionLogMenu != 'r' && optionLogMenu != 'l') {
+			while (optionLogMenu != 'r' && optionLogMenu != 'l' && optionLogMenu != 's') {
 
 				this.menusVIEW.printError("Please, insert a valid option...");				
 
@@ -252,6 +865,20 @@ public class UMCarroJA {
 			}
 
 			GestorFicheirosDados gestor = new GestorFicheirosDados();
+
+			if (optionLogMenu == 's') {
+				try {
+					gestor.estadoParaObjectFile(this.estadoMODEL);
+					
+					controllLogIn();
+				}
+				catch(FileNotFoundException e) {
+					System.out.println(e.getMessage());
+				}
+				catch(IOException e) {
+					System.out.println(e.getMessage());					
+				}
+			}
 
 			if (optionLogMenu == 'r' && logFinished == false) {
 
@@ -316,9 +943,11 @@ public class UMCarroJA {
 																  morada,
 																  nif);
 
+						this.user = this.estadoMODEL.getProprietario(nif);
+
 						logFinished = true;
 
-						this.user = this.estadoMODEL.getProprietario(nif).clone();
+						return logFinished;
 					}
 					catch (AtorAlreadyExistsException e) {
 
@@ -332,7 +961,8 @@ public class UMCarroJA {
 							this.menusVIEW.clearConsole();
 
 							run();
-						}					}
+						}					
+					}
 
 				} else if (optionRegister == '2') {
 
@@ -428,6 +1058,132 @@ public class UMCarroJA {
 		String input = scanner.next();
    	
 		return input;
+   	}
+
+   	public int printAvailableCars (List<Veiculo> listV) {
+
+   		int i = 1;
+
+   		this.menusVIEW.printHighlight("\nThere's(re) " + listV.size() + " car(s) available: \n");
+
+   		for (Veiculo v: listV) {
+
+   			this.menusVIEW.printHint("\nVehicle " + i + ":________________________________________________________");
+
+   			this.menusVIEW.printVehicleBasicInfo(v.getMarca(),
+   												 v.getMatricula(),
+   												 v.getVelMediaPorKM(),
+   												 v.getPrecoPorKM(),
+   												 ((VeiculoComAutonomia) v).getConsumoPorKM(),
+   												 ((VeiculoComAutonomia) v).getAutonomiaAtual(),
+   												 v.getLocalizacao().getX(),
+   												 v.getLocalizacao().getY(),
+   												 v.getLocalizacao().distancia(((Cliente) user).getLocalizacao()),
+   												 v.getClassificacao(),
+   												 v.getVezesAlugado());
+   			i++;
+   		}
+
+   		System.out.print("Please, choose a car by its NUMBER: ");
+   		
+   		return listV.size();
+   	}
+
+   	public int presentCarsOwner (List<Veiculo> cars) {
+
+   		this.menusVIEW.printHighlight("\nThere's(re) " + cars.size() + " car(s) available: \n");
+			
+   		if (cars.size() == 0) {
+   			return 0;
+   		}
+
+   		int i = 1;
+
+   		Scanner scan = new Scanner(System.in);
+
+   		String option = "s";
+
+   		int posLISTA = 0, size = cars.size();
+
+   		Veiculo v = null;
+
+   		while (true) {
+		
+   			v = cars.get(posLISTA);
+
+			this.menusVIEW.clearConsole();
+			this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+			this.menusVIEW.printUserDetails(user.getNome(),
+											user.getMorada(),
+											user.getEmail(),
+											user.getClassificacao(),
+											user.getNif(),
+											user.getClass().getSimpleName());
+		
+			this.menusVIEW.printHighlight("Press \"f\" to see next page or \"b\" to go back. (\"q\" to leave this menu)");
+
+			this.menusVIEW.printHint("\nVehicle " + posLISTA + ":________________________________________________________");
+
+			this.menusVIEW.printVehicleBasicInfoOWNER(v.getMarca(),
+   						 v.getMatricula(),
+   						 v.getVelMediaPorKM(),
+   						 v.getPrecoPorKM(),
+   						 ((VeiculoComAutonomia) v).getConsumoPorKM(),
+   						 ((VeiculoComAutonomia) v).getAutonomiaAtual(),
+   						 v.getLocalizacao().getX(),
+   						 v.getLocalizacao().getY(),
+   						 v.getClassificacao(),
+   						 v.getVezesAlugado());
+					option = scan.next();
+
+			if (option.length() == 1) {
+
+				if (option.charAt(0) == 'f') {
+
+						if (posLISTA + 1 < size)
+							posLISTA++;
+				
+				} else if (option.charAt(0) == 'b') {
+
+						if (posLISTA - 1 >= 0)
+							posLISTA--;
+
+				} else if (option.charAt(0) == 'q') {
+
+					break;
+				} else {
+					this.menusVIEW.printError("Insira uma opção válida!");
+				}
+
+			} else this.menusVIEW.printError("Insira apenas 1 caracter!");
+
+		}
+
+   		return cars.size();
+   	}
+
+   	public void printListBetweenDates (List<Aluguer> listaAluguers, LocalDate antes, LocalDate depois) {
+
+   		if (listaAluguers.size() == 0) {
+   			this.menusVIEW.printError("There are no rentals at the moment to display!");
+   			return;
+   		}
+
+   		for (Aluguer a: listaAluguers) {
+
+   			if ((a.getData().isEqual(antes) || a.getData().isAfter(antes)) && 
+   				(a.getData().isEqual(antes) || a.getData().isBefore(antes))) {
+
+   				this.menusVIEW.printFaturaAlguer(a.getCliente(),
+				            					 a.getProprietario(),
+				            					 a.getVeiculo(),
+				            					 a.getPreco(),
+				            					 a.getDistancia(),
+				            					 a.getData());
+   			}
+   		}
+
    	}
 
 }

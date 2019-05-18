@@ -25,7 +25,8 @@ public class VeiculoComAutonomia extends Veiculo {
 		                        double maxAuto,
 		                        double currentAuto,
 		                        String prop,
-		                        boolean estado) {
+		                        boolean estado,
+                                int vezesA) {
 
         super(new_marca, 
         	  nova_matricula, 
@@ -34,7 +35,8 @@ public class VeiculoComAutonomia extends Veiculo {
         	  classiF, 
         	  nova_local, 
         	  prop, 
-        	  estado);
+        	  estado,
+              vezesA);
 
         this.consumoPorKm    = consumo;
         this.autonomiaMaxima = maxAuto;
@@ -114,7 +116,7 @@ public class VeiculoComAutonomia extends Veiculo {
     
     public void setAutonomiaAtual(double atual){
         
-        this.autonomiaMaxima = atual;
+        this.autonomiaAtual = atual;
     }
 
     public double percentagemAutonomia () {

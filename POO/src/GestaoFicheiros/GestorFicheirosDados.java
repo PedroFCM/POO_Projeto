@@ -146,9 +146,10 @@ public class GestorFicheirosDados {
 	                            Double.parseDouble(camposCarr[6]),
 	                            Double.parseDouble(camposCarr[7]),
 	                            Double.parseDouble(camposCarr[7]),
-	                            "?",
+	                            estado.getProprietario(camposCarr[3]).getNif(),
 	                            true,
-	                            camposCarr[1]);
+	                            camposCarr[1],
+	                            0);
 
 	              if (estado.existeProprietario(camposCarr[3])) {
 
@@ -172,9 +173,10 @@ public class GestorFicheirosDados {
 	                            Double.parseDouble(camposCarr[6]),
 	                            Double.parseDouble(camposCarr[7]),
 	                            Double.parseDouble(camposCarr[7]),
-	                            "?",
+	                            estado.getProprietario(camposCarr[3]).getNif(),
 	                            true,
-	                            camposCarr[1]);
+	                            camposCarr[1],
+	                            0);
 
 	              if (estado.existeProprietario(camposCarr[3])) {
 
@@ -198,9 +200,10 @@ public class GestorFicheirosDados {
 	                            Double.parseDouble(camposCarr[6]),
 	                            Double.parseDouble(camposCarr[7]),
 	                            Double.parseDouble(camposCarr[7]),
-	                            "?",
+	                            estado.getProprietario(camposCarr[3]).getNif(),
 	                            true,
-	                            camposCarr[1]);
+	                            camposCarr[1],
+	                            0);
 
 	              if (estado.existeProprietario(camposCarr[3])) {
 
@@ -278,13 +281,26 @@ public class GestorFicheirosDados {
 
 	              cli_aluguer.adicionaAluguer(novoAluguerMP);
 
+	              novoMP.incrementVezesAlugadoBy1();
+
+	              novoMP.setLocalizacao(destino);
+				  cli_aluguer.setLocalizacao(destino);
+
 	              break;
 
 	            case "MaisBarato": 
 
-	              Veiculo novoMB = estado.carroMaisBarato(tipoCombustivel)
-	                                     .clone();
+	            	Veiculo novoMB = null;
 
+	            	List<Veiculo> listMB = new ArrayList<>();
+
+	            	try {
+
+	            		listMB = estado.carroMaisBarato(tipoCombustivel);
+	            		novoMB = listMB.get(listMB.size() - 1);
+	            	}
+	            	catch (CarNotAvailableException e) {}
+	
 	              if (novoMB == null) continue;
 
 	              Aluguer novoAluguerMB = new Aluguer (novoMB.getMatricula(),
@@ -295,6 +311,8 @@ public class GestorFicheirosDados {
 	                                                   LocalDate.now());
 
 	              cli_aluguer.adicionaAluguer(novoAluguerMB);                
+
+	              novoMB.incrementVezesAlugadoBy1();
 
 	              break;
 
@@ -369,6 +387,8 @@ public class GestorFicheirosDados {
     public static boolean isStringMatricula (String possibleMatricula) {
 
       //Matricula => JI-75-97
+
+      if (possibleMatricula.length() < 8) return false; 
 
       boolean result = true;
 
