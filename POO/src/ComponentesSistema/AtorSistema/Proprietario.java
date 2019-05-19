@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
+import java.lang.Math;
 
 import java.io.Serializable;
 
@@ -178,6 +179,27 @@ public class Proprietario extends AtorSistema {
         
         return this.mapVeiculos.containsKey(matricula)?this.mapVeiculos.get(matricula):null;
     }
+
+    public void classifica(Veiculo v_novo) {
+
+        int n = 0, size = 0;
+
+        List<Veiculo> veiculos = this.mapVeiculos.values()
+                                                 .stream()
+                                                 .collect(Collectors.toList());
+
+        veiculos.add(v_novo);
+
+        size = veiculos.size();
+
+        for (Veiculo v: veiculos) {
+
+            n += v.getClassificacao();
+        }
+
+        this.setClassificacao((int) Math.round(n / size));
+    }
+
 /*    
     public boolean aceitarRejeitarAluguer(Cliente c){
     

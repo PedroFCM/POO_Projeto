@@ -127,13 +127,6 @@ public class AtorSistema implements Serializable {
         return this.getEmail().hashCode();
     }
     
-    public void atribuiClassificacao(int classi){
-    
-        int n = this.historico_alugueres.size();
-        
-        this.setClassificacao((this.classificacao + classi)/(n+1));
-    }
-    
    //-------------------------------------------------------//  
 
     public List<Aluguer> getHistoricoAlugueres () {

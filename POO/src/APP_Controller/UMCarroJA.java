@@ -292,14 +292,18 @@ public class UMCarroJA {
 
    	public void classificarCarroMenu (Veiculo v) {
 
-   		int classParaAtribuir = getIntegerInput("Qual classificação deseja atribuir ao carro? ");
+   		int classParaAtribuir = -1;
+
+   		while (classParaAtribuir < 0 || classParaAtribuir > 100) {
+
+	   		classParaAtribuir = getIntegerInput("Qual classificação deseja atribuir ao carro? ");
+
+	   		this.menusVIEW.printError("Atribua uma classificação entre 0 e 100 pontos!");
+   		}
 
    		this.menusVIEW.printHighlight("Atribuiu " + classParaAtribuir + " pontos em 100!");
 
    		//Classificar o proprietario
-
-   		this.estadoMODEL.getProprietario(v.getProprietario())
-   						.atribuiClassificacao(classParaAtribuir);
 
    		v.atribuiClassificacao(classParaAtribuir);
 
@@ -397,12 +401,16 @@ public class UMCarroJA {
 				            
 				            classificarCarroMenu(paraAlugar);
 
+				            paraAlugar.incrementVezesAlugadoBy1();
+				            
 				            paraAlugar.setLocalizacao(destino);
 				            ((Cliente) this.user).setLocalizacao(destino);
 
 				            Proprietario p = this.estadoMODEL.getProprietario(paraAlugar.getProprietario()); 
 				            p.replaceVeiculo(paraAlugar);
-
+				            
+					   		p.classifica(paraAlugar);
+					   		
 				            this.estadoMODEL.replaceProprietario(p);
 				            this.estadoMODEL.replaceVeiculoSistema(paraAlugar);
 
