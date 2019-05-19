@@ -78,6 +78,11 @@ public class GUI_UMcarroJA {
 		out.println(ANSI_YELLOW + msg + ANSI_RESET);
 	}
 
+	public void printWarning (String msg) {
+
+		out.println("Warning: " + ANSI_RED + msg + ANSI_RESET);
+	}
+
 	public void printCreateVehicles() {
 
 			out.println(ANSI_GREEN + "[1] Hybrid" + ANSI_RESET);
@@ -183,8 +188,11 @@ public class GUI_UMcarroJA {
 
 		cat("GUInterfaces/title.txt");
 
-		printHint("\n\n\n\tPress \"l\" to log-in, \"r\" to register or \"s\" to save.");
+		cat("GUInterfaces/lowerFrame.txt");
 
+		System.out.println(ANSI_CYAN + "\n     Press " + ANSI_RESET + ANSI_GREEN + "\"l\" " + ANSI_RESET + ANSI_CYAN + "to log-in, " + ANSI_RESET + ANSI_GREEN + "\"r\" " + ANSI_RESET  + ANSI_CYAN + "to register, " + ANSI_RESET + ANSI_GREEN + "\"s\"" + ANSI_RESET + ANSI_CYAN + " to save or "+ ANSI_RESET + ANSI_GREEN + "\"q\"" + ANSI_RESET  + ANSI_CYAN  + " to quit." + ANSI_RESET);
+
+		cat("GUInterfaces/lowerFrame.txt");
 	}
 
 	public void printVehicleBasicInfo(String brand,

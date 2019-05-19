@@ -113,7 +113,7 @@ public class GestorFicheirosDados {
 	                              camposClie[3],
 	                              LocalDate.now(),
 	                              new Localizacao(Double.parseDouble(camposClie[4]), 
-	                                    Double.parseDouble(camposClie[5])),
+	                                    		  Double.parseDouble(camposClie[5])),
 	                            new ArrayList<>(),
 	                            0,
 	                            camposClie[1]);

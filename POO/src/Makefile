@@ -10,5 +10,5 @@ clean:
 	find . -type f -name "*.ctxt" -delete
 	find . -type f -name "package.bluej" -delete
 
-cleanSaves:
+removeSaves:
 	rm ObjectSaves/estadoObj.obj

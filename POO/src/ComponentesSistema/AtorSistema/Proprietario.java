@@ -178,10 +178,11 @@ public class Proprietario extends AtorSistema {
         
         return this.mapVeiculos.containsKey(matricula)?this.mapVeiculos.get(matricula):null;
     }
-    
+/*    
     public boolean aceitarRejeitarAluguer(Cliente c){
     
-        return(c.getClassificacao() > 50);
+       // return(c.getClassificacao() > 50);
+       return true;
     }
-    
+    */
 }

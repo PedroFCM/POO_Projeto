@@ -47,6 +47,10 @@ public class UMCarroJA {
 	private AtorSistema user;
 	private int currAluguerCarNum;
 
+	private boolean appSaved;
+	private boolean needToSave;
+	private boolean appQuit;
+
 	//--------------------------------------------------
 
     public UMCarroJA (EstadoSistema estadoM, GUI_UMcarroJA viewModel) {
@@ -70,7 +74,7 @@ public class UMCarroJA {
 
 	    		this.estadoMODEL = fileManager.objectFileParaEstado();
 
-		    	fileManager.stats_iniciais(this.estadoMODEL);
+		    	//fileManager.stats_iniciais(this.estadoMODEL);
 	    
 	    		return;
 
@@ -80,11 +84,11 @@ public class UMCarroJA {
     		catch (ClassNotFoundException e) {}
     	}
 
-    	System.out.println("\t\nPrimeira vez a utilizar a APP, a carregar LOGS!");
+    	this.menusVIEW.printHint("\t\t\t\nPrimeira vez a utilizar a APP, ou ainda não foram feitos SAVES!");
 
     	fileManager.carregarEstadoFromLogs(this.estadoMODEL, pathLogs);
         
-    	fileManager.stats_iniciais(this.estadoMODEL);
+    	//fileManager.stats_iniciais(this.estadoMODEL);
     }
 
     public void run () {
@@ -231,10 +235,9 @@ public class UMCarroJA {
 
    		while(true) {
 
-   			this.menusVIEW.printHighlight("Insira uma data " + msg + ": (Ex: \"2019-5-18\" no formato \"yy-mm-dd\"");
+   			this.menusVIEW.printHighlight("Insira uma data " + msg + ": (Ex: \"2019-05-18\" no formato \"yyyy-mm-dd\"");
 
    			data = scan.next();
-
 
    			try {
 
@@ -250,7 +253,7 @@ public class UMCarroJA {
    		return nova;
    	}
 
-   	public Localizacao whereToGo () {	
+   	public Localizacao whereToGo (String msg) {	
 
   		Scanner scan = new Scanner(System.in);
 
@@ -259,7 +262,7 @@ public class UMCarroJA {
 
   		while (true) {
 
-	  		this.menusVIEW.printHighlight("Para onde deseja ir? (Ex: insira x y => 2.0 2.0)");
+	  		this.menusVIEW.printHighlight(msg);
 
   			String posicao = scan.nextLine();
   			
@@ -300,11 +303,12 @@ public class UMCarroJA {
 
    		v.atribuiClassificacao(classParaAtribuir);
 
+   		this.needToSave = true;
+
    		this.menusVIEW.printHighlight("O carro tem agora " + v.getClassificacao());
    	}
 
    	public int getCarChoice(int max, List<Veiculo> listV) {
-
 
    		Scanner scan = new Scanner(System.in);
 
@@ -327,7 +331,7 @@ public class UMCarroJA {
 
 				if (inp >= 1 && inp <= max) {
 
-					Localizacao destino = whereToGo();
+					Localizacao destino = whereToGo("Para onde deseja ir? (Ex: insira x y => 2.0 2.0)");
 
 	   				this.menusVIEW.printHighlight("Efetuar aluguer do carro " + inp + "? [y/n]");
 
@@ -402,6 +406,8 @@ public class UMCarroJA {
 				            this.estadoMODEL.replaceProprietario(p);
 				            this.estadoMODEL.replaceVeiculoSistema(paraAlugar);
 
+				            this.needToSave = true;
+
 	   						break;
 
 	   					} else if (choice == 'n') {
@@ -434,6 +440,9 @@ public class UMCarroJA {
   	}
 
    	public void welcomeMenu() {
+
+   		if (this.appQuit == true)
+   			System.exit(1);
 
    		this.menusVIEW.clearConsole();
 		this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
@@ -494,6 +503,7 @@ public class UMCarroJA {
 								int num_cars = printAvailableCars(listaV);
 							
 								int car = getCarChoice(num_cars, listaV);
+			
 							}
 							
 							catch (CarNotAvailableException e) {
@@ -597,7 +607,10 @@ public class UMCarroJA {
 
 							List<Aluguer> listaAlugueres = ((Cliente) this.user).getHistoricoAlugueres();
 
-							printListBetweenDates(listaAlugueres, LocalDate.of(2019, 5, 18), LocalDate.of(2019, 5, 19));
+							LocalDate inf = getDataInput("inferior");
+							LocalDate sup = getDataInput("superior");
+
+							printListBetweenDates(listaAlugueres, inf, sup);
 
 						}
 
@@ -712,6 +725,7 @@ public class UMCarroJA {
 					            this.estadoMODEL.replaceProprietario((Proprietario) this.user);
 					            this.estadoMODEL.replaceVeiculoSistema(paraAumentar);
 
+					            this.needToSave = true;
 							}
 
 					//----------------------------------------------------------------------------------------
@@ -791,6 +805,7 @@ public class UMCarroJA {
 								this.estadoMODEL.replaceProprietario((Proprietario) this.user);
 
 								this.estadoMODEL.adicionaVeiculoSistema(v);
+								this.needToSave = true;
 							} else
 							if (tipo.equals("Gasoline")) {
 
@@ -801,6 +816,7 @@ public class UMCarroJA {
 								this.estadoMODEL.replaceProprietario((Proprietario) this.user);
 
 								this.estadoMODEL.adicionaVeiculoSistema(v);
+								this.needToSave = true;
 							} else 
 							if (tipo.equals("Eletric")) {
 
@@ -811,7 +827,7 @@ public class UMCarroJA {
 								this.estadoMODEL.replaceProprietario((Proprietario) this.user);
 
 								this.estadoMODEL.adicionaVeiculoSistema(v);
-								
+								this.needToSave = true;	
 							}	
 
 
@@ -823,7 +839,7 @@ public class UMCarroJA {
 					
 						} else if (optionCliente.charAt(0) == 'c') {
 
-							System.out.println("ola");
+							//System.out.println("ola");
 
 							welcomeMenu();
 
@@ -857,7 +873,7 @@ public class UMCarroJA {
 			char optionLogMenu = scanner.next().charAt(0);
 
 			//Press l to login or r to register
-			while (optionLogMenu != 'r' && optionLogMenu != 'l' && optionLogMenu != 's') {
+			while (optionLogMenu != 'r' && optionLogMenu != 'l' && optionLogMenu != 's' && optionLogMenu != 'q') {
 
 				this.menusVIEW.printError("Please, insert a valid option...");				
 
@@ -869,7 +885,8 @@ public class UMCarroJA {
 			if (optionLogMenu == 's') {
 				try {
 					gestor.estadoParaObjectFile(this.estadoMODEL);
-					
+					this.appSaved = true;
+					this.needToSave = false;
 					controllLogIn();
 				}
 				catch(FileNotFoundException e) {
@@ -878,6 +895,11 @@ public class UMCarroJA {
 				catch(IOException e) {
 					System.out.println(e.getMessage());					
 				}
+			}
+
+			if (optionLogMenu == 'q') {
+
+				System.exit(0);
 			}
 
 			if (optionLogMenu == 'r' && logFinished == false) {
@@ -946,6 +968,71 @@ public class UMCarroJA {
 						this.user = this.estadoMODEL.getProprietario(nif);
 
 						logFinished = true;
+						this.needToSave = true;
+						return logFinished;
+					}
+					catch (AtorAlreadyExistsException e) {
+
+						this.menusVIEW.printError(e.getMessage());
+
+						this.menusVIEW.printHint("\nPress Y to go back to menu...");
+						
+						while (scanner.next().charAt(0) != 'y' &&
+							scanner.next().charAt(0) != 'Y') {
+							this.menusVIEW.printError("Insira uma opção válida!");
+						}
+
+						this.menusVIEW.clearConsole();
+
+						run();
+					}
+
+				} else if (optionRegister == '2') {
+
+					scanner.nextLine();
+
+					while(true) {
+						System.out.print("\nName: ");
+						nomeAtor = scanner.nextLine();
+					
+						if (nomeAtor.length() == 0)
+							this.menusVIEW.printError("Nome vazio!");
+						else break;
+					}
+
+					while(true) {
+						System.out.print("Nif: ");
+						nif = scanner.nextLine();
+					
+						if (gestor.isStringNif(nif) == false)
+							this.menusVIEW.printError("NIF inválido!");
+						else break;
+					}					
+
+					while(true) {
+						System.out.print("Email: ");
+						email = scanner.nextLine();
+					
+						if (gestor.isStringEmail(email) == false)
+							this.menusVIEW.printError("Email invalid!");
+						else break;
+					}					
+
+					System.out.print("Morada: ");
+					morada = scanner.nextLine();
+
+					Localizacao cl_loc = whereToGo("Onde se encontra? (Insira por exemplo: 15.2 12.0)");
+
+					try {
+
+						this.estadoMODEL.criaAdicionaCliente(email, 
+																  nomeAtor, 
+																  email, 
+																  morada,
+																  nif,
+																  cl_loc);
+
+						this.user = this.estadoMODEL.getCliente(nif);
 
 						return logFinished;
 					}
@@ -955,18 +1042,15 @@ public class UMCarroJA {
 
 						this.menusVIEW.printHint("\nPress Y to go back to menu...");
 						
-						if (scanner.next().charAt(0) == 'y' ||
-							scanner.next().charAt(0) == 'Y') {
-						
-							this.menusVIEW.clearConsole();
+						while (scanner.next().charAt(0) != 'y' &&
+							scanner.next().charAt(0) != 'Y') {
+							this.menusVIEW.printError("Insira uma opção válida!");
+						}
 
-							run();
-						}					
+						this.menusVIEW.clearConsole();
+
+						run();
 					}
-
-				} else if (optionRegister == '2') {
-
-
 				}
 
 			} else if (optionLogMenu == 'l') {
@@ -1050,6 +1134,7 @@ public class UMCarroJA {
 
 		return logFinished;
    	}
+
 
    	public String getStringInput () {
 
@@ -1173,7 +1258,7 @@ public class UMCarroJA {
    		for (Aluguer a: listaAluguers) {
 
    			if ((a.getData().isEqual(antes) || a.getData().isAfter(antes)) && 
-   				(a.getData().isEqual(antes) || a.getData().isBefore(antes))) {
+   				(a.getData().isEqual(depois) || a.getData().isBefore(depois))) {
 
    				this.menusVIEW.printFaturaAlguer(a.getCliente(),
 				            					 a.getProprietario(),

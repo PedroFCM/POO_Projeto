@@ -142,6 +142,33 @@ public class EstadoSistema implements Serializable {
       }
     }
 
+    public void criaAdicionaCliente(String email,
+                                    String nomeAtor,
+                                    String passw,
+                                    String morada,
+                                    String nif,
+                                    Localizacao local_cliente)
+
+      throws AtorAlreadyExistsException {
+
+      AtorSistema novoCliente 
+      = new Cliente(email, nomeAtor,
+                           passw, morada,
+                           LocalDate.now(), 
+                           local_cliente,
+                           new ArrayList<>(),
+                           0,
+                           nif);
+
+      if (this.existeCliente(nif))
+        throw new AtorAlreadyExistsException("Nif " + nif + " já existente!");
+     
+      else {
+
+        this.adicionaCliente((Cliente) novoCliente);
+      }
+    }
+
     public void adicionaCliente (Cliente c) {
 
         if (!this.clientes_Sistema.containsKey(c.getNif())) {
