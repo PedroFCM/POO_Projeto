@@ -4,6 +4,8 @@ package EstadoSistema;
 import ComponentesSistema.Veiculos.*;
 import ComponentesSistema.AtorSistema.*;
 
+import EstadoSistema.Comparators.*;
+
 import BaseClasses.Localizacao;
 import BaseClasses.Aluguer;
 
@@ -19,6 +21,7 @@ import java.lang.Integer;
 import java.util.TreeMap;
 import java.util.SortedMap;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.HashSet;
 
 import java.io.Serializable;
@@ -287,23 +290,21 @@ public class EstadoSistema implements Serializable {
              throw new CarNotAvailableException("Não existem carros disponivéis...");
         }
         
-        SortedMap<Double, Veiculo> 
-       	veiculosOrdenadosPorPreco = new TreeMap<Double, Veiculo>();
+        TreeSet<Veiculo> veiculosOrdenadosPorPreco = new TreeSet<>(new ComparatorVeiculoPrecoKM());
 
         for (Veiculo v: todosVeiculos) {
 
-          veiculosOrdenadosPorPreco.put(v.getPrecoPorKM(), v.clone());
+          veiculosOrdenadosPorPreco.add(v.clone());
         }
 
         List<Veiculo> l = new ArrayList<>();
 
-        Veiculo v = veiculosOrdenadosPorPreco.get(veiculosOrdenadosPorPreco.firstKey());
+        Veiculo v = veiculosOrdenadosPorPreco.last();
 
         l = todosVeiculos.stream()
                          .filter(v1 -> v1.getPrecoPorKM() == v.getPrecoPorKM())
                          .collect(Collectors.toList());
 
-        
         return l;  
     }
 
@@ -393,7 +394,48 @@ public class EstadoSistema implements Serializable {
 
       v.setAutonomiaAtual((atual-dist)>=0?(atual-dist):0.0);
     }
-        
+    
+    public List<Cliente> top10Clientes () {
+
+      //------------------------------------------------------------------
+
+      TreeMap<Cliente, Double> clientesSortedByKmPerc = new TreeMap<>(new ComparatorClienteKmPercorridos());
+
+      //------------------------------------------------------------------
+
+      List<Cliente> clientes = this.clientes_Sistema.values()
+                                                    .stream()
+                                                    .collect(Collectors.toList());
+
+      //------------------------------------------------------------------
+
+      Double kmAlugados = 0.0;
+
+      for (Cliente c: clientes) {
+
+        clientesSortedByKmPerc.put(c.clone(), c.getTotalKmPercorridos());
+      }
+
+      //------------------------------------------------------------------
+
+      TreeMap<Cliente, Double> result = new TreeMap<>();
+
+      int count = 0, max = 10;
+
+      for (Map.Entry<Cliente, Double> e: clientesSortedByKmPerc.entrySet()) {
+          
+          if (count >= max) break;
+
+          result.put(e.getKey(), e.getValue());
+          
+          count++;
+      }
+
+      result.forEach((k, v) -> System.out.println(k.getNome() + " " + v));
+
+      return result.keySet().stream().collect(Collectors.toList());
+    }
+
     //-------------------------------------------------------//  
 
     public EstadoSistema clone () {
@@ -427,7 +469,6 @@ public class EstadoSistema implements Serializable {
                e.getProprietariosSistema().equals(this.proprietarios_Sistema) &&
                e.getData().equals(this.data_atual));
     }
-
 
     //-------------------------------------------------------//  
  

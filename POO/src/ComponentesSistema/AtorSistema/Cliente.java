@@ -6,6 +6,7 @@ import ComponentesSistema.Veiculos.*;
 import BaseClasses.Aluguer;
 import BaseClasses.Localizacao;
 
+import java.util.Comparator;
 import java.time.LocalDate;
 import java.lang.StringBuilder;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 import java.io.Serializable;
 
-public class Cliente extends AtorSistema {
+public class Cliente extends AtorSistema implements Comparable<Cliente> {
 
     //-------------------------------------------------------//  
 
@@ -93,6 +94,21 @@ public class Cliente extends AtorSistema {
         
         this.coordenadas = local;
     }
+
+    public Double getTotalKmPercorridos() {
+
+        Double total = 0.0;
+
+        total = this.getHistoricoAlugueres().stream()
+                                            .mapToDouble(Aluguer::getDistancia)
+                                            .sum();
+        return total;
+    }
  
     //-------------------------------------------------------//  
+
+    public int compareTo(Cliente c) {
+        
+        return c.getTotalKmPercorridos().compareTo(this.getTotalKmPercorridos());
+    }
 }

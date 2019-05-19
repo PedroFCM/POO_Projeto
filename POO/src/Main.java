@@ -38,7 +38,7 @@ public class Main {
 		    GUI_UMcarroJA gui = new GUI_UMcarroJA(); 
 
 		    gui.presentation();
-	
+			
 			controller.run();
 		}
 

@@ -92,7 +92,7 @@ public class UMCarroJA {
     }
 
     public void run () {
-
+    	//this.estadoMODEL.top10Clientes();
 	   	Scanner scanner = new Scanner(System.in);
 
 		//--------------------------------------------------
@@ -401,7 +401,7 @@ public class UMCarroJA {
 				            
 				            classificarCarroMenu(paraAlugar);
 
-				            paraAlugar.incrementVezesAlugadoBy1();
+				            //paraAlugar.incrementVezesAlugadoBy1();
 				            
 				            paraAlugar.setLocalizacao(destino);
 				            ((Cliente) this.user).setLocalizacao(destino);
