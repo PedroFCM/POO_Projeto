@@ -1,7 +1,7 @@
 
 //--------------------------------------------------
 
-package APP_Controller;
+package Controller;
 
 //--------------------------------------------------
 
@@ -30,7 +30,7 @@ import java.time.LocalDate;
 
 //--------------------------------------------------
 
-public class UMCarroJA {
+public class ControladorAPP {
 
 	//--------------------------------------------------
 
@@ -43,8 +43,11 @@ public class UMCarroJA {
 
 	private String usernameLogged;
 	private boolean isProprietario;
+	
 	private String currentAlugerPref;
 	private AtorSistema user;
+	private AtorSistema clienteQueAlugou;
+
 	private int currAluguerCarNum;
 
 	private boolean appSaved;
@@ -53,7 +56,7 @@ public class UMCarroJA {
 
 	//--------------------------------------------------
 
-    public UMCarroJA (EstadoSistema estadoM, GUI_UMcarroJA viewModel) {
+    public ControladorAPP (EstadoSistema estadoM, GUI_UMcarroJA viewModel) {
 
     	this.estadoMODEL = new EstadoSistema(estadoM);
     	this.menusVIEW   = viewModel;
@@ -61,7 +64,7 @@ public class UMCarroJA {
 
 	//--------------------------------------------------
 
-    public void initLogs () throws IOException, FileNotFoundException {
+    public int initLogs () throws IOException, FileNotFoundException {
 
 
     	GestorFicheirosDados fileManager = new GestorFicheirosDados();
@@ -76,7 +79,7 @@ public class UMCarroJA {
 
 		    	//fileManager.stats_iniciais(this.estadoMODEL);
 	    
-	    		return;
+    		return 0;
 
     		}
     		catch (FileNotFoundException e) {}
@@ -84,16 +87,16 @@ public class UMCarroJA {
     		catch (ClassNotFoundException e) {}
     	}
 
-    	this.menusVIEW.printHint("\t\t\t\nPrimeira vez a utilizar a APP, ou ainda não foram feitos SAVES!");
-
     	fileManager.carregarEstadoFromLogs(this.estadoMODEL, pathLogs);
         
     	//fileManager.stats_iniciais(this.estadoMODEL);
+    
+    	return 1;
     }
 
     public void run () {
-    	//this.estadoMODEL.top10Clientes();
-	   	Scanner scanner = new Scanner(System.in);
+    	
+    	Scanner scanner = new Scanner(System.in);
 
 		//--------------------------------------------------
 
@@ -337,7 +340,7 @@ public class UMCarroJA {
 
 					Localizacao destino = whereToGo("Para onde deseja ir? (Ex: insira x y => 2.0 2.0)");
 
-	   				this.menusVIEW.printHighlight("Efetuar aluguer do carro " + inp + "? [y/n]");
+	   				this.menusVIEW.printHighlight("Efetuar pedido de aluguer do carro " + inp + "? [y/n]");
 
 	   				char choice;
 
@@ -377,44 +380,35 @@ public class UMCarroJA {
 
 	   							break;
 
-	   						}
+	   						} else {
 
+	   							this.menusVIEW.printHighlight("Este carro tem autonomia para a sua viagem!");
+	   						}
+				            
 				            Aluguer novoAluguerMP = new Aluguer (paraAlugar.getMatricula(),
 	                                                   			 this.user.getNif(),
 	                                                   			 paraAlugar.getProprietario(),
 	                                                   			 distancia,
 	                                                    		 paraAlugar.getPrecoPorKM() * distancia,
-	                                                   			 LocalDate.now());
+	                                                   			 LocalDate.now(),
+	                                                   			 destino);
 
-				            this.user.adicionaAluguer(novoAluguerMP);
-				            this.estadoMODEL.replaceClienteSistema((Cliente) this.user);
+	   						this.estadoMODEL.enviarAluguerProprietario(novoAluguerMP.clone());
+
+	   						this.clienteQueAlugou = this.user.clone();
 
 				            this.menusVIEW.printFaturaAlguer(novoAluguerMP.getCliente(),
 				            								 novoAluguerMP.getProprietario(),
 				            								 novoAluguerMP.getVeiculo(),
 				            								 novoAluguerMP.getPreco(),
 				            								 novoAluguerMP.getDistancia(),
-				            								 novoAluguerMP.getData());
-
-				            this.estadoMODEL.consumirkmAluguer((VeiculoComAutonomia) paraAlugar,
-				            							 distancia);
+				            								 novoAluguerMP.getData(),1);
 				            
-				            classificarCarroMenu(paraAlugar);
-
-				            //paraAlugar.incrementVezesAlugadoBy1();
-				            
-				            paraAlugar.setLocalizacao(destino);
-				            ((Cliente) this.user).setLocalizacao(destino);
+				            this.menusVIEW.printHighlight("O seu pedido de aluguer foi enviado com sucesso! [Pressione \"c\" para voltar]");
 
 				            Proprietario p = this.estadoMODEL.getProprietario(paraAlugar.getProprietario()); 
-				            p.replaceVeiculo(paraAlugar);
-				            
-					   		p.classifica(paraAlugar);
-					   		
+				            					   		
 				            this.estadoMODEL.replaceProprietario(p);
-				            this.estadoMODEL.replaceVeiculoSistema(paraAlugar);
-
-				            this.needToSave = true;
 
 	   						break;
 
@@ -661,6 +655,7 @@ public class UMCarroJA {
 						optionCliente.charAt(0) == '2' ||
 						optionCliente.charAt(0) == '3' ||
 						optionCliente.charAt(0) == '4' ||
+						optionCliente.charAt(0) == '5' ||
 						optionCliente.charAt(0) == 'c' ||
 						optionCliente.charAt(0) == 'y') {
 
@@ -669,9 +664,7 @@ public class UMCarroJA {
 						if (optionCliente.charAt(0) == '1') {
 							
 							List<Veiculo> veiculosP = ((Proprietario) this.user).getListaVeiculos();
-							
-							presentCarsOwner(veiculosP);
-							
+														
 							this.menusVIEW.clearConsole();
 				
 							this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
@@ -683,6 +676,8 @@ public class UMCarroJA {
 															user.getNif(),
 															user.getClass().getSimpleName());
 	
+							presentCarsOwner(veiculosP);
+
 					//----------------------------------------------------------------------------------------
 					
 						} else if (optionCliente.charAt(0) == '2') {
@@ -711,31 +706,34 @@ public class UMCarroJA {
 
 							List<Veiculo> veiculosP = ((Proprietario) this.user).getListaVeiculos();
 
-							this.menusVIEW.printHint("Visit the first (1) menu to choose your car, example: ...Vehicle x....");
-							this.menusVIEW.printHint("(Press \"q\" to go back to menu)");
+							if (veiculosP.size() == 0) 
+								this.menusVIEW.printError("Não existem carros registados, insira carros para poder abastecer.");
+							else {
+								this.menusVIEW.printHint("Visit the first (1) menu to choose your car, example: ...Vehicle x....");
+								this.menusVIEW.printHint("(Press \"q\" to go back to menu)");
 
-							int sel_car = getIntegerInput("Car option:");
+								int sel_car = getIntegerInput("Car option:");
 
-							if (sel_car == -1) 
-								welcomeMenu();
+								if (sel_car == -1) 
+									welcomeMenu();
 
-							if (sel_car >= 0 && sel_car < veiculosP.size()) {
+								if (sel_car >= 0 && sel_car < veiculosP.size()) {
 
-								Double aumentarAuto = getDoubleInput("Insira a quantidade de combustivel: ");
+									Double aumentarAuto = getDoubleInput("Insira a quantidade de combustivel: ");
 
-								Veiculo paraAumentar = veiculosP.get(sel_car);
+									Veiculo paraAumentar = veiculosP.get(sel_car);
 
-								((Proprietario) this.user).abastecer((VeiculoComAutonomia) paraAumentar, 
-																	 aumentarAuto);
-								
-								((Proprietario) this.user).replaceVeiculo(paraAumentar);
+									((Proprietario) this.user).abastecer((VeiculoComAutonomia) paraAumentar, 
+																		 aumentarAuto);
+									
+									((Proprietario) this.user).replaceVeiculo(paraAumentar);
 
-					            this.estadoMODEL.replaceProprietario((Proprietario) this.user);
-					            this.estadoMODEL.replaceVeiculoSistema(paraAumentar);
+						            this.estadoMODEL.replaceProprietario((Proprietario) this.user);
+						            this.estadoMODEL.replaceVeiculoSistema(paraAumentar);
 
-					            this.needToSave = true;
+						            this.needToSave = true;
+								}
 							}
-
 					//----------------------------------------------------------------------------------------
 
 						} else if (optionCliente.charAt(0) == '4') {
@@ -838,6 +836,168 @@ public class UMCarroJA {
 								this.needToSave = true;	
 							}	
 
+						} else if (optionCliente.charAt(0) == '5') {
+
+							List<Aluguer> listAluguer = ((Proprietario) this.user).getPedidosAluguer();
+
+							int r = printListBetweenDates(listAluguer, LocalDate.of(2018, 1, 1), LocalDate.of(2020, 1, 1));
+
+							if (r == -1) {
+
+									this.menusVIEW.clearConsole();
+						
+									this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+									this.menusVIEW.printUserDetails(user.getNome(),
+																	user.getMorada(),
+																	user.getEmail(),
+																	user.getClassificacao(),
+																	user.getNif(),
+																	user.getClass().getSimpleName());
+
+									this.menusVIEW.printError("Não existem pedidos pendentes de momento!");
+							}
+
+							String op = "s";
+
+							Scanner s = new Scanner(System.in);
+
+							while (r != -1) {
+
+								this.menusVIEW.printHint("(1) Aceitar pedido | (2) Regeitar pedido | (3) Voltar");
+
+								op = s.next();
+
+								if (op.charAt(0) == '1') {
+
+									int pedidoParaAceitar;
+
+									pedidoParaAceitar = getIntegerInput("Qual o pedido que quer aceitar? <insira o numero da fatura>"); 
+									
+									if ((pedidoParaAceitar >= 1) && (pedidoParaAceitar <= listAluguer.size())) {
+										
+										Aluguer aceitado = listAluguer.get(pedidoParaAceitar - 1).clone();
+
+										this.clienteQueAlugou.adicionaAluguer(aceitado);
+										
+										this.menusVIEW.clearConsole();
+						
+										this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+										this.menusVIEW.printUserDetails(user.getNome(),
+																	user.getMorada(),
+																	user.getEmail(),
+																	user.getClassificacao(),
+																	user.getNif(),
+																	user.getClass().getSimpleName());
+
+										this.menusVIEW.printFaturaAlguer(aceitado.getCliente(),
+							            								 aceitado.getProprietario(),
+							            								 aceitado.getVeiculo(),
+							            								 aceitado.getPreco(),
+							            								 aceitado.getDistancia(),
+							            								 aceitado.getData(),
+							            								 -1);
+
+										((Cliente) this.clienteQueAlugou).setLocalizacao(aceitado.getDestino());
+
+										this.estadoMODEL.replaceClienteSistema((Cliente) this.clienteQueAlugou);
+
+										Veiculo alugado = this.estadoMODEL.getVeiculo(aceitado.getVeiculo()).clone();
+
+										this.estadoMODEL.consumirkmAluguer(((VeiculoComAutonomia) alugado).clone(), 
+																		   aceitado.getDistancia());
+
+										alugado.setLocalizacao(aceitado.getDestino());
+
+										Proprietario p = this.estadoMODEL.getProprietario(alugado.getProprietario()); 
+				            			
+										p.removePedidoAluguer(aceitado);
+
+				            			p.replaceVeiculo(alugado); 
+
+				            			this.user = p.clone();
+
+ 										this.estadoMODEL.replaceProprietario(p);
+				           			 	this.estadoMODEL.replaceVeiculoSistema(alugado);
+										
+										this.menusVIEW.printHint("Pedido de Aluguer efetuado, pressione \"c\" para sair");
+
+										while (true) {
+
+											op = s.next();
+
+											if ((op.length() == 1) && (op.charAt(0) == 'c')) {
+
+												this.menusVIEW.clearConsole();
+									
+												this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+												this.menusVIEW.printUserDetails(user.getNome(),
+																				user.getMorada(),
+																				user.getEmail(),
+																				user.getClassificacao(),
+																				user.getNif(),
+																				user.getClass().getSimpleName());
+												break;
+											} else
+												this.menusVIEW.printError("Opção inválida!");
+
+										}
+
+										break;
+									}
+
+									this.menusVIEW.printError("Opção Inválida!");
+
+								} else if (op.charAt(0) == '2') {
+
+									int pedidoParaRemover = 0;
+									
+									while (true) {
+										
+										pedidoParaRemover = getIntegerInput("Qual aluguer pretende rejeitar?");
+
+										if ((pedidoParaRemover >= 1) && (pedidoParaRemover <= listAluguer.size())) {
+
+											Aluguer aceitado = listAluguer.get(pedidoParaRemover - 1).clone();
+
+											Veiculo alugado = this.estadoMODEL.getVeiculo(aceitado.getVeiculo()).clone();
+
+											Proprietario p = this.estadoMODEL.getProprietario(alugado.getProprietario()); 
+					            			
+											p.removePedidoAluguer(aceitado);
+											
+											p.replaceVeiculo(alugado); 
+
+					            			this.user = p.clone();
+
+	 										this.estadoMODEL.replaceProprietario(p);
+					           			 	this.estadoMODEL.replaceVeiculoSistema(alugado);
+											
+											break;
+
+										} else {
+
+											this.menusVIEW.printError("Essa fatura não existe!");
+										}
+									}
+
+								} else if (op.charAt(0) == '3') {
+
+									this.menusVIEW.clearConsole();
+						
+									this.menusVIEW.cat("GUInterfaces/welcomeUser.txt");
+
+									this.menusVIEW.printUserDetails(user.getNome(),
+																	user.getMorada(),
+																	user.getEmail(),
+																	user.getClassificacao(),
+																	user.getNif(),
+																	user.getClass().getSimpleName());
+									break;
+								}
+							}
 
 						} else if (optionCliente.charAt(0) == 'y') {
 
@@ -893,8 +1053,7 @@ public class UMCarroJA {
 			if (optionLogMenu == 's') {
 				try {
 					gestor.estadoParaObjectFile(this.estadoMODEL);
-					this.appSaved = true;
-					this.needToSave = false;
+					this.menusVIEW.printHint("The app was saved successfully!");
 					controllLogIn();
 				}
 				catch(FileNotFoundException e) {
@@ -915,7 +1074,7 @@ public class UMCarroJA {
 				this.menusVIEW.clearConsole();
 				this.menusVIEW.cat("GUInterfaces/register.txt");
 
-				System.out.println("\nAre you an \"Owner\" or \"Client?\" (Press: 1 -> Owner | 2 -> Client)");
+				this.menusVIEW.printHighlight("\nAre you an \"Owner\" or \"Client?\" (Press: 1 -> Owner | 2 -> Client)");
 
 				char optionRegister = scanner.next().charAt(0);
 
@@ -1187,6 +1346,9 @@ public class UMCarroJA {
    		this.menusVIEW.printHighlight("\nThere's(re) " + cars.size() + " car(s) available: \n");
 			
    		if (cars.size() == 0) {
+
+   			this.menusVIEW.printError("Não existem veiculos ainda registados!");
+
    			return 0;
    		}
 
@@ -1256,12 +1418,14 @@ public class UMCarroJA {
    		return cars.size();
    	}
 
-   	public void printListBetweenDates (List<Aluguer> listaAluguers, LocalDate antes, LocalDate depois) {
+   	public int printListBetweenDates (List<Aluguer> listaAluguers, LocalDate antes, LocalDate depois) {
 
    		if (listaAluguers.size() == 0) {
    			this.menusVIEW.printError("There are no rentals at the moment to display!");
-   			return;
+   			return -1;
    		}
+
+   		int i = 1;
 
    		for (Aluguer a: listaAluguers) {
 
@@ -1273,10 +1437,12 @@ public class UMCarroJA {
 				            					 a.getVeiculo(),
 				            					 a.getPreco(),
 				            					 a.getDistancia(),
-				            					 a.getData());
+				            					 a.getData(), i);
+   				i++;
    			}
    		}
 
+   		return 0;
    	}
 
 }

@@ -94,7 +94,8 @@ public class GestorFicheirosDados {
 	                                0,
 	                                new ArrayList<>(),
 	                                new HashMap<>(),
-	                                camposProp[1]);
+	                                camposProp[1],
+	                                new ArrayList<>());
 
 	          estado.adicionaProprietario((Proprietario) novoProp);
 
@@ -277,7 +278,8 @@ public class GestorFicheirosDados {
 	                                                   novoMP.getProprietario(),
 	                                                   distancia,
 	                                                   novoMP.getPrecoPorKM() * distancia,
-	                                                   LocalDate.now());
+	                                                   LocalDate.now(),
+	                                                   destino);
 
 	              cli_aluguer.adicionaAluguer(novoAluguerMP);
 
@@ -308,7 +310,8 @@ public class GestorFicheirosDados {
 	                                                   novoMB.getProprietario(),
 	                                                   distancia,
 	                                                   novoMB.getPrecoPorKM() * distancia,
-	                                                   LocalDate.now());
+	                                                   LocalDate.now(),
+	                                                   destino);
 
 	              cli_aluguer.adicionaAluguer(novoAluguerMB);                
 

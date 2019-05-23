@@ -9,15 +9,19 @@ public class ComparatorVeiculoPrecoKM implements Comparator<Veiculo> {
 
     public int compare(Veiculo c1, Veiculo c2) {
 
-        if(c1.getPrecoPorKM() < c2.getPrecoPorKM()) {
-            return 1;
+    	int r = 1;
+
+        if(c1.getPrecoPorKM() <= c2.getPrecoPorKM()) {
+            r = 1;
         }
     
         if(c1.getPrecoPorKM() > c2.getPrecoPorKM()) {
-            return -1;
+            r = -1;
         }
     
-        return 0;
+    	return r;
+
+        //return 0;
     
     }
 }

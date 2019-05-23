@@ -1,7 +1,7 @@
 
 //----------------------------------------------------------------------------------        
 
-import APP_Controller.*;
+import Controller.*;
 import GUInterfaces.*;
 import EstadoSistema.*;
 
@@ -20,7 +20,9 @@ public class Main {
 
 		EstadoSistema estadoApp = new EstadoSistema(); 
 		GUI_UMcarroJA viewApp   = new GUI_UMcarroJA();
-		UMCarroJA controller    = new UMCarroJA(estadoApp, viewApp);
+		ControladorAPP controller = new ControladorAPP(estadoApp, viewApp);
+
+        //----------------------------------------------------------------------------------        
 
 		try {
 
@@ -31,13 +33,14 @@ public class Main {
 
 	    	System.out.println("\n\t\t A carregar a aplicação UMCarroJA...");
 
-			controller.initLogs();
-	
-	    	System.out.println("\n\n\t    >> Sistema inicial carregado com sucesso. <<\n");
-	
-		    GUI_UMcarroJA gui = new GUI_UMcarroJA(); 
+			int i = controller.initLogs();
+			
+			if (i == 1)
+				viewApp.printHint("\n\n\tPrimeira vez a usar a App? Ainda não fez nenhum save?");
+			else 
+				viewApp.printHint("\n\n\t\t A App já possui um registo de save!");
 
-		    gui.presentation();
+		    viewApp.presentation();
 			
 			controller.run();
 		}

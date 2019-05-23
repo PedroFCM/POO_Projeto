@@ -22,6 +22,8 @@ public class Proprietario extends AtorSistema {
 
     private Map<String,Veiculo> mapVeiculos;
     
+    private List<Aluguer> pedidosAluguer;
+
     //-------------------------------------------------------//  
 
     public Proprietario(String email, 
@@ -32,27 +34,33 @@ public class Proprietario extends AtorSistema {
                         int classificacao,
                         List<Aluguer> historico,
                         Map<String,Veiculo> veiculos,
-                        String nif) {
+                        String nif,
+                        List<Aluguer> pedidos) {
      
         super(email, nome, password, morada, data, classificacao, historico, nif);
+        
         this.mapVeiculos = veiculos.entrySet()
                                         .stream()
                                         .collect(Collectors.toMap(e -> e.getKey(),
                                                                   e -> e.getValue(),
                                                                     (e1, e2) -> e2,
                                                                     HashMap::new));
+    
+        this.pedidosAluguer = pedidos.stream().map(Aluguer::clone).collect(Collectors.toList());
     }
     
     public Proprietario (Proprietario umProprietario) {
     
         super(umProprietario);
         this.mapVeiculos = umProprietario.getMapVeiculos();
+        this.pedidosAluguer = umProprietario.getPedidosAluguer();
     }
     
     public Proprietario () {
         
         super();
         this.mapVeiculos = new HashMap<String, Veiculo>();
+        this.pedidosAluguer = new ArrayList<>();
     }
 
     //-------------------------------------------------------//  
@@ -90,6 +98,14 @@ public class Proprietario extends AtorSistema {
 
     //-------------------------------------------------------//  
     
+    public void removePedidoAluguer (Aluguer a) {
+
+        if (this.pedidosAluguer.contains(a)) {
+
+            this.pedidosAluguer.remove(a);
+        }
+    }
+
     public void adicionaVeiculo (Veiculo v) {
 
         
@@ -98,6 +114,11 @@ public class Proprietario extends AtorSistema {
             this.mapVeiculos.put(v.getMatricula(),v.clone());
             this.sinalizarVeiculo(mapVeiculos.get(v.getMatricula()));
         }
+    }
+
+    public void adicionaPedidoAluguer (Aluguer a) {
+
+        this.pedidosAluguer.add(a);
     }
 
     public void replaceVeiculo (Veiculo novo) {
@@ -121,9 +142,6 @@ public class Proprietario extends AtorSistema {
         }
     }
     
-   
-    //-------------------------------------------------------//  
-
     public Map<String, Veiculo> getMapVeiculos() {
 
        return this.mapVeiculos.entrySet()
@@ -132,6 +150,11 @@ public class Proprietario extends AtorSistema {
                                                              e -> e.getValue(),
                                                             (e1, e2) -> e2,
                                                              HashMap::new));
+    }
+
+    public List<Aluguer> getPedidosAluguer () {
+
+        return this.pedidosAluguer.stream().map(Aluguer::clone).collect(Collectors.toList());
     }
 
     public List<Veiculo> getListaVeiculos() {
@@ -199,12 +222,4 @@ public class Proprietario extends AtorSistema {
 
         this.setClassificacao((int) Math.round(n / size));
     }
-
-/*    
-    public boolean aceitarRejeitarAluguer(Cliente c){
-    
-       // return(c.getClassificacao() > 50);
-       return true;
-    }
-    */
 }

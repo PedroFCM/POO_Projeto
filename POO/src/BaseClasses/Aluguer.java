@@ -16,8 +16,9 @@ public class Aluguer implements Serializable {
     private double distancia;
     private double preco;
     private LocalDate data;
+    private Localizacao destinoViagem;
     
-    public Aluguer(String veiculo, String cliente, String proprietario, double distancia, double preco, LocalDate data) {    
+    public Aluguer(String veiculo, String cliente, String proprietario, double distancia, double preco, LocalDate data, Localizacao dest) {    
        
         this.veiculo = veiculo;
         this.cliente = cliente;
@@ -25,6 +26,7 @@ public class Aluguer implements Serializable {
         this.distancia = distancia;
         this.preco = preco;
         this.data = data;
+        this.destinoViagem = dest.clone();
     }
     
     public Aluguer(Aluguer umAluguer) {
@@ -35,6 +37,7 @@ public class Aluguer implements Serializable {
         this.distancia = umAluguer.getDistancia();
         this.preco = umAluguer.getPreco();
         this.data = umAluguer.getData();
+        this.destinoViagem = umAluguer.getDestino();
     }
     
     public Aluguer () {
@@ -45,6 +48,7 @@ public class Aluguer implements Serializable {
         this.preco = 0.0;
         this.distancia = 0.0;
         this.data = LocalDate.now();
+        this.destinoViagem = new Localizacao();
     }
 
    //-------------------------------------------------------//  
@@ -122,6 +126,11 @@ public class Aluguer implements Serializable {
     public LocalDate getData()
     {
         return this.data;
+    }
+
+    public Localizacao getDestino() {
+
+        return this.destinoViagem.clone();
     }
     
     public void setCliente(String cliente)

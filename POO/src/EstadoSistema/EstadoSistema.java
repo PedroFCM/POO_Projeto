@@ -135,9 +135,9 @@ public class EstadoSistema implements Serializable {
                            passw, morada,
                            LocalDate.now(), 0,
                            new ArrayList<>(),
-                           new HashMap<>(), nif);
+                           new HashMap<>(), nif, new ArrayList<>());
 
-      if (this.existeProprietario(nif))
+      if (this.existeProprietario(nif) || this.existeCliente(nif))
         throw new AtorAlreadyExistsException("Nif " + nif + " já existente!");
       else {
 
@@ -163,7 +163,7 @@ public class EstadoSistema implements Serializable {
                            0,
                            nif);
 
-      if (this.existeCliente(nif))
+      if (this.existeCliente(nif) || this.existeProprietario(nif))
         throw new AtorAlreadyExistsException("Nif " + nif + " já existente!");
      
       else {
@@ -195,6 +195,15 @@ public class EstadoSistema implements Serializable {
 
       this.clientes_Sistema.replace(c.getNif(), c.clone());
     }    
+
+    public void enviarAluguerProprietario (Aluguer a) {
+
+      Proprietario p = this.getProprietario(a.getProprietario());
+
+      p.adicionaPedidoAluguer(a.clone());
+
+      this.replaceProprietario(p);
+    }
 
     public List<Veiculo> allVeiculos() {
 

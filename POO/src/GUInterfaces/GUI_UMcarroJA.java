@@ -144,6 +144,7 @@ public class GUI_UMcarroJA {
 			out.println(ANSI_YELLOW + "[2] List of rentals" + ANSI_RESET);
 			out.println(ANSI_YELLOW + "[3] Abastecer veiculo" + ANSI_RESET);
 			out.println(ANSI_YELLOW + "[4] Inserir nova viatura." + ANSI_RESET);
+			out.println(ANSI_YELLOW + "[5] Ver/Aceitar pedidos de aluguer." + ANSI_RESET);
 
 			out.println(ANSI_GREEN + "\n[NOTE] Go back to menu? [y] | Clear error::note logs? [c]\n" + ANSI_RESET);
 
@@ -252,13 +253,17 @@ public class GUI_UMcarroJA {
 								   String matric,
 								   Double precAlug,
 								   Double dist,
-								   LocalDate data) {
+								   LocalDate data,
+								   int i) {
 
 		System.out.println(ANSI_YELLOW + "\n\n.-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.\n" + ANSI_RESET);		out.println(ANSI_RED + "\n");	
 	
-
-		out.println(ANSI_RED + "Fatura da viagem do dia " + ANSI_RESET + ANSI_BLUE + data + ANSI_RESET + ANSI_RED + "." + ANSI_RESET);	
-
+		if (i != -1) {
+			out.println(ANSI_RED + "Fatura " + i + " da viagem do dia " + ANSI_RESET + ANSI_BLUE + data + ANSI_RESET + ANSI_RED + "." + ANSI_RESET);	
+		} else {			
+			out.println(ANSI_RED + "Fatura da viagem do dia " + ANSI_RESET + ANSI_BLUE + data + ANSI_RESET + ANSI_RED + "." + ANSI_RESET);	
+		}
+		
 		out.println(ANSI_PURPLE + "\nNIF              : " + ANSI_RESET + ANSI_CYAN + cli_nif + ANSI_RESET);	
 		out.println(ANSI_PURPLE + "Owner            : " + ANSI_RESET + ANSI_CYAN + prop + ANSI_RESET);	
 		out.println(ANSI_PURPLE + "Vehicle Plate    : " + ANSI_RESET + ANSI_CYAN + matric + ANSI_RESET);	
