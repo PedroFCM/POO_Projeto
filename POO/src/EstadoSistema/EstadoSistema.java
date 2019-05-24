@@ -440,9 +440,28 @@ public class EstadoSistema implements Serializable {
           count++;
       }
 
-      result.forEach((k, v) -> System.out.println(k.getNome() + " " + v));
-
       return result.keySet().stream().collect(Collectors.toList());
+    }
+
+    public Double totalFaturadoNoPeriodoViatura (Veiculo v, LocalDate dataInf, LocalDate dataSup) {
+
+      double totalFaturado = 0.0;
+
+      List<Aluguer> alugueresViaturaV = new ArrayList<>();
+
+      alugueresViaturaV = this.getProprietario(v.getProprietario()).getHistoricoAlugueres();
+
+      for (Aluguer a: alugueresViaturaV) {
+          
+            if ((a.getData().isEqual(dataInf) || a.getData().isAfter(dataInf)) && 
+                (a.getData().isEqual(dataSup) || a.getData().isBefore(dataSup))) {
+              
+              if (a.getVeiculo().equals(v.getMatricula()))
+                totalFaturado += a.getPreco();
+            }
+      }
+
+      return totalFaturado;
     }
 
     //-------------------------------------------------------//  
@@ -496,17 +515,17 @@ public class EstadoSistema implements Serializable {
     
     public Cliente getCliente (String nif) {
 
-      return this.clientes_Sistema.get(nif);
+      return this.clientes_Sistema.get(nif).clone();
     }
 
     public Proprietario getProprietario (String nif) {
 
-      return this.proprietarios_Sistema.get(nif);
+      return this.proprietarios_Sistema.get(nif).clone();
     }
 
     public Veiculo getVeiculo (String matricula) {
 
-      return this.veiculos_Sistema.get(matricula);
+      return this.veiculos_Sistema.get(matricula).clone();
     }
 
     public Map<String, Veiculo> getVeiculosSistema () {

@@ -656,6 +656,7 @@ public class ControladorAPP {
 						optionCliente.charAt(0) == '3' ||
 						optionCliente.charAt(0) == '4' ||
 						optionCliente.charAt(0) == '5' ||
+						optionCliente.charAt(0) == '6' ||
 						optionCliente.charAt(0) == 'c' ||
 						optionCliente.charAt(0) == 'y') {
 
@@ -999,6 +1000,42 @@ public class ControladorAPP {
 								}
 							}
 
+						} else if (optionCliente.charAt(0) == '6') {
+
+							List<Veiculo> veiculosP = ((Proprietario) this.user).getListaVeiculos();
+
+							if (veiculosP.size() == 0) 
+								this.menusVIEW.printError("Não existem carros registados ainda.");
+							else {
+								this.menusVIEW.printHint("Visit the first (1) menu to choose your car, example: ...Vehicle x....");
+								this.menusVIEW.printHint("(Press \"q\" to go back to menu)");
+
+								int sel_car = getIntegerInput("Car option:");
+
+								if (sel_car == -1) 
+									welcomeMenu();
+
+								if (sel_car >= 0 && sel_car < veiculosP.size()) {
+
+									LocalDate antes = getDataInput("inferior");
+									LocalDate depois;
+
+									while (true) {
+										
+										depois = getDataInput("superior");
+										
+										if(depois.isAfter(antes) || depois.isEqual(antes)) break;
+										else {
+											this.menusVIEW.printError("Essa data não é superior!");
+										} 
+									}
+
+									Veiculo v = veiculosP.get(sel_car);
+
+									this.presentFaturacaoViatura(v, this.estadoMODEL.totalFaturadoNoPeriodoViatura(v, antes, depois));
+								}
+							}
+
 						} else if (optionCliente.charAt(0) == 'y') {
 
 							this.menusVIEW.clearConsole();
@@ -1024,6 +1061,55 @@ public class ControladorAPP {
 		}
    	}
 
+   	public void adminMenu () {
+
+   		String adminOp = " ";
+
+   		Scanner sc = new Scanner(System.in);
+
+   		while(adminOp.charAt(0) != 'q') {
+
+   			this.menusVIEW.clearConsole();
+	   		this.menusVIEW.cat("GUInterfaces/admin.txt");
+
+	   		adminOp = sc.next();
+
+	   		if ((adminOp.length() == 1) && (adminOp.charAt(0) == '1')) {
+
+	   			List<Cliente> top10List = this.estadoMODEL.top10Clientes();
+
+	   			if (top10List.size() == 0) {
+
+	   				this.menusVIEW.printError("Ainda não existem clientes registados!");
+	   			
+	   			} else {
+
+	   				this.printTopClientes(top10List);
+
+	   				int out = 0;
+	   				
+	   				this.menusVIEW.printHighlight("\nPressione \"1\" para voltar para o menu de ADMIN.");
+
+	   				while (true) {
+	   					out = getIntegerInput("");
+	   				
+	   					if (out == 1) 
+	   						break;
+	   				}
+	   			}
+
+	   		} else if (adminOp.charAt(0) == 'q') {
+
+	   			this.menusVIEW.clearConsole();
+
+	   			run();
+	   			
+	   			return;
+	   		}
+   		}
+
+	}
+   	
    	public boolean controllLogIn () {
 
 		//--------------------------------------------------
@@ -1041,7 +1127,7 @@ public class ControladorAPP {
 			char optionLogMenu = scanner.next().charAt(0);
 
 			//Press l to login or r to register
-			while (optionLogMenu != 'r' && optionLogMenu != 'l' && optionLogMenu != 's' && optionLogMenu != 'q') {
+			while (optionLogMenu != 'r' && optionLogMenu != 'l' && optionLogMenu != 's' && optionLogMenu != 'q' && optionLogMenu != 'a') {
 
 				this.menusVIEW.printError("Please, insert a valid option...");				
 
@@ -1049,6 +1135,13 @@ public class ControladorAPP {
 			}
 
 			GestorFicheirosDados gestor = new GestorFicheirosDados();
+
+			if (optionLogMenu == 'a') {
+
+				adminMenu();
+
+				controllLogIn();
+			}
 
 			if (optionLogMenu == 's') {
 				try {
@@ -1444,5 +1537,25 @@ public class ControladorAPP {
 
    		return 0;
    	}
+	
+	public void printTopClientes (List<Cliente> topList) {
 
+		int rank = 1;
+
+		for (Cliente c: topList) {
+
+			this.menusVIEW.printIndividual(c.getNome(), 
+				                           c.getTotalKmPercorridos(),
+				                           rank);
+			rank++;
+		}
+
+	}
+
+	public void presentFaturacaoViatura (Veiculo v, double fat) {
+
+		this.menusVIEW.printFaturacaoVeiculo(v.getMatricula(),
+											 v.getMarca(),
+											 fat);
+	}
 }

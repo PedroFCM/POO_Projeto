@@ -269,7 +269,11 @@ public class GestorFicheirosDados {
 		              novoMP = listMP.get(listMP.size() - 1);
 
 		            } 
-		            catch (CarNotAvailableException e) {}
+		            catch (CarNotAvailableException e) {
+		            	continue;
+		            }
+
+		          		//System.out.println("ola");
 
 	              if (novoMP == null) continue;
 
@@ -283,10 +287,23 @@ public class GestorFicheirosDados {
 
 	              cli_aluguer.adicionaAluguer(novoAluguerMP);
 
+	              estado.consumirkmAluguer(((VeiculoComAutonomia) novoMP).clone(), 
+											 novoAluguerMP.getDistancia());
+
 	              novoMP.incrementVezesAlugadoBy1();
 
 	              novoMP.setLocalizacao(destino);
+
 				  cli_aluguer.setLocalizacao(destino);
+
+				  Proprietario prMP = estado.getProprietario(novoMP.getProprietario()); 
+
+				  prMP.replaceVeiculo(novoMP); 
+
+				  prMP.adicionaAluguer(novoAluguerMP);
+
+				  estado.replaceProprietario(prMP);
+				  estado.replaceVeiculoSistema(novoMP);
 
 	              break;
 
@@ -301,7 +318,9 @@ public class GestorFicheirosDados {
 	            		listMB = estado.carroMaisBarato(tipoCombustivel);
 	            		novoMB = listMB.get(listMB.size() - 1);
 	            	}
-	            	catch (CarNotAvailableException e) {}
+	            	catch (CarNotAvailableException e) {
+	            		continue;
+	            	}
 	
 	              if (novoMB == null) continue;
 
@@ -314,8 +333,24 @@ public class GestorFicheirosDados {
 	                                                   destino);
 
 	              cli_aluguer.adicionaAluguer(novoAluguerMB);                
+		  
+		          estado.consumirkmAluguer(((VeiculoComAutonomia) novoMB).clone(), 
+											 novoAluguerMB.getDistancia());
 
 	              novoMB.incrementVezesAlugadoBy1();
+
+	              novoMB.setLocalizacao(destino);
+
+				  cli_aluguer.setLocalizacao(destino);
+
+				  Proprietario prMB = estado.getProprietario(novoMB.getProprietario()); 
+
+				  prMB.replaceVeiculo(novoMB); 
+
+				  prMB.adicionaAluguer(novoAluguerMB);
+			 	  
+			 	  estado.replaceProprietario(prMB);
+				  estado.replaceVeiculoSistema(novoMB);
 
 	              break;
 

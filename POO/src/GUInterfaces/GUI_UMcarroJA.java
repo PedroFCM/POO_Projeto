@@ -145,6 +145,7 @@ public class GUI_UMcarroJA {
 			out.println(ANSI_YELLOW + "[3] Abastecer veiculo" + ANSI_RESET);
 			out.println(ANSI_YELLOW + "[4] Inserir nova viatura." + ANSI_RESET);
 			out.println(ANSI_YELLOW + "[5] Ver/Aceitar pedidos de aluguer." + ANSI_RESET);
+			out.println(ANSI_YELLOW + "[6] Faturacao da viatura num periodo." + ANSI_RESET);
 
 			out.println(ANSI_GREEN + "\n[NOTE] Go back to menu? [y] | Clear error::note logs? [c]\n" + ANSI_RESET);
 
@@ -192,6 +193,8 @@ public class GUI_UMcarroJA {
 		cat("GUInterfaces/lowerFrame.txt");
 
 		System.out.println(ANSI_CYAN + "\n     Press " + ANSI_RESET + ANSI_GREEN + "\"l\" " + ANSI_RESET + ANSI_CYAN + "to log-in, " + ANSI_RESET + ANSI_GREEN + "\"r\" " + ANSI_RESET  + ANSI_CYAN + "to register, " + ANSI_RESET + ANSI_GREEN + "\"s\"" + ANSI_RESET + ANSI_CYAN + " to save or "+ ANSI_RESET + ANSI_GREEN + "\"q\"" + ANSI_RESET  + ANSI_CYAN  + " to quit." + ANSI_RESET);
+
+		System.out.println(ANSI_CYAN + "\n     Press " + ANSI_RESET + ANSI_GREEN + "\"a\" " + ANSI_RESET + ANSI_CYAN + "to acess admin menu." + ANSI_RESET);
 
 		cat("GUInterfaces/lowerFrame.txt");
 	}
@@ -273,5 +276,22 @@ public class GUI_UMcarroJA {
 	
 
 		System.out.println(ANSI_YELLOW + "\n\n.-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.\n" + ANSI_RESET);
+	}
+
+
+	public void printIndividual (String nome, Double totalKM, int rank) {
+
+		if (rank < 10)
+			out.println(ANSI_PURPLE + "[#  " + rank + "] Name: " + ANSI_RESET + ANSI_CYAN + nome + ANSI_RESET + ANSI_YELLOW + " traveled " + ANSI_RESET + ANSI_RED + (Math.round(totalKM*1000) / 1000.0) + ANSI_RESET + ANSI_CYAN + " km" + ANSI_RESET);	
+		else 
+			out.println(ANSI_PURPLE + "[# " + rank + "] Name: " + ANSI_RESET + ANSI_CYAN + nome + ANSI_RESET + ANSI_YELLOW + " traveled " + ANSI_RESET + ANSI_RED + (Math.round(totalKM*1000) / 1000.0) + ANSI_RESET + ANSI_CYAN + " km" + ANSI_RESET);	
+	}
+
+	public void printFaturacaoVeiculo (String matr, String marca, double fat) {
+
+		out.println(ANSI_PURPLE + "A sua viatura  " + ANSI_RESET
+				  + ANSI_RED + marca + ANSI_RESET + ANSI_PURPLE + " com matricula " + ANSI_RESET 
+				  + ANSI_RED + matr + ANSI_RESET + ANSI_PURPLE + " rendeu " + ANSI_RESET 
+			      + ANSI_CYAN + (Math.round(fat*1000) / 1000.0) + " €" +  ANSI_RESET);	
 	}
 }
