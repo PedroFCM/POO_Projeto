@@ -34,7 +34,7 @@ public class ControladorAPP {
 
 	//--------------------------------------------------
 
-	private final static String pathLogs = "Logs/log_simples.bak";
+	private final static String pathLogs = "Logs/logsPOO_carregamentoInicial.bak";
 
 	//--------------------------------------------------
 
@@ -89,8 +89,6 @@ public class ControladorAPP {
 
     	fileManager.carregarEstadoFromLogs(this.estadoMODEL, pathLogs);
         
-    	//fileManager.stats_iniciais(this.estadoMODEL);
-    
     	return 1;
     }
 
@@ -293,7 +291,7 @@ public class ControladorAPP {
   		return new Localizacao(x, y);
    	}
 
-   	public void classificarCarroMenu (Veiculo v) {
+   	public void classificarCarroMenu (Veiculo v, Aluguer a) {
 
    		int classParaAtribuir = -1;
 
@@ -301,17 +299,27 @@ public class ControladorAPP {
 
 	   		classParaAtribuir = getIntegerInput("Qual classificação deseja atribuir ao carro? ");
 
+	   		if (classParaAtribuir >= 0 && classParaAtribuir <= 100)
+	   			break;
+	   		
 	   		this.menusVIEW.printError("Atribua uma classificação entre 0 e 100 pontos!");
    		}
 
    		this.menusVIEW.printHighlight("Atribuiu " + classParaAtribuir + " pontos em 100!");
 
-   		//Classificar o proprietario
-
    		v.atribuiClassificacao(classParaAtribuir);
 
-   		this.needToSave = true;
+		Proprietario p = this.estadoMODEL.getProprietario(v.getProprietario()); 
+		
+		p.replaceVeiculo(v); 
 
+ 		this.estadoMODEL.replaceProprietario(p);
+		this.estadoMODEL.replaceVeiculoSistema(v);
+
+		((Cliente) this.user).removeAluguerNaoClassificao(a);
+		
+		this.estadoMODEL.replaceClienteSistema((Cliente) this.user);
+   		
    		this.menusVIEW.printHighlight("O carro tem agora " + v.getClassificacao());
    	}
 
@@ -474,9 +482,10 @@ public class ControladorAPP {
 						optionCliente.charAt(0) == '2' ||
 						optionCliente.charAt(0) == '3' ||
 						optionCliente.charAt(0) == '4' ||
-						optionCliente.charAt(0) == '5') {
+						optionCliente.charAt(0) == '5' ||
+						optionCliente.charAt(0) == '6') {
 
-						if (optionCliente.charAt(0) != '5') 
+						if (optionCliente.charAt(0) != '5' && optionCliente.charAt(0) != '6') 
 							clientMenuSelection();
 
 				   		this.menusVIEW.clearConsole();
@@ -614,6 +623,33 @@ public class ControladorAPP {
 
 							printListBetweenDates(listaAlugueres, inf, sup);
 
+						} else if (optionCliente.charAt(0) == '6') {
+
+							List<Aluguer> listaAlugSemClass = ((Cliente) this.user).getNaoClassificados();
+
+							if (listaAlugSemClass.size() == 0) {
+
+								this.menusVIEW.printError("Não existem viagens por classificar.");
+							} else {
+
+								this.printListBetweenDates(listaAlugSemClass, LocalDate.now(), LocalDate.now());
+
+								int toClassify = -1;
+
+								while (true) {
+
+									toClassify = getIntegerInput("Qual fatura deseja classificar? [Ex: ...Fatura x do dia .....]");
+								
+									if (toClassify >= 1 && toClassify <= listaAlugSemClass.size())
+										break;
+									else 
+										this.menusVIEW.printError("Opção Inválida!");
+								}
+
+								Veiculo paraClassificar = this.estadoMODEL.getVeiculo(listaAlugSemClass.get(toClassify-1).getVeiculo());
+
+								classificarCarroMenu(paraClassificar, listaAlugSemClass.get(toClassify-1));
+							}
 						}
 
 					} else if (optionCliente.charAt(0) == 'y') {
@@ -902,6 +938,8 @@ public class ControladorAPP {
 
 										((Cliente) this.clienteQueAlugou).setLocalizacao(aceitado.getDestino());
 
+										((Cliente) this.clienteQueAlugou).adicionaAluguerNaoClassificao(aceitado.clone());
+
 										this.estadoMODEL.replaceClienteSistema((Cliente) this.clienteQueAlugou);
 
 										Veiculo alugado = this.estadoMODEL.getVeiculo(aceitado.getVeiculo()).clone();
@@ -910,6 +948,8 @@ public class ControladorAPP {
 																		   aceitado.getDistancia());
 
 										alugado.setLocalizacao(aceitado.getDestino());
+
+										alugado.incrementVezesAlugadoBy1();
 
 										Proprietario p = this.estadoMODEL.getProprietario(alugado.getProprietario()); 
 				            			

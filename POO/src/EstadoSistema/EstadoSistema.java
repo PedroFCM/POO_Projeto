@@ -161,7 +161,8 @@ public class EstadoSistema implements Serializable {
                            local_cliente,
                            new ArrayList<>(),
                            0,
-                           nif);
+                           nif,
+                           new ArrayList<>());
 
       if (this.existeCliente(nif) || this.existeProprietario(nif))
         throw new AtorAlreadyExistsException("Nif " + nif + " já existente!");
@@ -515,17 +516,17 @@ public class EstadoSistema implements Serializable {
     
     public Cliente getCliente (String nif) {
 
-      return this.clientes_Sistema.get(nif).clone();
+      return this.clientes_Sistema.get(nif);
     }
 
     public Proprietario getProprietario (String nif) {
 
-      return this.proprietarios_Sistema.get(nif).clone();
+      return this.proprietarios_Sistema.get(nif);
     }
 
     public Veiculo getVeiculo (String matricula) {
 
-      return this.veiculos_Sistema.get(matricula).clone();
+      return this.veiculos_Sistema.get(matricula);
     }
 
     public Map<String, Veiculo> getVeiculosSistema () {

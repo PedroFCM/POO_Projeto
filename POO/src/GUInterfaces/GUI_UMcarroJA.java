@@ -133,6 +133,7 @@ public class GUI_UMcarroJA {
 			out.println(ANSI_YELLOW + "[3] Rent the cheapest car, by DISTANCE;" + ANSI_RESET);
 			out.println(ANSI_YELLOW + "[4] Rent the car with a certain autonomy." + ANSI_RESET);
 			out.println(ANSI_YELLOW + "[5] Apresentar lista de alugueres efetuados." + ANSI_RESET);
+			out.println(ANSI_YELLOW + "[6] Classificar viagem." + ANSI_RESET);
 
 			out.println(ANSI_GREEN + "\n[NOTE] Go back to menu? [y] | Clear error::note logs? [c]\n" + ANSI_RESET);
 		

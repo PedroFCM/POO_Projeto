@@ -33,6 +33,7 @@ import java.io.ObjectInputStream;
 
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.NoSuchElementException;
 
 public class GestorFicheirosDados {
 
@@ -71,10 +72,23 @@ public class GestorFicheirosDados {
 	    BufferedReader inStream = new BufferedReader(new FileReader(path_logs));
 
 	    while ((linha = inStream.readLine()) != null) {
-	        
+	      
 	      tokens = new StringTokenizer(linha);
 
-	      novoComponente = tokens.nextToken(":");
+	      try {
+	      	
+	      	novoComponente = tokens.nextToken(":");
+	      }
+	      
+	      catch(NoSuchElementException e) {
+
+	      	continue;
+	      }
+
+	      catch(NullPointerException e) {
+
+	      	continue;
+	      }
 
 	      switch(novoComponente) {
 
@@ -117,10 +131,10 @@ public class GestorFicheirosDados {
 	                                    		  Double.parseDouble(camposClie[5])),
 	                            new ArrayList<>(),
 	                            0,
-	                            camposClie[1]);
+	                            camposClie[1],
+	                            new ArrayList<>());
 
 	          estado.adicionaCliente ((Cliente) novoClie);
-
 
 	          break;
 
@@ -136,7 +150,9 @@ public class GestorFicheirosDados {
 	          switch (tipoDeCarro) {
 
 	            case "Electrico":
-	                            
+	              
+	            if (estado.existeProprietario(camposCarr[3])) {
+
 	              VeiculoComAutonomia eletrico 
 	                = new CarroEletrico(camposCarr[2],
 	                            Double.parseDouble(camposCarr[4]),
@@ -152,17 +168,17 @@ public class GestorFicheirosDados {
 	                            camposCarr[1],
 	                            0);
 
-	              if (estado.existeProprietario(camposCarr[3])) {
-
 	                estado.getProprietario(camposCarr[3])
 	                      .adicionaVeiculo(eletrico);
 
 	                estado.adicionaVeiculoSistema(eletrico);
-	              }
+	            }
 
 	              break;
 
 	            case "Gasolina": 
+ 					
+ 				if (estado.existeProprietario(camposCarr[3])) {
 
 	              VeiculoComAutonomia gasolina 
 	                = new CarroGasolina(camposCarr[2],
@@ -179,17 +195,18 @@ public class GestorFicheirosDados {
 	                            camposCarr[1],
 	                            0);
 
-	              if (estado.existeProprietario(camposCarr[3])) {
-
 	                estado.getProprietario(camposCarr[3])
 	                      .adicionaVeiculo(gasolina);
 
 	                estado.adicionaVeiculoSistema(gasolina);
-	              }
+
+	               }
 
 	              break;
 
 	            case "Hibrido":
+
+ 				if (estado.existeProprietario(camposCarr[3])) {
 
 	              VeiculoComAutonomia hibrido 
 	                = new CarroHibrido(camposCarr[2],
@@ -205,9 +222,6 @@ public class GestorFicheirosDados {
 	                            true,
 	                            camposCarr[1],
 	                            0);
-
-	              if (estado.existeProprietario(camposCarr[3])) {
-
 	                estado.getProprietario(camposCarr[3])
 	                      .adicionaVeiculo(hibrido);
 
@@ -272,8 +286,6 @@ public class GestorFicheirosDados {
 		            catch (CarNotAvailableException e) {
 		            	continue;
 		            }
-
-		          		//System.out.println("ola");
 
 	              if (novoMP == null) continue;
 

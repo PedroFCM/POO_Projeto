@@ -197,8 +197,14 @@ public abstract class Veiculo implements Serializable {
     public void atribuiClassificacao(int classi){
     
         int n = this.vezesAlugado;
-        
-        this.setClassificacao((this.classificacao + classi)/(n+1));
+
+        if (this.classificacao == 0) {
+
+            this.setClassificacao(classi);
+        } else {
+
+            this.setClassificacao((this.classificacao + classi)/(n+1));
+        }
     }
     
     //-------------------------------------------------------//  

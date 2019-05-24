@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.lang.StringBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import java.io.Serializable;
 
@@ -20,6 +21,8 @@ public class Cliente extends AtorSistema implements Comparable<Cliente> {
 
     //Cada cliente tem a sua localização
     private Localizacao coordenadas;
+
+    private List<Aluguer> naoClassificado;
 
     //-------------------------------------------------------//  
 
@@ -31,12 +34,14 @@ public class Cliente extends AtorSistema implements Comparable<Cliente> {
                     Localizacao local_cliente,
                     List<Aluguer> historico,
                     int classif,
-                    String nif) {
+                    String nif,
+                    List<Aluguer> naoClass) {
         
         super(email_cliente, nome_cliente, 
               pass_cliente, morada_cliente, 
               dataNasc_cliente, classif, historico, nif);
 
+        this.naoClassificado = naoClass.stream().map(Aluguer::clone).collect(Collectors.toList());
         this.coordenadas = new Localizacao(local_cliente);
     }
 
@@ -44,12 +49,14 @@ public class Cliente extends AtorSistema implements Comparable<Cliente> {
 
         super(novo);
         this.coordenadas = new Localizacao(novo.getLocalizacao());
+        this.naoClassificado = novo.getNaoClassificados();
     }
     
     public Cliente () {
 
         super();
         this.coordenadas = new Localizacao();
+        this.naoClassificado = new ArrayList<>();
     }
 
     //-------------------------------------------------------//  
@@ -84,6 +91,21 @@ public class Cliente extends AtorSistema implements Comparable<Cliente> {
     }
 
     //-------------------------------------------------------//  
+
+    public List<Aluguer> getNaoClassificados () {
+
+        return this.naoClassificado.stream().collect(Collectors.toList());
+    }
+
+    public void adicionaAluguerNaoClassificao(Aluguer a) {
+
+        this.naoClassificado.add(a.clone());
+    }
+
+    public void removeAluguerNaoClassificao(Aluguer a) {
+
+        this.naoClassificado.remove(a);
+    }
 
     public Localizacao getLocalizacao() {
         
