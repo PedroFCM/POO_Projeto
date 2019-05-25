@@ -1,12 +1,6 @@
 
 //----------------------------------------------------------------------------------        
 
-import Controller.*;
-import GUInterfaces.*;
-import EstadoSistema.*;
-
-//----------------------------------------------------------------------------------        
-
 import java.io.IOException;
 import java.io.FileNotFoundException;
 

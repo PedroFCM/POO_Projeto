@@ -8,7 +8,6 @@ run:
 clean:
 	find . -type f -name "*.class" -delete
 	find . -type f -name "*.ctxt" -delete
-	find . -type f -name "package.bluej" -delete
 
 removeSaves:
 	rm ObjectSaves/estadoObj.obj
