@@ -20,6 +20,8 @@ import java.io.Serializable;
 
 public class Aluguer implements Serializable {
 
+	//-------------------------------------------------------------------------------------------------------------
+	
 	/*
 	* Matricula do Veiculo
 	*/
@@ -49,6 +51,8 @@ public class Aluguer implements Serializable {
 	*/
     private Localizacao destinoViagem;
     
+	//-------------------------------------------------------------------------------------------------------------
+
     /**
 	 * Construtor parameterizado da classe Aluguer
 	 *
@@ -280,7 +284,7 @@ public class Aluguer implements Serializable {
     /**
 	 * Altera a variavel de instancia veiculo.
 	 *
-	 * @param veiculo Nif do veiculo
+	 * @param veiculo Matricula do veiculo
 	 *
 	*/
     
@@ -292,7 +296,7 @@ public class Aluguer implements Serializable {
     /**
 	 * Altera a variavel de instancia preco.
 	 *
-	 * @param preco Nif do preco
+	 * @param preco Preco novo
 	 *
 	*/
     
@@ -304,7 +308,7 @@ public class Aluguer implements Serializable {
     /**
 	 * Altera a variavel de instancia distancia.
 	 *
-	 * @param distancia Nif do distancia
+	 * @param distancia Distancia nova
 	 *
 	*/
     
@@ -316,7 +320,7 @@ public class Aluguer implements Serializable {
     /**
 	 * Altera a variavel de instancia data.
 	 *
-	 * @param data Nif do data
+	 * @param data Data nova.
 	 *
 	*/
     

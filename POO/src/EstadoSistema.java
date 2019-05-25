@@ -1,3 +1,17 @@
+//-------------------------------------------------------------------------------------------------------------
+
+/**
+ * Class que implementa o Estado do Sistema da APP.
+ * Possui as funcionalidades que a APP apresenta.
+ *
+ * @author João Pedro Rodrigues Azevedo
+ * @author Pedro Filipe Costa Machado
+ * @author Paulo Jorge da Silva Araújo 
+ *
+ * @version 2019/05/25
+ */
+
+//-------------------------------------------------------------------------------------------------------------
 
 import ExceptionsProgramFlow.*;
 
@@ -16,22 +30,46 @@ import java.util.HashSet;
 
 import java.io.Serializable;
 
+//-------------------------------------------------------------------------------------------------------------
+
 public class EstadoSistema implements Serializable {
+    
+    //-------------------------------------------------------------------------------------------------------------
+
+    /* - Serial version - */
     
     private static final long serialVersionUID = 1L;
 
-    //-------------------------------------------------------//  
+    //-------------------------------------------------------------------------------------------------------------
     
-    //Key: Cliente; Value: Nome
+    /*
+     * Map de clientes do sistema, Key = nif.
+    */
     private Map<String, Cliente> clientes_Sistema;
-
+    /*
+     * Map de proprietarios do sistema, Key = nif.
+    */
     private Map<String, Proprietario> proprietarios_Sistema;
-    
+    /*
+     * Map de veiculos do sistema, Key = matricula.
+    */
     private Map<String, Veiculo> veiculos_Sistema;
-
+    /*
+     * Data de inicializacao do sistema
+    */
     private LocalDate data_atual;
     
-    //-------------------------------------------------------//  
+    //-------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Construtor parameterizado da classe EstadoSistema
+     *
+     * @param clientes Map de clientes
+     * @param proprietarios Map de proprietarios
+     * @param veiculos Map de veiculos
+     * @param data Data de criação do sistema
+     *
+    */
 
     public EstadoSistema (Map<String, Cliente> clientes,
                           Map<String, Proprietario> proprietarios,
@@ -60,6 +98,13 @@ public class EstadoSistema implements Serializable {
                                                                             HashMap::new));
         this.data_atual = data;
     }
+    
+    /**
+     * Construtor cópia de um EstadoSistema
+     *           
+     * @param novo Estado de Sistema novo.
+     *
+    */
 
     public EstadoSistema (EstadoSistema novo) {
 
@@ -69,6 +114,11 @@ public class EstadoSistema implements Serializable {
         this.veiculos_Sistema = novo.getVeiculosSistema();
     }
 
+    /**
+     * Construtor vazio de Estado Sistema
+     *
+    */
+
     public EstadoSistema () {
 
         this.clientes_Sistema = new HashMap<String, Cliente>();
@@ -77,22 +127,53 @@ public class EstadoSistema implements Serializable {
         this.data_atual = LocalDate.now();
     }
 
-    //-------------------------------------------------------//  
-    
+    //---------------------------------------------------------------------------------------------------------
+   
+    /**
+     * Verifica se um proprietario existe no map de proprietarios
+     *
+     * @param nif nif do proprietario.
+     *
+     * @return true caso exista
+    */
+   
     public boolean existeProprietario (String nif) {
 
       return this.proprietarios_Sistema.containsKey(nif);
     }
 
+    /**
+     * Verifica se um veiculo existe no map de veiculos
+     *
+     * @param matricula matricula do veiculo.
+     *
+     * @return true caso exista
+    */
+
     public boolean existeMatricula (String matricula) {
 
       return this.veiculos_Sistema.containsKey(matricula);
     }
-    
+
+    /**
+     * Verifica se um cliente existe no map de clientes
+     *
+     * @param nif nif do cliente.
+     *
+     * @return true caso exista
+    */
+
     public boolean existeCliente (String nif) {
 
       return this.clientes_Sistema.containsKey(nif);
     }
+
+    /**
+     * Adiciona um proprietario ao sistema
+     *
+     * @param p novo proprietario.
+     *
+    */
 
     public void adicionaProprietario (Proprietario p) {
 
@@ -101,6 +182,13 @@ public class EstadoSistema implements Serializable {
               this.proprietarios_Sistema.put(p.getNif(), p.clone());
         }
     }
+
+    /**
+     * Substitui um proprietario do sistema
+     *
+     * @param p novo proprietario.
+     *
+    */
 
     public void replaceProprietario (Proprietario p) {
 
@@ -112,6 +200,17 @@ public class EstadoSistema implements Serializable {
           this.proprietarios_Sistema.replace(p.getNif(), p.clone());
         }
     }
+
+    /**
+     * Cria e adiciona um proprietario ao sistema
+     *
+     * @param email email do proprietario.
+     * @param nome nome do proprietario.
+     * @param passw passw do proprietario.
+     * @param morada morada do proprietario.
+     * @param nif nif do proprietario.
+     *
+    */
 
     public void criaAdicionaProprietario(String email,
                                          String nomeAtor,
@@ -134,6 +233,18 @@ public class EstadoSistema implements Serializable {
         this.adicionaProprietario((Proprietario) novoProp);
       }
     }
+
+    /**
+     * Cria e adiciona um cliente ao sistema
+     *
+     * @param email email do cliente.
+     * @param nome nome do cliente.
+     * @param passw passw do cliente.
+     * @param morada morada do cliente.
+     * @param nif nif do cliente.
+     * @param local_cliente Localizacao do cliente
+     *
+    */
 
     public void criaAdicionaCliente(String email,
                                     String nomeAtor,
@@ -163,6 +274,13 @@ public class EstadoSistema implements Serializable {
       }
     }
 
+    /**
+     * Adiciona um cliente ao sistema
+     *
+     * @param c novo cliente.
+     *
+    */
+
     public void adicionaCliente (Cliente c) {
 
         if (!this.clientes_Sistema.containsKey(c.getNif())) {
@@ -171,21 +289,49 @@ public class EstadoSistema implements Serializable {
         }
     }
 
+    /**
+     * Adiciona um veiculo ao sistema
+     *
+     * @param novo novo veiculo.
+     *
+    */
+
     public void adicionaVeiculoSistema (Veiculo novo) {
 
       this.veiculos_Sistema.put(novo.getMatricula(), novo.clone());
     }
+
+    /**
+     * Substitui um veiculo do sistema
+     *
+     * @param novo novo veiculo.
+     *
+    */
 
     public void replaceVeiculoSistema (Veiculo novo) {
 
       this.veiculos_Sistema.replace(novo.getMatricula(), novo.clone());
     }
 
+    /**
+     * Substitui um cliente do sistema
+     *
+     * @param c novo cliente.
+     *
+    */
+
     public void replaceClienteSistema (Cliente c) {
 
 
       this.clientes_Sistema.replace(c.getNif(), c.clone());
     }    
+
+    /**
+     * Adiciona um pedido de aluguer a um proprietario
+     *
+     * @param a o aluguer.
+     *
+    */
 
     public void enviarAluguerProprietario (Aluguer a) {
 
@@ -195,6 +341,13 @@ public class EstadoSistema implements Serializable {
 
       this.replaceProprietario(p);
     }
+
+    /**
+     * Apresenta todos os veiculos do sistema numa lista
+     *
+     * @return Lista de veiculos
+     *
+    */
 
     public List<Veiculo> allVeiculos() {
 
@@ -211,6 +364,19 @@ public class EstadoSistema implements Serializable {
    
         return listaV;
     }
+
+    /**
+     * Calcula o carro mais proximo de uma localizacao
+     * Devolve uma lista pois pode existir 2 carros na mesma posicao
+     *
+     * @param c Cliente
+     * @param preferencia Tipo de carro
+     *
+     * @throws CarNotAvailableException Caso nao haja carros
+     *
+     * @return Lista de veiculos
+     *
+    */
 
     public List<Veiculo> carroMaisProximo (Cliente c, String preferencia) 
           throws CarNotAvailableException {
@@ -266,6 +432,18 @@ public class EstadoSistema implements Serializable {
         return res;  
     }
 
+    /**
+     * Calcula o carro mais barato do sistema
+     * Devolve uma lista pois pode existir 2 carros com o mesmo preco
+     *
+     * @param preferencia Tipo de carro
+     *
+     * @throws CarNotAvailableException Caso nao haja carros
+     *
+     * @return Lista de veiculos
+     *
+    */
+
     public List<Veiculo> carroMaisBarato (String preferencia) 
       throws CarNotAvailableException {
 
@@ -308,6 +486,20 @@ public class EstadoSistema implements Serializable {
         return l;  
     }
 
+    /**
+     * Calcula o carro mais barato do sistema numa distancia x
+     * Devolve uma lista pois pode existir 2 ou mais carros
+     *
+     * @param c Cliente
+     * @param distanciaMax Distancia maxima que esta disposta a percorrer
+     * @param preferencia Tipo de carro
+     *
+     * @throws CarNotAvailableException Caso nao haja carros
+     *
+     * @return Lista de veiculos
+     *
+    */
+
     public List<Veiculo> carroMaisBarato (Cliente c, Double distanciaMax, String preferencia) 
             throws CarNotAvailableException {
 
@@ -321,6 +513,19 @@ public class EstadoSistema implements Serializable {
 
       return result;  
     }
+
+    /**
+     * Calcula os carros com o mesmo ou mais de autonomia que o argumento
+     * Devolve uma lista pois pode existir 2 ou mais carros
+     *
+     * @param autonomia autonomia minima
+     * @param preferencia Tipo de carro
+     *
+     * @throws CarNotAvailableException Caso nao haja carros
+     *
+     * @return Lista de veiculos
+     *
+    */
 
     public List<Veiculo> carroComCertaAutonomia(String preferencia, Double autonomia)
           throws CarNotAvailableException {
@@ -357,6 +562,16 @@ public class EstadoSistema implements Serializable {
         return result;
     }
 
+    /**
+     * Calcula os carros dada a preferencia [OBSULETO]
+     * Devolve uma lista pois pode existir 2 ou mais carros
+     *
+     * @param tipoDeCarroDesejado Tipo de carro
+     *
+     * @return Lista de veiculos
+     *
+    */
+
     public List<Veiculo> carroEspecifico (String tipoDeCarroDesejado) {
 
       List<Veiculo> todosVeiculos = new ArrayList<Veiculo>();    
@@ -388,6 +603,16 @@ public class EstadoSistema implements Serializable {
       return carroEspecifico;
     }
 
+    /**
+     * Consome os km do carro que o aluguer apresenta
+     *
+     * @param v Veiculo
+     * @param dist km para retirar
+     *
+     * @return Lista de veiculos
+     *
+    */
+
     public void consumirkmAluguer (VeiculoComAutonomia v, Double dist) {
 
       Double atual = v.getAutonomiaAtual();
@@ -395,7 +620,15 @@ public class EstadoSistema implements Serializable {
       v.setAutonomiaAtual((atual-dist)>=0?(atual-dist):0.0);
     }
     
-    public List<Cliente> top10Clientes () {
+
+    /**
+     * Apresenta a lista dos top10 clientes do sistema
+     *
+     * @return Lista de Cliente
+     *
+    */
+
+      public List<Cliente> top10Clientes () {
 
       //------------------------------------------------------------------
 
@@ -434,6 +667,17 @@ public class EstadoSistema implements Serializable {
       return result.keySet().stream().collect(Collectors.toList());
     }
 
+    /**
+     * Calcula o total faturado por uma viatura num periodo
+     *
+     * @param v Veiculo
+     * @param dataInf data inferior
+     * @param dataSup data superior
+     *
+     * @return Total faturado
+     *
+    */
+
     public Double totalFaturadoNoPeriodoViatura (Veiculo v, LocalDate dataInf, LocalDate dataSup) {
 
       double totalFaturado = 0.0;
@@ -455,12 +699,24 @@ public class EstadoSistema implements Serializable {
       return totalFaturado;
     }
 
-    //-------------------------------------------------------//  
+    //-----------------------------------------------------------------------------------  
+    
+    /**
+     * Constrói uma cópia de um EstadoSistema.
+     *
+     * @return Novo EstadoSistema.
+    */
 
     public EstadoSistema clone () {
 
         return new EstadoSistema(this);
     }
+    
+    /**
+     * Converte um EstadoSistema para a sua representação em String
+     *
+     * @return A representação do EstadoSistema em String.
+    */
 
     public String toString (){
         
@@ -474,6 +730,14 @@ public class EstadoSistema implements Serializable {
 
         return s.toString();
     }
+
+    /**
+     * Determina se dois EstadoSistema são iguais.
+     *
+     * @param o Objeto para fazer comparação.
+     *
+     * @return true se forem iguais.
+    */
 
     public boolean equals(Object o) {
         
@@ -489,8 +753,16 @@ public class EstadoSistema implements Serializable {
                e.getData().equals(this.data_atual));
     }
 
-    //-------------------------------------------------------//  
+    //---------------------------------------------------------------------------------------------------------------  
  
+    /**
+     * Calcula o mail do proprietario dado um veiculo
+     *
+     * @param v Veiculo
+     *
+     * @return mail do proprietario
+    */
+
     public String getMailProprietarioVeiculo(Veiculo v){
     
         List <Proprietario> lista = this.proprietarios_Sistema.values().stream().collect(Collectors.toList());
@@ -503,21 +775,51 @@ public class EstadoSistema implements Serializable {
         
         return null;
     }
-    
+
+    /**
+     * Devolve o cliente do sistema dado o nif
+     *
+     * @param nif Nif do cliente
+     *
+     * @return Cliente que possui aquele nif
+    */
+
     public Cliente getCliente (String nif) {
 
       return this.clientes_Sistema.get(nif);
     }
+
+    /**
+     * Devolve o proprietario do sistema dado o nif
+     *
+     * @param nif Nif do proprietario
+     *
+     * @return proprietario que possui aquele nif
+    */
 
     public Proprietario getProprietario (String nif) {
 
       return this.proprietarios_Sistema.get(nif);
     }
 
+    /**
+     * Devolve o veiculo do sistema dado o nif
+     *
+     * @param nif Nif do veiculo
+     *
+     * @return veiculo que possui aquele nif
+    */
+
     public Veiculo getVeiculo (String matricula) {
 
       return this.veiculos_Sistema.get(matricula);
     }
+
+    /**
+     * Devolve o Map de veiculos do sistema
+     *
+     * @return Veiculos do sistema
+    */
 
     public Map<String, Veiculo> getVeiculosSistema () {
 
@@ -529,6 +831,12 @@ public class EstadoSistema implements Serializable {
                                                              HashMap::new));
     }
 
+    /**
+     * Devolve o Map de clientes do sistema
+     *
+     * @return Veiculos do sistema
+    */
+
     public Map<String, Cliente> getClientesSistema () {
 
        return this.clientes_Sistema.entrySet()
@@ -538,6 +846,12 @@ public class EstadoSistema implements Serializable {
                                                             (e1, e2) -> e2,
                                                              HashMap::new));
     }
+
+    /**
+     * Devolve o Map de clientes do sistema
+     *
+     * @return Proprietarios do sistema
+    */
 
     public Map<String, Proprietario> getProprietariosSistema () {
 
@@ -549,20 +863,43 @@ public class EstadoSistema implements Serializable {
                                                                      HashMap::new));
    }
 
+    /**
+     * Devolve o Data de criação do sistema
+     *
+     * @return Data
+    */
+
    public LocalDate getData () {
 
        return this.data_atual;
    }
+    /**
+     * Devolve o numero de proprietarios registados
+     *
+     * @return Data
+    */
 
    public int getNumProprietarios() {
 
        return this.proprietarios_Sistema.size();
    }
-
+   
+    /**
+     * Devolve o numero de clientes registados
+     *
+     * @return Data
+    */
+   
    public int getNumClientes() {
 
        return this.clientes_Sistema.size();
    }
+    
+    /**
+     * Devolve o numero de veiculos registados
+     *
+     * @return Data
+    */
 
    public int getNumVeiculos() {
 

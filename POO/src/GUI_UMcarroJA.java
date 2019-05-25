@@ -1,44 +1,81 @@
+//-------------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------
+/**
+ * Class que implementa a GUI do projeto.
+ * Apresenta diversos metodos para apresentar diferentes informações aos utilizadores
+ * desta APP.
+ *
+ * @author João Pedro Rodrigues Azevedo
+ * @author Pedro Filipe Costa Machado
+ * @author Paulo Jorge da Silva Araújo 
+ *
+ * @version 2019/05/25
+ */
+
+//-------------------------------------------------------------------------------------------------------------
 
 import static java.lang.System.out;
-
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-
 import java.lang.StringBuilder;
-
 import java.time.LocalDate;
 
-//------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------
 
 public class GUI_UMcarroJA {  
 
-	//------------------------------------------------------------------
 
-	public static final String ANSI_RESET = "\u001B[0m";
-	public static final String ANSI_BLACK = "\u001B[30m";
-	public static final String ANSI_RED = "\u001B[31m";
-	public static final String ANSI_GREEN = "\u001B[32m";
-	public static final String ANSI_YELLOW = "\u001B[33m";
-	public static final String ANSI_BLUE = "\u001B[34m";
-	public static final String ANSI_PURPLE = "\u001B[35m";
-	public static final String ANSI_CYAN = "\u001B[36m";
-	public static final String ANSI_WHITE = "\u001B[37m";
+	//-------------------------------------------------------------------------------------------------------------
 
-	public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
-	public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-	public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
-	public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-	public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
-	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+	/*
+	* Variaveis de classe de GUI_UMcarroJA
+	* Apresenta-se diversas MACROS para apresentar cores no terminal Linux
+	*/
+
+	//-------------------------------------------------------------------------------------------------------------
+
+	/*
+	* Cores de fonte de texto Ascii Ansi
+	*/
+
+	private static final String ANSI_RESET = "\u001B[0m";
+	private static final String ANSI_BLACK = "\u001B[30m";
+	private static final String ANSI_RED = "\u001B[31m";
+	private static final String ANSI_GREEN = "\u001B[32m";
+	private static final String ANSI_YELLOW = "\u001B[33m";
+	private static final String ANSI_BLUE = "\u001B[34m";
+	private static final String ANSI_PURPLE = "\u001B[35m";
+	private static final String ANSI_CYAN = "\u001B[36m";
+	private static final String ANSI_WHITE = "\u001B[37m";
+
+	//-------------------------------------------------------------------------------------------------------------
+
+	/*
+	* Cores de background de texto Ascii Ansi
+	*/
+
+	private static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+	private static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+	private static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+	private static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+	private static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+	private static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
+	private static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+	private static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
                                                                                          
-	//------------------------------------------------------------------
-	
+	//-------------------------------------------------------------------------------------------------------------
+
+    /**
+	 * Apresenta no terminal o conteudo do ficheiro argumento.
+	 * Semelhante à call "cat" da bash
+	 * Trata da exceção na própria função.
+	 *
+	 * @param file_path Path para o ficheiro.
+	 *
+	*/
+
     public void cat (String file_path) {
 
 	    try {
@@ -52,32 +89,75 @@ public class GUI_UMcarroJA {
 	        }    
 	    }	
 
-    	catch (Exception e) {}
+    	catch (Exception e) {
+
+    		System.out.println(e.getMessage());
+    	}
 	}
+
+    /**
+	 * Faz clear ao terminal. Semelhante a call na bash "clear".
+	 *
+	*/
 
 	public void clearConsole() {
 
 		System.out.print("\033[H\033[2J");
 	}
 
+    /**
+	 * Função interativa que apresenta um erro no terminal.
+	 * O erro, a string, é mandada como parametro.
+	 *
+	 * @param erroMsg mensagem de erro.
+	 *
+	*/
+
 	public void printError(String erroMsg) {
 
 		out.println(ANSI_RED + "[ERROR] " + erroMsg + ANSI_RESET);
 	}
 
-	public void printHint(String erroMsg) {
+   /**	
+	 * Apresenta uma mensagem a verde ao utilizador.
+	 *
+	 * @param hint mensagem.
+	 *
+	*/
 
-		out.println(ANSI_GREEN + erroMsg + ANSI_RESET);
+	public void printHint(String hint) {
+
+		out.println(ANSI_GREEN + hint + ANSI_RESET);
 	}
+
+   /**	
+	 * Apresenta uma mensagem amarela ao utilizador.
+	 *
+	 * @param msg mensagem.
+	 *
+	*/
+
 	public void printHighlight (String msg) {
 
 		out.println(ANSI_YELLOW + msg + ANSI_RESET);
 	}
 
+   /**	
+	 * Apresenta uma mensagem de warning ao utilizador.
+	 *
+	 * @param msg mensagem.
+	 *
+	*/
+
 	public void printWarning (String msg) {
 
 		out.println("Warning: " + ANSI_RED + msg + ANSI_RESET);
 	}
+
+   /**	
+	 * Apresenta o menu de escolha do tipo de veiculo para o proprietario.
+	 *
+	*/
 
 	public void printCreateVehicles() {
 
@@ -87,6 +167,11 @@ public class GUI_UMcarroJA {
 
 			out.println(ANSI_YELLOW + "Stay tunned, we are working on getting surf boards, scooters and MORE! ;)" + ANSI_RESET);		
 	}
+
+   /**	
+	 * Apresenta o menu de escolha do tipo de veiculo para o cliente.
+	 *
+	*/
 
 	public void printPreferredVehicles() {
 
@@ -98,6 +183,18 @@ public class GUI_UMcarroJA {
 
 			out.println(ANSI_YELLOW + "Stay tunned, we are working on getting surf boards, scooters and MORE! ;)" + ANSI_RESET);
 	}
+
+   /**	
+	 * Apresenta os detalhes do utilizador passado o seu tipo de dados como parametro.
+	 * 
+	 * @param user_nome Nome do utilizador
+	 * @param user_morada Morada do utilizador
+	 * @param user_email Email do utilizador
+	 * @param user_class Classificacao do utilizador
+	 * @param user_nif Nif do utilizador
+	 * @param tipoUser "Cliente" ou "Proprietario"
+	 *
+	*/
 
 	public void printUserDetails (String user_name,
 		                          String user_morada,
@@ -154,6 +251,13 @@ public class GUI_UMcarroJA {
 		}
 	}
 
+   /**	
+	 * Apresenta a localização de um cliente pelo GPS (Coordenadas enviadas como parametro).
+	 * 
+	 * @param xLoc Localizacao coordenada X
+	 * @param yLoc Localizacao coordenada Y
+	 *
+	*/
 
 	public void printClientLocationBasicInfo (Double xLoc, Double yLoc) {
 
@@ -161,7 +265,11 @@ public class GUI_UMcarroJA {
 								   + ANSI_RESET + ANSI_RED + xLoc + ANSI_RESET 
 								   + ANSI_GREEN + " Y = " + ANSI_RESET + ANSI_RED + yLoc + ANSI_RESET);
 	}
-	//------------------------------------------------------------------
+
+   /**	
+	 * Apresenta os detalhes do utilizador passado o seu tipo de dados como parametro.
+	 * 
+	*/
 
 	public void presentation () {
 
@@ -185,7 +293,11 @@ public class GUI_UMcarroJA {
 
 	}
 
-	//------------------------------------------------------------------
+    /**	
+	 * Apresenta o menu inicial ao user.
+	 * Estes podem escolher entre Login, Register, Admin, Save ou Quit
+	 * 
+	*/
 
 	public void mainMenu() {
 
@@ -199,6 +311,23 @@ public class GUI_UMcarroJA {
 
 		cat("GUInterfaces/lowerFrame.txt");
 	}
+
+    /**	
+	 * Apresenta as carateristicas do veiculo, as suas propriedades para o Cliente.
+	 * 
+	 * @param brand Marca do veiculo.
+	 * @param plate Matricula do veiculo.
+	 * @param vel Velocidade media do veiculo.
+	 * @param precoPKm Preco por km do veiculo.
+	 * @param cons Consumo do veiculo.
+	 * @param autoAtual Autonomia atual.
+	 * @param x localizacao na coordenada X.
+	 * @param y localizacao na coordenada Y.	 
+	 * @param dist Distancia do veiculo das coordenadas x y.
+	 * @param classi Classificacao do veiculo.
+	 * @param vezesAlugado Numero de vezes que o veiculo foi alugado.
+	 *
+	*/
 
 	public void printVehicleBasicInfo(String brand,
 									  String plate,
@@ -227,6 +356,22 @@ public class GUI_UMcarroJA {
 						   + ANSI_GREEN + " Y = " + ANSI_RESET + ANSI_RED + y + "\n" + ANSI_RESET);
 	}
 
+    /**	
+	 * Apresenta as carateristicas do veiculo, as suas propriedades para o Proprietario.
+	 * 
+	 * @param brand Marca do veiculo.
+	 * @param plate Matricula do veiculo.
+	 * @param vel Velocidade media do veiculo.
+	 * @param precoPKm Preco por km do veiculo.
+	 * @param cons Consumo do veiculo.
+	 * @param autoAtual Autonomia atual.
+	 * @param x localizacao na coordenada X.
+	 * @param y localizacao na coordenada Y.	 
+	 * @param classi Classificacao do veiculo.
+	 * @param vezesAlugado Numero de vezes que o veiculo foi alugado.
+	 *
+	*/
+
 	public void printVehicleBasicInfoOWNER(String brand,
 									  String plate,
 									  Double vel,
@@ -251,6 +396,20 @@ public class GUI_UMcarroJA {
 						   + ANSI_RESET + ANSI_RED + x + ANSI_RESET 
 						   + ANSI_GREEN + " Y = " + ANSI_RESET + ANSI_RED + y + "\n" + ANSI_RESET);
 	}
+
+    /**	
+	 * Apresenta as carateristicas do Aluguer.
+	 * 
+	 * @param cli_nif Nif do cliente.
+	 * @param prop Nif do proprietario.
+	 * @param matric Matricula do veiculo.
+	 * @param precoAlug Preco do aluguer.
+	 * @param dist Distancia da viagem.
+	 * @param data Data de aluguer.
+	 * @param i Numero da fatura.
+	 * @param classificacao Classificacao do cliente.	 
+	 *
+	*/
 
 	public void printFaturaAlguer (String cli_nif,
 								   String prop,
@@ -281,6 +440,15 @@ public class GUI_UMcarroJA {
 		System.out.println(ANSI_YELLOW + "\n\n.-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.\n" + ANSI_RESET);
 	}
 
+    /**	
+	 * Converte a classificacao do cliente para a classificacao em String.
+	 * 
+	 * @param classificacao Classificacao do cliente.
+	 *
+	 * @return Experiencia do cliente.
+	 *
+	*/
+
 	public String classifica (int classificacao) {
 
 		if (classificacao >= 0 && classificacao < 40) {
@@ -300,6 +468,16 @@ public class GUI_UMcarroJA {
 		return "Sem experiencia";
 	}
 
+    /**	
+	 * Apresenta um posição no ranking de users.
+	 * 
+	 * @param nome Nome do user.
+	 * @param totalKM distancia percorrida pelo user.
+	 * @param rank Rank do cliente.
+	 *
+	 *
+	*/
+
 	public void printIndividual (String nome, Double totalKM, int rank) {
 
 		if (rank < 10)
@@ -307,6 +485,16 @@ public class GUI_UMcarroJA {
 		else 
 			out.println(ANSI_PURPLE + "[# " + rank + "] Name: " + ANSI_RESET + ANSI_CYAN + nome + ANSI_RESET + ANSI_YELLOW + " traveled " + ANSI_RESET + ANSI_RED + (Math.round(totalKM*1000) / 1000.0) + ANSI_RESET + ANSI_CYAN + " km" + ANSI_RESET);	
 	}
+
+    /**	
+	 * Apresenta a faturacao de um veiculo.
+	 * 
+	 * @param matr Matricula do veiculo.
+	 * @param marca Marca do veiculo.
+	 * @param fat Quantidade faturada pelo veiculo.
+	 *
+	 *
+	*/
 
 	public void printFaturacaoVeiculo (String matr, String marca, double fat) {
 

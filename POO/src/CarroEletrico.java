@@ -1,7 +1,41 @@
+//-------------------------------------------------------------------------------------------------------------
+
+/**
+ * Class que um Carro Eletrico, cuja super class é VeiculoComAutonomia. 
+ *
+ * @author João Pedro Rodrigues Azevedo
+ * @author Pedro Filipe Costa Machado
+ * @author Paulo Jorge da Silva Araújo 
+ *
+ * @version 2019/05/25
+ */
+
+//-------------------------------------------------------------------------------------------------------------
 
 import java.io.Serializable;
 
+//-------------------------------------------------------------------------------------------------------------
+
 public class CarroEletrico extends VeiculoComAutonomia {
+
+
+    /**
+     * Construtor parameterizado da classe CarroEletrico
+     *
+     * @param nova_matricula Matricula do veiculo.
+     * @param velMedia Velocidade Media do Veiculo
+     * @param priceKM Preco por km do veiculo
+     * @param classiF Classificacao do veiculo
+     * @param nova_local Localizacao do veiculo             
+     * @param consumo Consumo do veiculo
+     * @param maxAuto Autonomia maxima do veiculo
+     * @param currentAuto Autonomia atual do veiculo
+     * @param prop Proprietario do veiculo (Nif)
+     * @param estado Disponivel = true
+     * @param marca Marca do veiculo
+     * @param v Vezes que foi alugado
+     *
+    */
 
     public CarroEletrico (String nova_matricula,
                           double velMedia,
@@ -30,17 +64,36 @@ public class CarroEletrico extends VeiculoComAutonomia {
               v);
     }
 
+    /**
+     * Construtor copia da classe CarroEletrico
+     *
+     * @param carroEle novo Carro Eletrico.
+     *
+    */
+
     public CarroEletrico (CarroEletrico carroEle) {
 
         super(carroEle);
    }
+
+    /**
+     * Construtor vazio da classe CarroEletrico
+    */
 
     public CarroEletrico () {
 
         super();
     }
 
-    //-------------------------------------------------------//  
+    //-------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Determina se dois carros eletricos são iguais.
+     *
+     * @param o Objeto para fazer comparação.
+     *
+     * @return true se forem iguais.
+    */
 
     public boolean equals(Object o) {
         
@@ -53,11 +106,23 @@ public class CarroEletrico extends VeiculoComAutonomia {
      
         return(super.equals(g));
     }
+    
+    /**
+     * Constrói uma cópia de um CarroEletrico.
+     *
+     * @return Novo CarroEletrico.
+    */
 
     public CarroEletrico clone () {
 
         return new CarroEletrico(this);
     }
+
+    /**
+     * Converte um CarroEletrico para a sua representação em String
+     *
+     * @return A representação do carro eletrico em String.
+    */
 
     public String toString (){
         
@@ -69,6 +134,6 @@ public class CarroEletrico extends VeiculoComAutonomia {
         return s.toString();
     }
 
-    //-------------------------------------------------------//  
+    //-------------------------------------------------------------------------------------------------------------
 
 }

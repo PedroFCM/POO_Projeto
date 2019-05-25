@@ -1,21 +1,79 @@
+//-------------------------------------------------------------------------------------------------------------
+
+/**
+ * Class que implementa um Veiculo, abstrata. 
+ *
+ * @author João Pedro Rodrigues Azevedo
+ * @author Pedro Filipe Costa Machado
+ * @author Paulo Jorge da Silva Araújo 
+ *
+ * @version 2019/05/25
+ */
+
+//-------------------------------------------------------------------------------------------------------------
 
 import java.io.Serializable;
 
+//-------------------------------------------------------------------------------------------------------------
+
 public abstract class Veiculo implements Serializable {
 
-    //-------------------------------------------------------//  
 
+    //-------------------------------------------------------------------------------------------------------------
+
+    /*
+    * Marca do veiculo
+    */
     private String marca;
+    /*
+    * Matricula do veiculo
+    */
     private String matricula;
+    /*
+    * Velocidade media do veiculo
+    */
     private double velMediaPorKM;
+    /*
+    * Preco por km do veiculo
+    */
     private double precoPorKm;
+    /*
+    * Classificacao do veiculo
+    */
     private int classificacao;
+    /*
+    * Localizacao do veiculo
+    */
     private Localizacao local;
+    /*
+    * Nif do proprietario do veiculo
+    */
     private String proprietario;
+    /*
+    * Disponibilidade do veiculo
+    */
     private boolean disponivel;
+    /*
+    * Numer de vezes alugado
+    */
     private int vezesAlugado;
     
-    //-------------------------------------------------------//  
+    //-------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Construtor parameterizado da classe CarroEletrico
+     *
+     * @param new_marca Marca do veiculo.
+     * @param new_matricula Matricula do veiculo.
+     * @param new_mediumVel Velocidade Media do Veiculo
+     * @param new_precKM Preco por km do veiculo
+     * @param new_classif Classificacao do veiculo
+     * @param new_local Localizacao do veiculo             
+     * @param new_prop Proprietario do veiculo (Nif)
+     * @param new_estado Disponivel = true
+     * @param vezes Vezes que foi alugado
+     *
+    */
 
     public Veiculo (String new_marca,
                     String new_mat,
@@ -38,6 +96,13 @@ public abstract class Veiculo implements Serializable {
         this.vezesAlugado    = vezes;
     }
    
+    /**
+     * Construtor copia da classe Veciulo
+     *
+     * @param novo novo Veiculo.
+     *
+    */
+
     public Veiculo (Veiculo novo) {
 
         this.marca           = novo.getMarca();
@@ -50,6 +115,10 @@ public abstract class Veiculo implements Serializable {
         this.disponivel      = novo.getDisponivel();
         this.vezesAlugado    = novo.getVezesAlugado();
     }
+
+    /**
+     * Construtor vazio da classe Veiculo
+    */
 
     public Veiculo () {
 
@@ -64,7 +133,15 @@ public abstract class Veiculo implements Serializable {
         this.vezesAlugado    = 0;
     }
   
-    //-------------------------------------------------------//  
+    //-------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Determina se dois veiculos são iguais.
+     *
+     * @param o Objeto para fazer comparação.
+     *
+     * @return true se forem iguais.
+    */
 
     public boolean equals(Object o) {
         
@@ -85,11 +162,21 @@ public abstract class Veiculo implements Serializable {
                this.marca == v.getMarca());
     }
 
-    //-------------------------------------------------------//  
+    /**
+     * Constrói uma cópia de um veiculo.
+     * Obriga cada subclasse a implementar este metodo
+     *
+     * @return Novo Veiculo.
+    */
 
     public abstract Veiculo clone ();
 
-    //-------------------------------------------------------//  
+
+    /**
+     * Converte um Veiculo para a sua representação em String
+     *
+     * @return A representação do veiculo em String.
+    */
 
     public String toString (){
         
@@ -108,87 +195,188 @@ public abstract class Veiculo implements Serializable {
         return s.toString();
     }
     
-    //-------------------------------------------------------//  
+    //----------------------------------------------------------------------------------------
+    
+    /**
+     * Devolve a marca do veiculo
+     *
+     * @return A marca do veiculo.
+    */
 
     public String getMarca () {
 
         return this.marca;
     }
 
+    /**
+     * Devolve a proprietario do veiculo
+     *
+     * @return A proprietario do veiculo.
+    */
+
     public String getProprietario() {
 
         return this.proprietario;
     }
+
+    /**
+     * Devolve a matricula do veiculo
+     *
+     * @return A matricula do veiculo.
+    */
 
     public String getMatricula () {
 
         return this.matricula;
     }
 
+    /**
+     * Devolve a velMedia do veiculo
+     *
+     * @return A velMedia do veiculo.
+    */
+
     public double getVelMediaPorKM () {
 
         return this.velMediaPorKM; 
     }
+
+    /**
+     * Devolve o preco por km do veiculo
+     *
+     * @return o preco por km do veiculo.
+    */
 
     public double getPrecoPorKM () {
 
         return this.precoPorKm;
     }
 
+    /**
+     * Devolve a classificacao do veiculo
+     *
+     * @return A classificacao do veiculo.
+    */
+
     public int getClassificacao () {
 
         return this.classificacao;
     }
+
+    /**
+     * Devolve a localizacao do veiculo
+     *
+     * @return A localizacao do veiculo.
+    */
 
     public Localizacao getLocalizacao () {
 
         return this.local;
     }
 
+    /**
+     * Devolve a disponibilidade do veiculo
+     *
+     * @return A disponibilidade do veiculo.
+    */
+
     public boolean getDisponivel(){
         
         return this.disponivel;
     }
-    
+
+    /**
+     * Atribui o precoKm de um veiculo
+     *
+     * @param preco precoKm do veiculo
+    */
+
     public void setPrecoPorKm(double preco){
         
         this.precoPorKm = preco;
     }
     
+    /**
+     * Atribui a disponibilidade de um veiculo
+     *
+     * @param estado disponibilidade do veiculo
+    */
+
     public void setDisponivel(boolean estado){
         
         this.disponivel = estado;
     }
-    
+
+    /**
+     * Atribui a Localizacao de um veiculo
+     *
+     * @param l Localizacao do veiculo
+    */
+
     public void setLocalizacao(Localizacao l){
     
         this.local = l.clone();
     }
+
+    /**
+     * Atribui a marca de um veiculo
+     *
+     * @param new_marca marca do veiculo
+    */
 
     public void setMarca(String new_marca) {
 
         this.marca = new_marca;
     }
 
+    /**
+     * Atribui a clas de um veiculo
+     *
+     * @param clas classificacao do veiculo
+    */
+
     public void setClassificacao(int clas) {
 
         this.classificacao = clas;
     }
+
+    /**
+     * Devolve o numero de vezes alugado
+     *
+     * @return Numero de vezes alugado
+    */
 
     public int getVezesAlugado() {
 
         return this.vezesAlugado;
     }
 
+    /**
+     * Atribui o numero de vezes alugado de um veiculo
+     *
+     * @param v numero de vezes alugado do veiculo
+    */
+
     public void setVezesAlugado(int v) {
 
         this.vezesAlugado = v;
     }
 
+    /**
+     * Aumenta o numero de vezes alugado por 1
+     *
+    */
+
     public void incrementVezesAlugadoBy1() {
 
         this.vezesAlugado = this.vezesAlugado + 1;
     }   
+
+    /**
+     * Atribui classificacao ao veiculo mediante as suas classificacao antigas
+     *
+     * @param classi classificacao a atribuir ao veiculo
+    */
 
     public void atribuiClassificacao(int classi){
     
@@ -205,11 +393,29 @@ public abstract class Veiculo implements Serializable {
     
     //-------------------------------------------------------//  
     
+    /**
+     * Metodo abstrato. Atribui uma nova posicao x, y ao veiculo
+     *
+     * @param x Localizacao X
+     * @param y Localizacao Y
+    */
+
     public abstract void moverParaPosicao (double x, double y);
  
+    /**
+     * Metodo abstrato. Determina se um veiculo esta disponivel para aluguer
+     *
+    */
+
     public abstract boolean veiculoDisponivelAluguer();
 
     //-------------------------------------------------------//
+
+    /**
+     * Hashcode de um veiculo pela matricula.
+     *
+     * @return hashcode de um veiculo
+    */
 
     public int hashCode () {
 

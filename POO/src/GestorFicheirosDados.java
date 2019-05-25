@@ -1,3 +1,17 @@
+//-------------------------------------------------------------------------------------------------------------
+
+/**
+ * Class que implementa um gestor de ficheiros do EstadoSistema.
+ * Faz a leitura e carregamento de dados a partir de um ficheiro.
+ *
+ * @author João Pedro Rodrigues Azevedo
+ * @author Pedro Filipe Costa Machado
+ * @author Paulo Jorge da Silva Araújo 
+ *
+ * @version 2019/05/25
+ */
+
+//-------------------------------------------------------------------------------------------------------------
 
 import ExceptionsProgramFlow.*;
 
@@ -27,27 +41,40 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.NoSuchElementException;
 
+//-------------------------------------------------------------------------------------------------------------
+
 public class GestorFicheirosDados {
 
 
-	//--------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------
 
+	/*
+	 * Path de onde é lido/escrito o estado em ObjectFile
+	*/
 	private static final String estadoObjetoPath = "ObjectSaves/estadoObj.obj";
 
-	//--------------------------------------------------
-
-	//--------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------
 
 	public GestorFicheirosDados () {
+
+		//Nao possui variaveis de instancia
 		//...
 	}
 
-	//--------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Função que carrega os logs do ficheiro pathLogs
+     *
+     * @param estado Variavel que guarda o Estado do Sistema
+     * @param path_logs Caminho para o ficheiro de logs inicial
+     * 
+     * @throws IOException Problema de IO, criação de ficheiros, leitura,...
+     * @throws FileNotFoundException Caso não existe o ficheiro
+    */
 
     public static void carregarEstadoFromLogs (EstadoSistema estado, String path_logs) 
                           throws IOException, FileNotFoundException {
-
-	    //--------------------------------------------------
 
 	    String linha = null, novoComponente = null;
 	    
@@ -426,6 +453,14 @@ public class GestorFicheirosDados {
 	    }
     }
 
+    /**
+     * Função que verifica se uma string é uma matricula
+     *
+     * @param possibleMatricula Matricula para verificar
+     * 
+     * @return true se for matricula
+    */
+
     public static boolean isStringMatricula (String possibleMatricula) {
 
       //Matricula => JI-75-97
@@ -455,6 +490,14 @@ public class GestorFicheirosDados {
       return result;
     }
 
+    /**
+     * Função que verifica se uma string é um nif
+     *
+     * @param possibleNif String para verificar
+     * 
+     * @return true se for nif
+    */
+
     public static boolean isStringNif (String possibleNif) {
 
       boolean result;
@@ -475,12 +518,28 @@ public class GestorFicheirosDados {
       return result;
     }
 
+    /**
+     * Função que verifica se uma string é um Email
+     *
+     * @param possEmail String para verificar
+     * 
+     * @return true se for Email
+    */
+
     public static boolean isStringEmail (String possEmail) {
 
     	return (possEmail.chars()
     					.filter(ch -> ch == '@')
     					.count() == 1);
     }
+
+
+    /**
+     * Função que apresenta as estatisticas de leitura do estado
+     *
+     * @param e Estado
+     * 
+    */
 
     public static void stats_iniciais(EstadoSistema e) {
 
@@ -491,6 +550,15 @@ public class GestorFicheirosDados {
 		System.out.println ("Existem " + e.getNumVeiculos() + " Veiculos.\n");
 
 	}
+
+    /**
+     * Função que guarda o Estado para um ficheiro objeto
+     *
+     * @param estado Estado
+     *
+     * @throws FileNotFoundException Caso o ficheiro nao exista 
+     * @throws IOException Caso haja problemas de IO 
+    */
 
 	public static void estadoParaObjectFile(EstadoSistema estado) 
 					throws FileNotFoundException, IOException {
@@ -505,6 +573,16 @@ public class GestorFicheirosDados {
 	    fileOut.close();
 	    
  	}
+
+    /**
+     * Função que guarda o estado do ficheiro para o objeto EstadoSistema
+	 *
+	 * @return EstadoSistema inicializado
+	 *
+     * @throws FileNotFoundException Caso o ficheiro nao exista 
+     * @throws IOException Caso haja problemas de IO 
+     * @throws ClassNotFoundException Caso a classe nao exista (A que foi cast)
+    */
 
  	public static EstadoSistema objectFileParaEstado () 
  								throws  FileNotFoundException, 
