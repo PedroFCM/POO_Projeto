@@ -1,5 +1,17 @@
+//-------------------------------------------------------------------------------------------------------------
 
-//--------------------------------------------------
+/**
+ * Class que implementa o controlador de Um carro Ja.
+ * Utiliza a VIEW e o MODELO para implementar um MVC.
+ *
+ * @author João Pedro Rodrigues Azevedo
+ * @author Pedro Filipe Costa Machado
+ * @author Paulo Jorge da Silva Araújo 
+ *
+ * @version 2019/05/25
+ */
+
+//-------------------------------------------------------------------------------------------------------------
 
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -13,41 +25,142 @@ import java.time.LocalDate;
 
 import ExceptionsProgramFlow.*;
 
-//--------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
 public class ControladorAPP {
 
-	//--------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 
+	/*
+	 * Path para o ficheiro de carregamento inicial desta App
+	*/
 	private final static String pathLogs = "Logs/logsPOO_carregamentoInicial.bak";
 
-	//--------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 
+	/*
+	 * Guarda o estado da aplicação - MODELO
+	*/
 	private EstadoSistema estadoMODEL;
+	/*
+	 * Para utilizar as funcionalidades da - VIEW
+	*/
 	private GUI_UMcarroJA menusVIEW;
-
+	/*
+	 * Nome do utilizador Loggado
+	*/
 	private String usernameLogged;
+	/*
+	 * Indica se o user é proprietario ou não
+	*/
 	private boolean isProprietario;
-	
+	/*
+	 * Nome do utilizador Loggado
+	*/
 	private String currentAlugerPref;
+	/*
+	 * Guarda o utilizador que está loggado atualmente
+	*/
 	private AtorSistema user;
+	/*
+	 * Utilizador do ultimo aluguer feito
+	*/
 	private AtorSistema clienteQueAlugou;
-
+	/*
+	 * Numero do carro que foi alugado atualmente
+	*/
 	private int currAluguerCarNum;
-
+	/*
+	 * Indica se a app foi guardada
+	*/
 	private boolean appSaved;
+	/*
+	 * Indica se existem dados por guardar
+	*/
 	private boolean needToSave;
+	/*
+	 * Indica se é preciso dar quit à app
+	*/
 	private boolean appQuit;
 
-	//--------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+    
+    /**
+     * Construtor parameterizado da classe ControladorAPP
+     *
+     * @param estadoM Estado == modelo.
+     * @param viewModel VIEW == apresentacao.
+     *
+    */
 
     public ControladorAPP (EstadoSistema estadoM, GUI_UMcarroJA viewModel) {
 
     	this.estadoMODEL = new EstadoSistema(estadoM);
     	this.menusVIEW   = viewModel;
     }
+    
+    /**
+     * Construtor cópia de um ControladorAPP
+     *           
+     * @param c ControladorAPP novo.
+     *
+    */
+    
+    public ControladorAPP (ControladorAPP c) {
 
-	//--------------------------------------------------
+    	this.estadoMODEL = c.getModel();
+    	this.menusVIEW   = c.getView();
+    }
+
+    /**
+     * Construtor vazio de um ControladorAPP
+     *
+    */
+
+    public ControladorAPP () {
+
+    	this.estadoMODEL = new EstadoSistema();
+    	this.menusVIEW   = new GUI_UMcarroJA();
+    }
+
+	//-------------------------------------------------------------------------------------------------
+
+    /**
+     * Retorna uma cópia do MODELO do Sistema.
+     *
+     * @return Copia do Sistema.
+    */
+
+    public EstadoSistema getModel () {
+
+    	return new EstadoSistema(this.estadoMODEL);
+    }
+
+	//-------------------------------------------------------------------------------------------------
+
+    /**
+     * Retorna o objeto VIEW usado.
+     * Não necessita de ser uma cópia visto que este nao tem estado interno.
+     *
+     * @return Copia do Sistema.
+    */
+
+    public GUI_UMcarroJA getView () {
+
+    	return this.menusVIEW;
+    }
+
+	//-------------------------------------------------------------------------------------------------
+
+    /**
+     * Gere a inicializacao do sistema.
+     * Caso já exista um SAVE, então o programa inicia a partir desse save.
+     *
+     * @throws IOExcetpion Caso hajam problemas de IO     
+     * @throws FileNotFoundException Caso não exista o ficheiro de leitura/escrita
+     *
+     * @return 1 caso não existam saves, 0 caso existam.
+    */
 
     public int initLogs () throws IOException, FileNotFoundException {
 
@@ -61,21 +174,32 @@ public class ControladorAPP {
     		try {
 
 	    		this.estadoMODEL = fileManager.objectFileParaEstado();
-
-		    	//fileManager.stats_iniciais(this.estadoMODEL);
 	    
     		return 0;
 
     		}
-    		catch (FileNotFoundException e) {}
-    		catch (IOException e) {}
-    		catch (ClassNotFoundException e) {}
+    		catch (FileNotFoundException e) {
+
+    			System.out.println(e.getMessage());
+    		}
+    		catch (IOException e) {
+
+    			System.out.println(e.getMessage());
+    		}
+    		catch (ClassNotFoundException e) {
+
+    			System.out.println(e.getMessage());
+    		}
     	}
 
     	fileManager.carregarEstadoFromLogs(this.estadoMODEL, pathLogs);
         
     	return 1;
     }
+
+    /**
+     * Corre o programa após inicializado com SAVES ou LOGS.
+    */
 
     public void run () {
     	
@@ -91,6 +215,10 @@ public class ControladorAPP {
 
 	    welcomeMenu();
    	}
+
+    /**
+     * Menu de seleção do carro por parte de um cliente.
+    */
 
    	public void clientMenuSelection() {
 
@@ -140,6 +268,14 @@ public class ControladorAPP {
 
    	}
 
+    /**
+     * Função que gere o input do user para Doubles
+     *
+     * @param msg mensagem a apresentar ao user
+     *
+     * @return Double lido
+    */
+
    	public Double getDoubleInput (String msg) {
 
   		Scanner scan = new Scanner(System.in);
@@ -174,6 +310,14 @@ public class ControladorAPP {
 
   		return x;
    	}
+
+    /**
+     * Função que gere o input do user para Integers
+     *
+     * @param msg mensagem a apresentar ao user
+     *
+     * @return Integer lido
+    */
 
    	public int getIntegerInput (String msg) {
 
@@ -212,6 +356,14 @@ public class ControladorAPP {
   		return x;
    	}
 
+    /**
+     * Função que gere o input do user para LocalDates
+     *
+     * @param msg mensagem a apresentar ao user
+     *
+     * @return LocalDate lido
+    */
+
    	public LocalDate getDataInput (String msg) {
 
    		Scanner scan = new Scanner(System.in);
@@ -238,6 +390,14 @@ public class ControladorAPP {
 
    		return nova;
    	}
+
+    /**
+     * Função que gere o input do user para recolher o destino do user
+     *
+     * @param msg mensagem a apresentar ao user
+     *
+     * @return Localizacao destino lida
+    */
 
    	public Localizacao whereToGo (String msg) {	
 
@@ -276,6 +436,14 @@ public class ControladorAPP {
   		return new Localizacao(x, y);
    	}
 
+    /**
+     * Menu de classificacao do carro e interação com o user.
+     *
+     * @param v Veiculo para classificar
+     * @param a Aluguer 
+     *
+    */
+
    	public void classificarCarroMenu (Veiculo v, Aluguer a) {
 
    		int classParaAtribuir = -1;
@@ -307,6 +475,16 @@ public class ControladorAPP {
    		
    		this.menusVIEW.printHighlight("O carro tem agora " + v.getClassificacao());
    	}
+
+    /**
+     * Menu de apresentação e interação para obter a escolha de aluguer do cliente.
+     *
+     * @param max Numero maximo da lista de carros disponiveis calculada
+     * @param listV Lista de carros disponiveis 
+     *
+     * @return Escolha do user
+     *
+    */
 
    	public int getCarChoice(int max, List<Veiculo> listV) {
 
@@ -432,6 +610,15 @@ public class ControladorAPP {
 
    		return inp;
   	}
+
+    /**
+     * Menu de apresentação do perfil do utilizador (Proprietario ou Cliente)
+     *
+     * São aqui geridadas todas as Opções do utilizador chamando
+     * os menus necessários ao funcionamento.
+     *
+     * Menu principal de I/O
+    */
 
    	public void welcomeMenu() {
 
@@ -1089,6 +1276,13 @@ public class ControladorAPP {
 		}
    	}
 
+    /**
+     * Menu de apresentação do perfil de administrador
+     *
+     * São aqui geridadas todas as Opções do admin. 
+     *
+    */
+
    	public void adminMenu () {
 
    		String adminOp = " ";
@@ -1125,6 +1319,23 @@ public class ControladorAPP {
 	   						break;
 	   				}
 	   			}
+
+	   		} else if ((adminOp.length() == 1) && (adminOp.charAt(0) == '2')) {
+	   		
+	   				GestorFicheirosDados fileManager = new GestorFicheirosDados();
+
+	   				fileManager.stats_iniciais(this.estadoMODEL);
+	   				
+	   				int out = 0;
+	   				
+	   				this.menusVIEW.printHighlight("\nPressione \"1\" para voltar para o menu de ADMIN.");
+
+	   				while (true) {
+	   					out = getIntegerInput("");
+	   				
+	   					if (out == 1) 
+	   						break;
+	   				}
 
 	   		} else if (adminOp.charAt(0) == 'q') {
 
@@ -1423,6 +1634,11 @@ public class ControladorAPP {
 		return logFinished;
    	}
 
+    /**
+     * Devolve a string lida do terminal
+     *
+     * @return String lida
+    */
 
    	public String getStringInput () {
 
@@ -1432,6 +1648,14 @@ public class ControladorAPP {
    	
 		return input;
    	}
+
+    /**
+     * Apreseta os carros disponiveis da lista de carros, de forma interativa.
+	 *
+	 * @param listV lista de veiculos a apresentar
+     *
+     * @return tamanho da lista argumento
+    */
 
    	public int printAvailableCars (List<Veiculo> listV) {
 
@@ -1461,6 +1685,14 @@ public class ControladorAPP {
    		
    		return listV.size();
    	}
+
+    /**
+     * Apreseta os carros do Proprietario da lista de carros, de forma interativa.
+	 *
+	 * @param cars lista de veiculos a apresentar
+     *
+     * @return tamanho da lista argumento
+    */
 
    	public int presentCarsOwner (List<Veiculo> cars) {
 
@@ -1539,6 +1771,16 @@ public class ControladorAPP {
    		return cars.size();
    	}
 
+    /**
+     * Apreseta uma lista de alugueres entre 2 datas.
+	 *
+	 * @param listaAluguers lista de alugueres a apresentar
+	 * @param antes data inferior
+	 * @param depois data superior
+     *
+     * @return 0 caso tudo corra bem.
+    */
+
    	public int printListBetweenDates (List<Aluguer> listaAluguers, LocalDate antes, LocalDate depois) {
 
    		if (listaAluguers.size() == 0) {
@@ -1567,7 +1809,15 @@ public class ControladorAPP {
 
    		return 0;
    	}
-	
+
+    /**
+     * Apresenta a lista dos top 10 clientes com mais KM percorridos.
+	 * Recorre, claramente, ao modelo para criar essa lista.
+	 *
+	 * @param topList lista de clientes a apresentar
+     *
+    */
+
 	public void printTopClientes (List<Cliente> topList) {
 
 		int rank = 1;
@@ -1581,6 +1831,15 @@ public class ControladorAPP {
 		}
 
 	}
+
+    /**
+     * Apresenta a faturacao de uma viatura.
+	 * Recorre, claramente, ao modelo para criar essa faturacao.
+	 *
+	 * @param v Veiculo.
+	 * @param fat Faturacao.
+     *
+    */
 
 	public void presentFaturacaoViatura (Veiculo v, double fat) {
 

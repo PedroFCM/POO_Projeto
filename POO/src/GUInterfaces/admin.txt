@@ -7,5 +7,7 @@
 
 [1] Verificar ranking de clientes;
 
+[2] Estatisticas do sistema (MODELO);
+
 [q] Voltar para o menu inicial;
 
