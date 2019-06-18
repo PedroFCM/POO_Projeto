@@ -1183,8 +1183,8 @@ public class ControladorAPP {
 											Proprietario p = this.estadoMODEL.getProprietario(alugado.getProprietario()); 
 					            			
 											p.removePedidoAluguer(aceitado);
-											
-											p.replaceVeiculo(alugado); 
+																						
+                      p.replaceVeiculo(alugado); 
 
 					            			this.user = p.clone();
 
