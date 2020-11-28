@@ -6,4 +6,4 @@ Disclaimer: In this repository POO stands for Object Oriented Programming.
 
 Group: João Azevedo | Paulo Araújo | Pedro Machado
 
-University of Minho, Software Engeneering.
+University of Minho, Software Engineering.
